@@ -1,0 +1,11 @@
+# Bỏ qua tất cả các tệp .meta trong thư mục assets
+/assets/*.meta
+
+# Bỏ qua thư mục .vs
+.vs/
+
+# Bỏ qua thư mục node_modules
+node_modules/
+
+# Bỏ qua tệp log
+*.log
