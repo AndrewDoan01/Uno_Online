@@ -22,6 +22,7 @@ public class CardDisplayManagement : MonoBehaviour
             this.name = name;
             this.description = description;
         }
+
     }
     void Start()
     {
