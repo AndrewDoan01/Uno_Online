@@ -21,7 +21,7 @@ public enum CardType
     WildDrawFour
 }
 
-public class Card : MonoBehaviour
+public class Cards : MonoBehaviour
 {
     public Image cardImage; // Tham chiếu đến thành phần Image
     public CardColor Color { get; private set; }
@@ -59,7 +59,7 @@ public class Card : MonoBehaviour
     }
 
     // Kiểm tra xem lá bài này có thể chơi lên lá bài khác không
-    public bool IsPlayableOn(Card otherCard)
+    public bool IsPlayableOn(Cards otherCard)
     {
         return Color == otherCard.Color || 
                Type == otherCard.Type || 

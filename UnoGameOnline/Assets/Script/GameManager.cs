@@ -11,13 +11,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Lấy tham chiếu đến CardDisplayManager
-        cardDisplayManager = FindObjectOfType<CardDisplayManagement>();
+        // Sử dụng FindFirstObjectByType để tìm đối tượng đầu tiên của CardDisplayManagement
+        cardDisplayManager = Object.FindFirstObjectByType<CardDisplayManagement>();
 
         // Gán các hàm xử lý cho các nút
         playCardButton.onClick.AddListener(PlayCard);
         skipTurnButton.onClick.AddListener(SkipTurn);
     }
+
 
     void DrawCard()
     {
