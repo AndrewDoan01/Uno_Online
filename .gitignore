@@ -1,45 +1,15 @@
-# Thư mục và file cho Visual Studio
-.vscode/
-*.code-workspace
-
-# Thư mục và file cho JetBrains Rider
-.idea/
-*.sln.iml
-
-# Thư mục và file cho các plugin Unity
-[Ll]ibrary/ScriptAssemblies/
-[Ll]ibrary/ShaderCache/
-
-# Thư mục cho các file tạm thời của Unity
-[Aa]ssets/StreamingAssets/
-
-# Các file từ Asset Store
-[Aa]ssets/AssetStoreTools*
-
-# File cache cho Unity Collaborate
-[Cc]ollab/
-
-# Các file nhị phân khác
-*.apk
-*.aab
-*.app
-*.ipa
-*.xcodeproj
-*.xcworkspace
-
-# Các file log khác
+# Ignore the Unity-specific directories
+[Ll]ibrary/
+[Tt]emp/
+[Bb]in/
+# Ignore build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+# Ignore user-specific files
+*.user
+*.userprefs
+*.suo
+*.vspscc
+# Ignore logs
 *.log
-*.stacktrace
-
-# File tạm
-*.tmp
-*.temp
-
-# Các file backup
-*.bak
-*.swp
-*.swm
-
-# Các file liên quan đến dịch vụ CI/CD
-*.env
-*.config
