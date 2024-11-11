@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+
 using static Form1;
 
 public partial class Form1 : Form
@@ -18,6 +19,7 @@ public partial class Form1 : Form
     private List<Card> playerHand = new List<Card>();
     private int currentPlayerIndex = 0;
     private string currentCard = string.Empty;
+
 
     // Cập nhật giao diện tay bài của người chơi
     private void UpdatePlayerHandUI(List<Card> hand)
@@ -123,14 +125,13 @@ public partial class Form1 : Form
     }
 
 
-
     public Form1()
     {
         InitializeGame();
         InitializeGameBoard();
         InitializeTimer();
     }
-     
+    
     private void InitializeGame()
     {
         // Khởi tạo một số người chơi và các lá bài ban đầu
@@ -345,6 +346,31 @@ public partial class Form1 : Form
             }
         }
 
+    private void CardButton_Click(object sender, EventArgs e)
+    {
+        Button clickedButton = (Button)sender;
+        Card selectedCard = clickedButton.Tag as Card;
+
+        if (IsValidMove(selectedCard))
+        {
+            // Cập nhật lá bài hiện tại với lá bài được chọn
+            currentCard = $"{selectedCard.Color} {selectedCard.Number}";
+            currentCardLabel.Text = $"Lá bài hiện tại: {currentCard}";
+
+            // Xóa lá bài khỏi tay người chơi
+            playerHand.Remove(selectedCard);
+            PlayerHandPanel.Controls.Remove(clickedButton);
+
+            // Kiểm tra nếu người chơi đã chiến thắng
+            CheckForWinner();
+
+            // Tiến hành lượt chơi tiếp theo
+            NextTurn();
+        }
+        else
+        {
+            MessageBox.Show("Lá bài không hợp lệ.");
+        }
     }
 
     private bool IsValidMove(Card selectedCard)
@@ -367,6 +393,11 @@ public partial class Form1 : Form
     }
 
     
+    private void EndGame()
+    {
+        // Xử lý kết thúc trò chơi
+        MessageBox.Show("Trò chơi kết thúc!");
+    }
 
     private Color GetCardColor(Card card)
     {
@@ -491,7 +522,6 @@ public partial class Form1 : Form
 }
 
 // Helper classes
-
 public class Card
 {
     public string Color { get; set; }
@@ -519,3 +549,9 @@ public class Player
     }
 }
 
+}
+
+public class Player
+{
+    public string Name { get; set; }
+}
