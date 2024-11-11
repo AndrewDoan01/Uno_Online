@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using static Form1;
+
 public partial class Form1 : Form
 {
     //private Label currentPlayerLabel;
@@ -18,13 +20,118 @@ public partial class Form1 : Form
     private int currentPlayerIndex = 0;
     private string currentCard = string.Empty;
 
+
+    // Cập nhật giao diện tay bài của người chơi
+    private void UpdatePlayerHandUI(List<Card> hand)
+    {
+        playerHandListBox.Items.Clear();  // Giả sử playerHandListBox là một ListBox trong UI
+        foreach (var card in hand)
+        {
+            playerHandListBox.Items.Add(card.ToString());  // Thêm thẻ vào ListBox
+        }
+    }
+
+
+    // Phương thức rút thẻ cho người chơi tiếp theo
+    private void DrawCardsToNextPlayer()
+    {
+        Player nextPlayer = players[(currentPlayerIndex + 1) % players.Count];
+        nextPlayer.Hand.Add(deck.DrawCard());  // Giả sử bạn có phương thức DrawCard trong lớp Deck
+    }
+
+    // Hướng chơi: 1 cho chiều kim đồng hồ, -1 cho ngược chiều kim đồng hồ
+    private int turnDirection = 1;
+
+    // Cập nhật nhãn thẻ hiện tại
+    private void UpdateCurrentCardLabel(Card card)
+    {
+        currentCardLabel.Text = card.ToString();  // Giả sử currentCardLabel là một Label trong UI
+    }
+    // Cập nhật nhãn thẻ hiện tại
+    private void UpdateCurrentCardLabel(Card card)
+    {
+        currentCardLabel.Text = card.ToString();  // Giả sử currentCardLabel là một Label trong UI
+    }
+
+
+    public class Deck
+    {
+        private List<Card> cards;
+
+        public Deck()
+        {
+            // Khởi tạo bộ bài và xáo trộn
+            this.cards = new List<Card>();
+            // Thêm các lá bài vào đây
+        }
+
+        public Card DrawCard()
+        {
+            if (cards.Count == 0) return null; // Nếu không còn bài
+            var card = cards[0]; // Lấy lá bài đầu tiên
+            cards.RemoveAt(0); // Xóa lá bài đã rút
+            return card;
+        }
+    }
+
+    public class GameManager
+    {
+        private Deck deck;
+        private List<Card> discardPile = new List<Card>();
+        private int turnDirection = 1;
+
+        public GameManager()
+        {
+            deck = new Deck();
+        }
+
+        public void StartGame()
+        {
+            Card firstCard = deck.DrawCard();
+            discardPile.Add(firstCard);
+            UpdateCurrentCardLabel(firstCard);
+        }
+
+        public void HandleSpecialCard(Card playedCard)
+        {
+            if (playedCard.Value == "Skip")
+            {
+                NextTurn();
+            }
+            else if (playedCard.Value == "Reverse")
+            {
+                turnDirection *= -1;  // Đổi hướng
+            }
+            else if (playedCard.Value == "Draw Two")
+            {
+                DrawCardsToNextPlayer(2);
+            }
+            else if (playedCard.Value == "Draw Four")
+            {
+                DrawCardsToNextPlayer(4);
+            }
+        }
+
+        private void DrawCardsToNextPlayer(int numberOfCards)
+        {
+            int nextPlayerIndex = (currentPlayerIndex + turnDirection + players.Count) % players.Count;
+            Player nextPlayer = players[nextPlayerIndex];
+            for (int i = 0; i < numberOfCards; i++)
+            {
+                nextPlayer.Hand.Add(deck.DrawCard());
+            }
+            UpdatePlayerHandUI(nextPlayer);
+        }
+    }
+
+
     public Form1()
     {
         InitializeGame();
         InitializeGameBoard();
         InitializeTimer();
     }
-
+    
     private void InitializeGame()
     {
         // Khởi tạo một số người chơi và các lá bài ban đầu
@@ -178,6 +285,67 @@ public partial class Form1 : Form
         }
     }
 
+    public void CheckForWinner(Player player) {
+    if (player.Hand.Count == 0) {
+        MessageBox.Show($"{player.Name} đã thắng trò chơi!");
+        EndGame();
+    }
+    }
+
+    private void EndGame() {
+    // Thiết lập lại game hoặc hiển thị kết thúc
+}
+
+
+
+    private void CardButton_Click(object sender, EventArgs e)
+    {
+
+        
+
+        Button clickedButton = (Button)sender;
+        Card selectedCard = clickedButton.Tag as Card;
+
+        bool IsValidMove(Card playedCard, Card topCard)
+        {
+            return playedCard.Color == topCard.Color ||
+                   playedCard.Value == topCard.Value ||
+                   playedCard.Color == "Wild";
+        }
+        void PlayCard(Player player, Card playedCard)
+        {
+            if (IsValidMove(playedCard, discardPile.Last()))
+            {
+                discardPile.Add(playedCard);
+                HandleSpecialCard(playedCard);
+                CheckForWinner(player);
+                NextTurn();
+            }
+            else
+            {
+                MessageBox.Show("Lá bài không hợp lệ!");
+            }
+        }
+        void HandleSpecialCard(Card playedCard)
+        {
+            if (playedCard.Value == "Skip")
+            {
+                NextTurn();
+            }
+            else if (playedCard.Value == "Reverse")
+            {
+                turnDirection *= -1;
+            }
+            else if (playedCard.Value == "Draw Two")
+            {
+                DrawCardsToNextPlayer(2);
+            }
+            else if (playedCard.Value == "Draw Four")
+            {
+                DrawCardsToNextPlayer(4);
+            }
+        }
+
     private void CardButton_Click(object sender, EventArgs e)
     {
         Button clickedButton = (Button)sender;
@@ -224,6 +392,7 @@ public partial class Form1 : Form
         }
     }
 
+    
     private void EndGame()
     {
         // Xử lý kết thúc trò chơi
@@ -357,6 +526,29 @@ public class Card
 {
     public string Color { get; set; }
     public string Number { get; set; }
+
+    // Nếu muốn sử dụng "Value", thêm thuộc tính này
+    public string Value => $"{Color} {Number}"; // Giả sử Value là sự kết hợp của Color và Number
+    public Card(string number, string value)
+    {
+        Number = number;
+        Color = value;
+    }
+}
+
+
+public class Player
+{
+    public string Name { get; set; }
+    public List<Card> Hand { get; set; }  // Add this property
+
+    // Constructor to initialize the Hand list
+    public Player()
+    {
+        Hand = new List<Card>(); // Initialize the Hand as an empty list
+    }
+}
+
 }
 
 public class Player
