@@ -61,11 +61,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -82,16 +84,24 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_9.png" />
+    <Content Include="Resources\CardImages\Green_9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_Draw.png" />
+    <Content Include="Resources\CardImages\Green_Draw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_Reverse.png" />
+    <Content Include="Resources\CardImages\Green_Reverse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_Skip.png" />
+    <Content Include="Resources\CardImages\Green_Skip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Others\MockUp 0.png" />
@@ -100,43 +110,69 @@
     <None Include="Resources\Others\Mockup.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_0.png" />
+    <Content Include="Resources\CardImages\Red_0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_1.png" />
+    <Content Include="Resources\CardImages\Red_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_2.png" />
+    <Content Include="Resources\CardImages\Red_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_3.png" />
+    <Content Include="Resources\CardImages\Red_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_4.png" />
+    <Content Include="Resources\CardImages\Red_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_5.png" />
+    <Content Include="Resources\CardImages\Red_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_6.png" />
+    <Content Include="Resources\CardImages\Red_6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_7.png" />
+    <Content Include="Resources\CardImages\Red_7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_8.png" />
+    <Content Include="Resources\CardImages\Red_8.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_9.png" />
+    <Content Include="Resources\CardImages\Red_9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_Draw.png" />
+    <Content Include="Resources\CardImages\Red_Draw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_Reverse.png" />
+    <Content Include="Resources\CardImages\Red_Reverse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Red_Skip.png" />
+    <Content Include="Resources\CardImages\Red_Skip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Others\Table_0.png" />
@@ -154,121 +190,197 @@
     <None Include="Resources\Others\Table_4.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Wild.png" />
+    <Content Include="Resources\CardImages\Wild.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Wild_Draw.png" />
+    <Content Include="Resources\CardImages\Wild_Draw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_0.png" />
+    <Content Include="Resources\CardImages\Yellow_0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_1.png" />
+    <Content Include="Resources\CardImages\Yellow_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_2.png" />
+    <Content Include="Resources\CardImages\Yellow_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_3.png" />
+    <Content Include="Resources\CardImages\Yellow_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_4.png" />
+    <Content Include="Resources\CardImages\Yellow_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_5.png" />
+    <Content Include="Resources\CardImages\Yellow_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_6.png" />
+    <Content Include="Resources\CardImages\Yellow_6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_7.png" />
+    <Content Include="Resources\CardImages\Yellow_7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_8.png" />
+    <Content Include="Resources\CardImages\Yellow_8.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_9.png" />
+    <Content Include="Resources\CardImages\Yellow_9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_Draw.png" />
+    <Content Include="Resources\CardImages\Yellow_Draw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_Reverse.png" />
+    <Content Include="Resources\CardImages\Yellow_Reverse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Yellow_Skip.png" />
+    <Content Include="Resources\CardImages\Yellow_Skip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Others\Banner.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_0.png" />
+    <Content Include="Resources\CardImages\Blue_0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_1.png" />
+    <Content Include="Resources\CardImages\Blue_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_2.png" />
+    <Content Include="Resources\CardImages\Blue_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_3.png" />
+    <Content Include="Resources\CardImages\Blue_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_4.png" />
+    <Content Include="Resources\CardImages\Blue_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_5.png" />
+    <Content Include="Resources\CardImages\Blue_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_6.png" />
+    <Content Include="Resources\CardImages\Blue_6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_7.png" />
+    <Content Include="Resources\CardImages\Blue_7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_8.png" />
+    <Content Include="Resources\CardImages\Blue_8.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_9.png" />
+    <Content Include="Resources\CardImages\Blue_9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_Draw.png" />
+    <Content Include="Resources\CardImages\Blue_Draw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_Reverse.png" />
+    <Content Include="Resources\CardImages\Blue_Reverse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Blue_Skip.png" />
+    <Content Include="Resources\CardImages\Blue_Skip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Deck.png" />
+    <Content Include="Resources\CardImages\Deck.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_0.png" />
+    <Content Include="Resources\CardImages\Green_0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_1.png" />
+    <Content Include="Resources\CardImages\Green_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_2.png" />
+    <Content Include="Resources\CardImages\Green_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_3.png" />
+    <Content Include="Resources\CardImages\Green_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_4.png" />
+    <Content Include="Resources\CardImages\Green_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_5.png" />
+    <Content Include="Resources\CardImages\Green_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_6.png" />
+    <Content Include="Resources\CardImages\Green_6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_7.png" />
+    <Content Include="Resources\CardImages\Green_7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CardImages\Green_8.png" />
+    <Content Include="Resources\CardImages\Green_8.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
