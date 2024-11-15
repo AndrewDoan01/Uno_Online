@@ -1,0 +1,9 @@
+D:\C++\c# code\UNO2\UNOServer\UNOServer\bin\Debug\UNOServer.exe.config
+D:\C++\c# code\UNO2\UNOServer\UNOServer\bin\Debug\UNOServer.exe
+D:\C++\c# code\UNO2\UNOServer\UNOServer\bin\Debug\UNOServer.pdb
+D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.AssemblyReference.cache
+D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.Properties.Resources.resources
+D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.GenerateResource.cache
+D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.CoreCompileInputs.cache
+D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.exe
+D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.pdb
