@@ -476,6 +476,7 @@ public partial class Form1 : Form
             this.Controls.Add(this.skipTurnButton);
             this.DoubleBuffered = true;
             this.Name = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -487,6 +488,11 @@ public partial class Form1 : Form
     private Label currentPlayerLabel;
     private ProgressBar turnTimer;
     private FlowLayoutPanel PlayerHandPanel;
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+
+    }
 }
 
 // Helper classes
