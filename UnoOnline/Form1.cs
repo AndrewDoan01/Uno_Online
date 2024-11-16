@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Deck;
 
@@ -167,7 +168,7 @@ public partial class Form1 : Form
 
     private void InitializeGameBoard()
     {
-        // Label thông báo lượt chơi
+        // Label for current player
         currentPlayerLabel = new Label
         {
             Location = new Point(20, 10),
@@ -177,17 +178,18 @@ public partial class Form1 : Form
         };
         Controls.Add(currentPlayerLabel);
 
-        // ProgressBar cho thời gian lượt chơi
+        // Custom ProgressBar for turn timer
         turnTimer = new ProgressBar
         {
             Location = new Point(300, 10),
             Size = new Size(200, 20),
             Maximum = 100,
-            Value = 100
+            Value = 100,
+            ForeColor = Color.Green
         };
         Controls.Add(turnTimer);
 
-        // Label thông báo lá bài hiện tại
+        // Label for current card
         currentCardLabel = new Label
         {
             Location = new Point(300, 50),
@@ -198,7 +200,7 @@ public partial class Form1 : Form
         };
         Controls.Add(currentCardLabel);
 
-        // Panel cho tay bài người chơi
+        // Panel for player hand
         PlayerHandPanel = new FlowLayoutPanel
         {
             Location = new Point(20, 60),
@@ -206,7 +208,7 @@ public partial class Form1 : Form
         };
         Controls.Add(PlayerHandPanel);
 
-        // Nút Bỏ qua lượt
+        // Skip turn button
         skipTurnButton = new Button
         {
             Location = new Point(500, 60),
@@ -216,7 +218,7 @@ public partial class Form1 : Form
         skipTurnButton.Click += SkipTurnButton_Click;
         Controls.Add(skipTurnButton);
 
-        // Nút Rút bài
+        // Draw card button
         drawCardButton = new Button
         {
             Location = new Point(500, 110),
@@ -227,7 +229,7 @@ public partial class Form1 : Form
         Controls.Add(drawCardButton);
     }
 
-    
+
 
 
     private void InitializeTimer()
@@ -275,7 +277,7 @@ public partial class Form1 : Form
 
     private void DisplayPlayerHand(List<Card> playerHand)
     {
-        PlayerHandPanel.Controls.Clear(); // Xóa tất cả các controls hiện có
+        PlayerHandPanel.Controls.Clear(); // Clear existing controls
 
         int xOffset = 10;
         int yOffset = 10;
@@ -291,16 +293,19 @@ public partial class Form1 : Form
                 BackgroundImage = GameResources.GetCardImage(card),
                 BackgroundImageLayout = ImageLayout.Stretch,
                 FlatStyle = FlatStyle.Flat,
-                Tag = card
+                Tag = card,
+                BackColor = Color.White,
+                FlatAppearance = { BorderSize = 1, BorderColor = Color.Black }
             };
 
-            cardButton.FlatAppearance.BorderSize = 0;
+            cardButton.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            cardButton.FlatAppearance.BorderSize = 1;
 
             cardButton.Click += CardButton_Click;
 
             PlayerHandPanel.Controls.Add(cardButton);
 
-            xOffset += cardWidth + 5; // Khoảng cách giữa các lá bài
+            xOffset += cardWidth + 5; // Space between cards
         }
     }
     private Image GetCardImage(Card card)
@@ -407,10 +412,10 @@ public partial class Form1 : Form
     {
             this.skipTurnButton = new System.Windows.Forms.Button();
             this.drawCardButton = new System.Windows.Forms.Button();
-            this.currentCardLabel = new System.Windows.Forms.Label();
-            this.currentPlayerLabel = new System.Windows.Forms.Label();
             this.turnTimer = new System.Windows.Forms.ProgressBar();
             this.PlayerHandPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.currentCardLabel = new System.Windows.Forms.Label();
+            this.currentPlayerLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // skipTurnButton
@@ -431,24 +436,6 @@ public partial class Form1 : Form
             this.drawCardButton.Text = "Draw";
             this.drawCardButton.UseVisualStyleBackColor = true;
             // 
-            // currentCardLabel
-            // 
-            this.currentCardLabel.AutoSize = true;
-            this.currentCardLabel.Location = new System.Drawing.Point(519, 184);
-            this.currentCardLabel.Name = "currentCardLabel";
-            this.currentCardLabel.Size = new System.Drawing.Size(110, 16);
-            this.currentCardLabel.TabIndex = 3;
-            this.currentCardLabel.Text = "currentCardLabel";
-            // 
-            // currentPlayerLabel
-            // 
-            this.currentPlayerLabel.AutoSize = true;
-            this.currentPlayerLabel.Location = new System.Drawing.Point(519, 150);
-            this.currentPlayerLabel.Name = "currentPlayerLabel";
-            this.currentPlayerLabel.Size = new System.Drawing.Size(120, 16);
-            this.currentPlayerLabel.TabIndex = 4;
-            this.currentPlayerLabel.Text = "currentPlayerLabel";
-            // 
             // turnTimer
             // 
             this.turnTimer.Location = new System.Drawing.Point(514, 108);
@@ -458,16 +445,32 @@ public partial class Form1 : Form
             // 
             // PlayerHandPanel
             // 
-            this.PlayerHandPanel.Location = new System.Drawing.Point(12, 294);
+            this.PlayerHandPanel.Location = new System.Drawing.Point(12, 291);
             this.PlayerHandPanel.Name = "PlayerHandPanel";
             this.PlayerHandPanel.Size = new System.Drawing.Size(602, 100);
             this.PlayerHandPanel.TabIndex = 6;
+            // 
+            // currentCardLabel
+            // 
+            this.currentCardLabel.AutoSize = true;
+            this.currentCardLabel.Location = new System.Drawing.Point(519, 184);
+            this.currentCardLabel.Name = "currentCardLabel";
+            this.currentCardLabel.Size = new System.Drawing.Size(0, 16);
+            this.currentCardLabel.TabIndex = 3;
+            // 
+            // currentPlayerLabel
+            // 
+            this.currentPlayerLabel.AutoSize = true;
+            this.currentPlayerLabel.Location = new System.Drawing.Point(519, 150);
+            this.currentPlayerLabel.Name = "currentPlayerLabel";
+            this.currentPlayerLabel.Size = new System.Drawing.Size(0, 16);
+            this.currentPlayerLabel.TabIndex = 4;
             // 
             // Form1
             // 
             this.BackgroundImage = global::UnoOnline.Properties.Resources.Table_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(626, 441);
+            this.ClientSize = new System.Drawing.Size(647, 441);
             this.Controls.Add(this.PlayerHandPanel);
             this.Controls.Add(this.turnTimer);
             this.Controls.Add(this.currentPlayerLabel);
@@ -484,14 +487,101 @@ public partial class Form1 : Form
 
     private Button skipTurnButton;
     private Button drawCardButton;
-    private Label currentCardLabel;
-    private Label currentPlayerLabel;
     private ProgressBar turnTimer;
     private FlowLayoutPanel PlayerHandPanel;
 
     private void Form1_Load(object sender, EventArgs e)
     {
 
+    }
+
+    private Label currentCardLabel;
+    private Label currentPlayerLabel;
+    private async void AnimateCardDrawing(Card card)
+    {
+        Button cardButton = new Button
+        {
+            Size = new Size(80, 120),
+            BackgroundImage = GameResources.GetCardImage(card),
+            BackgroundImageLayout = ImageLayout.Stretch,
+            FlatStyle = FlatStyle.Flat,
+            Tag = card,
+            BackColor = Color.White,
+            FlatAppearance = { BorderSize = 1, BorderColor = Color.Black }
+        };
+
+        cardButton.FlatAppearance.MouseOverBackColor = Color.LightGray;
+        cardButton.FlatAppearance.BorderSize = 1;
+
+        Controls.Add(cardButton);
+
+        Point startPoint = new Point(500, 110); // Starting point (deck location)
+        Point endPoint = new Point(20 + (playerHand.Count * 85), 60); // Ending point (player hand location)
+
+        for (int i = 0; i <= 100; i += 5)
+        {
+            cardButton.Location = new Point(
+                startPoint.X + (endPoint.X - startPoint.X) * i / 100,
+                startPoint.Y + (endPoint.Y - startPoint.Y) * i / 100
+            );
+            await Task.Delay(10);
+        }
+
+        Controls.Remove(cardButton);
+        DisplayPlayerHand(playerHand);
+    }
+    private async void drawCardButton_Click(object sender, EventArgs e)
+    {
+        // Thêm một lá bài mới vào tay người chơi nếu họ không thể ra bài
+        Card newCard = DrawCard();
+        playerHand.Add(newCard);
+
+        // Animate the card drawing
+        await Task.Run(() => AnimateCardDrawing(newCard));
+    }
+
+    private async void AnimateCardPlaying(Button cardButton, Card card)
+    {
+        Point startPoint = cardButton.Location; // Starting point (player hand location)
+        Point endPoint = new Point(300, 50); // Ending point (center of the game board)
+
+        for (int i = 0; i <= 100; i += 5)
+        {
+            cardButton.Location = new Point(
+                startPoint.X + (endPoint.X - startPoint.X) * i / 100,
+                startPoint.Y + (endPoint.Y - startPoint.Y) * i / 100
+            );
+            await Task.Delay(10);
+        }
+
+        PlayerHandPanel.Controls.Remove(cardButton);
+        currentCard = $"{card.Color} {card.Value}";
+        currentCardLabel.Text = $"Lá bài hiện tại: {currentCard}";
+    }
+
+    private async void cardButton_Click(object sender, EventArgs e)
+    {
+        Button clickedButton = (Button)sender;
+        Card selectedCard = clickedButton.Tag as Card;
+
+        if (IsValidMove(selectedCard))
+        {
+            // Animate the card playing
+            await Task.Run(() => AnimateCardPlaying(clickedButton, selectedCard));
+
+            // Xóa lá bài khỏi tay người chơi
+            playerHand.Remove(selectedCard);
+
+            // Kiểm tra nếu người chơi đã chiến thắng
+            CheckForWinner();
+
+            // Tiến hành lượt chơi tiếp theo
+            NextTurn();
+        }
+        else
+        {
+            MessageBox.Show("Lá bài không hợp lệ.");
+        }
     }
 }
 
