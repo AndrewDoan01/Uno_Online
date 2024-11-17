@@ -279,7 +279,7 @@ namespace UNOServer
             }
         }
 
-        /* Hàm xử lý việc sau khi đánh 1 lá bài*/
+        /* Hàm xử lý việc sau khi đánh 1 lá bài rồi chuyển lượt */
         private static void DanhBai(string[] Signal, PLAYER User)
         {
             BOBAI.currentCard = Signal[3]; //Cập nhật lá bài hiện tại
@@ -378,7 +378,7 @@ namespace UNOServer
             }
         }
 
-        /* Hàm xử lý mỗi lần người chơi rút bài */
+        /* Hàm xử lý mỗi lần người chơi rút 1 lá bài rồi chuyển lượt */
         private static void RutBai(string[] Signal, PLAYER User)
         {
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy thông tin về số bài còn lại của người chơi hiện tại 
@@ -401,7 +401,7 @@ namespace UNOServer
             UpdateTurn();
         }
 
-        /* Hàm xử lý việc bị rút nhiều lá bài do các lá bài đặc biệt */
+        /* Hàm xử lý việc bị rút nhiều lá bài do các lá bài đặc biệt rồi chuyển lượt */
         private static void HandleSpecialCardEffect(string[] Signal, PLAYER User)
         {
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy thông tin về số bài còn lại của người chơi hiện tại
