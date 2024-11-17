@@ -121,7 +121,7 @@ namespace UNOServer
          * RutBai;ID;SoLuongBai                                                       | Update;ID;SoluongBai;CardName(Nếu đánh bài);color(df,wd) (Nếu đánh bài)          
          * SpecialDraw;ID;SoLuongBai;                                                 | Turn;ID                      
          * Chat;ID;<Content>                                                          | CardDraw;ID;CardName                
-         * YellUNO;ID                                                                 | SpecialDraw;ID;CardName;CardName...
+         * YellUNO;ID                                                                 | Specialdraws;ID;CardName;CardName...
          * DrawPenalty;ID;SoLuongBai;                                                 | End;ID
          *                                                                            | MESSAGE;ID;<Content>
          *                                                                            | YellUNOEnable;ID
@@ -430,7 +430,7 @@ namespace UNOServer
         private static void HandleSpecialDraw(string[] Signal, PLAYER User)
         {
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy thông tin về số bài còn lại của người chơi hiện tại
-            string cardstack = "SpecialDraw;" + PLAYERLIST[HienTai - 1].ID + ";"; //Tạo chuỗi cardstack chứa thông điệp SpecialDraw: Các lá bài mà người chơi nhận được
+            string cardstack = "Specialdraws;" + PLAYERLIST[HienTai - 1].ID + ";"; //Tạo chuỗi cardstack chứa thông điệp Specialdraws: Các lá bài mà người chơi nhận được
             //Phạt người chơi không hô UNO rút thêm 2 lá
             if (YELLUNOLIST.Contains(User.ID))
             {
