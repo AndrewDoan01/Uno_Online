@@ -507,12 +507,4 @@ namespace UNOServer
         public int Luot { get; set; } //Thứ tự (lượt) của người chơi 
         public Socket PlayerSocket { get; set; } //Socket người chơi 
     }
-
-    class Room
-    {
-        public string RoomID { get; set; }
-        public int NumofPlayers { get; set; }
-        public List<PLAYER> PLAYERLIST { get; set; }
-
-    }
 }
