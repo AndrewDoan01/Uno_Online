@@ -72,8 +72,8 @@ namespace UNOOnline
                 AnalyzeData(receivedMessage);
             }
         }
-        // Gọi hàm hiện thị bàn chơi từ Form GameTable
-        // public static GameTable gametable;
+        // Gọi hàm hiện thị bàn chơi từ Class GameManager
+        public static GameManager gamemanager;
         // public static List<OtherPlayers> otherplayers;
         private static void AnalyzeData(string data)
         {
@@ -95,34 +95,36 @@ namespace UNOOnline
             switch (datatype)
             {
                 case "Info":
-                    //gametable = new GameTable(tokens[1]);
+                    //gamemanager.InitializeStat(tokens[1]);
                     break;
                 case "InitializeStat":
-                    //gametable.InitializeStat(tokens);
+                    //gamemanager.InitializeStat(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);
                     break;
                 case "OtherPlayerStat":
-                    //
+                    //gamemanager.OtherPlayerStat(tokens[1], tokens[2], tokens[3], tokens[4]);
                     break;
                 case "Boot":
-                    //gametable.Boot(tokens[1]);
+                    //gamemanager.Boot(tokens[1]);
                     break;
                 case "Update":
-                    //gametable.Update(tokens);
+                    //gamemanager.Update(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
                     break;
                 case "Turn":
-                    //gametable.Turn(tokens[1]);
+                    //gamemanager.StartTurn(tokens[1]);
                     break;
                 case "CardDraw":
-                    //gametable.CardDraw(tokens[1], tokens[2]);
+                    //gamemanager.CardDraw(tokens[1], tokens[2]);
                     break;
                 case "SpecialDraw":
-                    //gametable.SpecialDraw(tokens);
+                    //gamemanager.SpecialDraw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
                     break;
                 case "End":
-                    //gametable.End(tokens[1]);
+                    //gamemanager.End(tokens[1]);
                     break;
                 case "MESSAGE":
-                    //gametable.Message(tokens[1], tokens[2]);
+                    //gamemanager.MESSAGE(tokens[1], tokens[2]);
+                    break;
+                default:
                     break;
             }
         }
