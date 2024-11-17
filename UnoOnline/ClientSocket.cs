@@ -16,16 +16,11 @@ namespace UNOOnline
         //hàm này sẽ được dời sang form màn hình chính, khi người dùng nhấn nút kết nối
         private static void Connect(string[] args)
         {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-
-            /*
-             * Lỗi khi lấy ip server
-             * IPAddress ipAddress = host.AddressList[0];
-            */
-            //Nên đang test bằng ip của máy tui đang chạy server =))
-            IPAddress ipAdress = IPAddress.Parse("10.0.155.136");
-            IPEndPoint endPoint = new IPEndPoint(ipAdress, 11000);
-            ConnectToServer(endPoint);
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());         
+            IPAddress iPAddress = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+            IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000);
+            
+            ConnectToServer(serverEP);
             TestSending();
         }
         // Hàm kết nối tới server
