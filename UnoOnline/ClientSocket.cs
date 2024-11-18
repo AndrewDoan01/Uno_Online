@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -16,8 +17,8 @@ namespace UNOOnline
         //hàm này sẽ được dời sang form màn hình chính, khi người dùng nhấn nút kết nối
         private static void Connect(string[] args)
         {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());         
-            IPAddress iPAddress = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress iPAddress = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Lấy ra IP dạng IPv4 từ host ở trên
             IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000);
             
             ConnectToServer(serverEP);
