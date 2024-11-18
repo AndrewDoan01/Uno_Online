@@ -587,6 +587,7 @@ public partial class Form1 : Form
 
 // Helper classes
 
+<<<<<<< Updated upstream
 public class GameManager
 {
     public List<Player> Players { get; set; }
@@ -783,4 +784,6 @@ public class Deck
         }
     }
 }
+=======
+>>>>>>> Stashed changes
 // end aaasddd
