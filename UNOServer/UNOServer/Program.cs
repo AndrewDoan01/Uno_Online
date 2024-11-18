@@ -188,13 +188,6 @@ namespace UNOServer
             return temp; //Trả về chuỗi temp chứa lá bài đã lật
         }
 
-        /* Hàm kiểm tra bộ bài còn lá nào không (optional có thể không cần) */
-        public static bool ISOVER()
-        {
-            if (BOBAI.CardName.Length == 0) //Kiểm tra nếu mảng CardName đã hết lá bài (độ dài 0)
-                return true;
-            return false;
-        }
 
         /* Hàm gửi một thông điệp cho tất cả các client kết nối trong PLAYERLIST (optional có thể không cần) */
         public static void BroadcastBack(string type, string receivedata)
