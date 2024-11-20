@@ -99,10 +99,13 @@ namespace UNOServer
                     HandleSpecialDraw(Signal, User);
                     break;
                 case "YellUNO":
-                    YELLUNOLIST.Remove(User.ID);
+                    YELLUNOLIST.Remove(Signal[1]);
                     break;
                 case "DrawPenalty":
                     HandleSpecialDraw(Signal, User);
+                    break;
+                case "Diem":
+                    HandleDiem (Signal, User);
                     break;
                 case "Chat":
                     HandleChat(Signal, User);
@@ -116,16 +119,17 @@ namespace UNOServer
          *                  Client -> Server                                          |                                     Server -> Client
          * CONNECT;ID                                                                 | Info;ID         
          * DISCONNNECT;ID                                                             | InitializeStat;ID;Luot;SoLuongBai;CardName;CardName...;CardName (7 bài người chơi + 1 bài hệ thống tự đánh)              
-         * START;                                                                     | OtherPlayerStat;ID;Luot;SoLuongBai
-         * DanhBai;ID;SoLuongBai;CardName;color(df,wd)                                | Boot;ID                                   
-         * RutBai;ID;SoLuongBai                                                       | Update;ID;SoluongBai;CardName(Nếu đánh bài);color(df,wd) (Nếu đánh bài)          
+         * START;ID                                                                   | OtherPlayerStat;ID;Luot;SoLuongBai
+         * DanhBai;ID;SoLuongBai;CardName;color(wild draw, wild)                      | Boot;ID                                   
+         * RutBai;ID;SoLuongBai                                                       | Update;ID;SoluongBai;CardName(Nếu đánh bài);color(wild draw, wild) (Nếu đánh bài)          
          * SpecialDraw;ID;SoLuongBai;                                                 | Turn;ID                      
          * Chat;ID;<Content>                                                          | CardDraw;ID;CardName                
          * YellUNO;ID                                                                 | Specialdraws;ID;CardName;CardName...
          * DrawPenalty;ID;SoLuongBai;                                                 | End;ID
-         *                                                                            | MESSAGE;ID;<Content>
+         * Diem;ID;<Diem so>                                                          | MESSAGE;ID;<Content>
          *                                                                            | YellUNOEnable;ID
          *                                                                            | Penalty;ID
+         *                                                                            | 
          * Lưu ý: Bên client sẽ tự động disable nút hô UNO sau khi người chơi ấn nút hô UNO hoặc khi lại đến lượt người chơi đó quên ấn.
          * Bên client sẽ xử lý logic việc show những lá bài có thể đánh hoặc không trong bộ bài dựa trên thông điệp Update lá bài face up card bên server gửi đến (cùng màu, cùng số, đặc biệt trường hợp
          * face up card là lá df, wd phải dựa trên màu người chơi đánh lá đó đã chọn).
@@ -180,30 +184,14 @@ namespace UNOServer
             for (int i = 0; i < BOBAI.CardName.Length; i++)
             {
                 temp = BOBAI.CardName[i]; //Lấy lá bài của mảng CardName và lưu vào chuỗi temp
-                if (!temp.Contains("Rv") && !temp.Contains("s") && !temp.Contains("wd") && !temp.Contains("dt") && !temp.Contains("df")) //Nếu thỏa điều kiện chỉ là lá bài số thì break khỏi vòng lặp
+                //Nếu thỏa điều kiện chỉ là lá bài số thì break khỏi vòng lặp
+                if (!temp.Contains("Reverse") && !temp.Contains("Skip") && !temp.Contains("Wild") && !temp.Contains("Wild_Draw") && !temp.Contains("Draw")) //Sử dụng Contains() để xác định trong lá bài có phần cần tìm hay không
+                //Lưu ý là contains() sử dụng với chuỗi không yêu cầu chuỗi gốc phải khớp hoàn toàn nên đáng lý ra là chỉ cần contains Wild và Draw nhưng t trình bày hết cho dễ hiểu
                     break;
             }
             BOBAI.CardName = BOBAI.CardName.Where(val => val != temp).ToArray(); //Xóa lá bài đã được chọn ra khỏi mảng CardName để không bị sử dụng lại
             MoBai.mobai.Add(temp); //Lưu lá bài đã đánh vào list MoBai lưu trữ các lá bài đã đánh
             return temp; //Trả về chuỗi temp chứa lá bài đã lật
-        }
-
-        /* Hàm kiểm tra bộ bài còn lá nào không (optional có thể không cần) */
-        public static bool ISOVER()
-        {
-            if (BOBAI.CardName.Length == 0) //Kiểm tra nếu mảng CardName đã hết lá bài (độ dài 0)
-                return true;
-            return false;
-        }
-
-        /* Hàm gửi một thông điệp cho tất cả các client kết nối trong PLAYERLIST (optional có thể không cần) */
-        public static void BroadcastBack(string type, string receivedata)
-        {
-            foreach (var user in PLAYERLIST)
-            {
-                byte[] data = Encoding.UTF8.GetBytes(type + receivedata);
-                user.PlayerSocket.Send(data);
-            }
         }
 
         /* Hàm gửi thông tin của tất cả người chơi đã kết nối cho người chơi mới và ngược lại */
@@ -300,7 +288,7 @@ namespace UNOServer
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy số lượng bài còn lại của người chơi sau khi đánh đó
             if (PLAYERLIST[HienTai - 1].SoLuongBai == 0) //Kiểm tra nếu số lượng bài còn lại của người chơi sau khi đánh đó là 0
             {
-                //Gửi thông điệp cho tất cả người chơi End: kết thúc game
+                //Gửi thông điệp cho tất cả người chơi End: kết thúc game và bật màn hình kết quả thắng thua, người thắng (Signal[1]) sẽ mở màn hình thắng, còn lại màn hình thua
                 foreach (var user in PLAYERLIST)
                 {
                     string SendData = "End;" + Signal[1];
@@ -326,7 +314,7 @@ namespace UNOServer
                     if (user.Luot != HienTai)
                     {
                         string SendData = "Update;" + Signal[1] + ";" + Signal[2] + ";" + Signal[3];
-                        if (Signal[3].Contains("df") || Signal[3].Contains("wd"))
+                        if (Signal[3].Contains("Wild_Draw") || Signal[3].Contains("Wild")) //Đáng lý là chỉ cần contains Wild nhưng t trình bày hết cho dễ hiểu trường hợp này do chỉ có 2 lá đó là có màu được chọn đi kèm
                         {
                             SendData += ";" + Signal[4];
                         }
@@ -335,13 +323,13 @@ namespace UNOServer
                         Thread.Sleep(200);
                     }
                 }
-                if (Signal[3].Contains("dt")) //Nếu lá bài người chơi đánh là draw 2 (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng như dt_X, dt_Y...)
+                if (Signal[3].Contains("Blue_Draw") || Signal[3].Contains("Red_Draw") || Signal[3].Contains("Green_Draw") || Signal[3].Contains("Yellow_Draw")) //Nếu lá bài người chơi đánh là draw 2 (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng)
                     RUT += 2;
-                if (Signal[3].Contains("df")) //Nếu lá bài người chơi đánh là draw 4 (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng như df_X, df_Y...)
+                if (Signal[3].Contains("Wild_Draw")) //Nếu lá bài người chơi đánh là draw 4 (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng)
                 {
                     RUT += 4;
                 }
-                if (Signal[3].Contains("rv")) //Nếu lá bài người chơi đánh là reverse (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng như rv_X, rv_Y...)
+                if (Signal[3].Contains("Reverse")) //Nếu lá bài người chơi đánh là reverse (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng)
                 {
                     if (ChieuDanh == true) //Đang thuận chiều thì ngược chiều và ngược lại
                         ChieuDanh = false;
@@ -350,7 +338,7 @@ namespace UNOServer
                 }
                 if (ChieuDanh == true) //Nếu thuận chiều 
                 {
-                    if (Signal[3].Contains("s")) //Nếu lá bài người chơi đánh là skip
+                    if (Signal[3].Contains("Skip")) //Nếu lá bài người chơi đánh là skip
                     {
                         if (HienTai == PLAYERLIST.Count) //Nếu HienTai là người chơi có thứ tự lượt cuối cùng trong PLAYERLIST đã sắp xếp thứ tự theo lượt chơi
                         {
@@ -368,7 +356,7 @@ namespace UNOServer
                 }
                 else //Nếu ngược chiều
                 {
-                    if (Signal[3].Contains("s")) //Nếu lá bài người chơi đánh là skip
+                    if (Signal[3].Contains("Skip")) //Nếu lá bài người chơi đánh là skip
                     {
                         if (HienTai == 1) //Nếu HienTai là người chơi có thứ tự lượt đầu tiên trong PLAYERLIST đã sắp xếp thứ tự theo lượt chơi
                         {
@@ -419,7 +407,6 @@ namespace UNOServer
                     string SendData = "Update;" + Signal[1] + ";" + Signal[2];
                     byte[] data = Encoding.UTF8.GetBytes(SendData);
                     user.PlayerSocket.Send(data);
-
                     Thread.Sleep(200);
                 }
             }
@@ -432,10 +419,10 @@ namespace UNOServer
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy thông tin về số bài còn lại của người chơi hiện tại
             string cardstack = "Specialdraws;" + PLAYERLIST[HienTai - 1].ID + ";"; //Tạo chuỗi cardstack chứa thông điệp Specialdraws: Các lá bài mà người chơi nhận được
             //Phạt người chơi không hô UNO rút thêm 2 lá
-            if (YELLUNOLIST.Contains(User.ID))
+            if (YELLUNOLIST.Contains(PLAYERLIST[HienTai - 1].ID))
             {
                 RUT += 2;
-                YELLUNOLIST.Remove(User.ID);
+                YELLUNOLIST.Remove(PLAYERLIST[HienTai - 1].ID);
             }
             //Vòng lặp nối các lá bài vào cardstack để hoàn chỉnh SpecialDraw 
             for (int i = 0; i < RUT; i++)
@@ -455,7 +442,6 @@ namespace UNOServer
                     string SendData = "Update;" + Signal[1] + ";" + Signal[2];
                     byte[] data = Encoding.UTF8.GetBytes(SendData);
                     user.PlayerSocket.Send(data);
-
                     Thread.Sleep(200);
                 }
             }
@@ -466,7 +452,6 @@ namespace UNOServer
         private static void HandleChat(string[] Signal, PLAYER User)
         {
             string sender = Signal[1]; //Tạo chuỗi sender để lưu ID của người gửi tin chat 
-            User.ID = sender; //Đối tượng player lấy ID của người gửi tin chat
             string ChatContent = Signal[2]; //Tạo chuỗi MessContent để lưu nội dung tin chat trong mảng chuỗi Signal
             //Gửi thông điệp MESSAGE: Tin chat của người chơi gửi chat đến tất cả người chơi còn lại
             foreach (var user in PLAYERLIST)
@@ -515,38 +500,15 @@ namespace UNOServer
             byte[] data = Encoding.UTF8.GetBytes(SendData);
             User.PlayerSocket.Send(data);
         }
-    }
 
-    /* Class chứa các lá bài của bộ bài */
-    class BOBAI
-    {
-        public static string currentCard = "";
-        public static string[] CardName =
+        /* Hàm cập nhật điểm của người chơi sau khi hết ván */
+        private static void HandleDiem(string[] Signal, PLAYER User)
         {
-                "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r1_", "r2_", "r3_", "r4_", "r5_", "r6_", "r7_", "r8_", "r9_",
-                "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b1_", "b2_", "b3_", "b4_", "b5_", "b6_", "b7_", "b8_", "b9_",
-                "y0", "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y1_", "y2_", "y3_", "y4_", "y5_", "y6_", "y7_", "y8_", "y9_",
-                "g0", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "g1_", "g2_", "g3_", "g4_", "g5_", "g6_", "g7_", "g8_", "g9_",
-                "Rv_r", "Rv_r_X", "Rv_b", "Rv_b_X", "Rv_y", "Rv_y_X", "Rv_g", "Rv_g_X",
-                "s_r", "s_r_X", "s_b", "s_b_X", "s_y", "s_y_X", "s_g", "s_g_X",
-                "wd", "wd_X", "wd_Y", "wd_Z",
-                "df", "df_X", "df_Y", "df_Z",
-                "dt_r", "dt_r_X", "dt_b", "dt_b_X", "dt_y", "dt_y_X", "dt_g", "dt_g_X"
-        }; //Mảng string chứa tên các lá bài trong bộ bài
-    }
-
-    /* Class để lưu trữ các bài đã mở ra (đã đánh) */
-    class MoBai
-    {
-        public static List<string> mobai = new List<string>();
-    }
-
-    /* Class để lưu trữ thông tin từng người chơi */
-    class PLAYER
-    {
-        public string ID { get; set; } //Danh tính (số ID) của người chơi
-        public int SoLuongBai { get; set; } //Số lượng bài của người chơi
-        public int Luot { get; set; } //Thứ tự (lượt) của người chơi 
-        public Socket PlayerSocket { get; set; } //Socket người chơi 
+            for (int i = 0; i < PLAYERLIST.Count; i++)
+            {
+                if (PLAYERLIST[i].ID == Signal[1])
+                    PLAYERLIST[i].Diem += int.Parse(Signal[2]);
+            }
+        }
     }
 }

@@ -50,29 +50,17 @@
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\Uno_Online\\Uno_Online\\UnoOnline\\Form1.cs",
-              "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\Uno_Online\\Uno_Online\\UnoOnline\\Form1.cs",
-              "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAJgAAAAAAAAAAAAUwOQAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-16T04:31:48.437Z",
-              "EditorCaption": ""
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\Uno_Online\\Uno_Online\\UnoOnline\\Form1.cs",
-              "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\Uno_Online\\Uno_Online\\UnoOnline\\Form1.cs [Design]",
-              "RelativeToolTip": "Form1.cs [Design]",
+              "Title": "ClientSocket.cs",
+              "DocumentMoniker": "C:\\Users\\ledan\\source\\repos\\Uno_Online\\UnoOnline\\ClientSocket.cs",
+              "RelativeDocumentMoniker": "ClientSocket.cs",
+              "ToolTip": "C:\\Users\\ledan\\source\\repos\\Uno_Online\\UnoOnline\\ClientSocket.cs",
+              "RelativeToolTip": "ClientSocket.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAgAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-16T04:29:44.143Z",
 =======
