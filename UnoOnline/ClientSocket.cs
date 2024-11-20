@@ -14,7 +14,7 @@ namespace UNOOnline
         public static Thread recvThread;
         public static string datatype = "";
 
-        //hàm này sẽ được dời sang form màn hình chính, khi người dùng nhấn nút kết nối
+        //hàm này sẽ được dời sang form màn hình chính, khi người dùng mở ứng dụng
         private static void Connect(string[] args)
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -22,8 +22,8 @@ namespace UNOOnline
             IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000);
             
             ConnectToServer(serverEP);
-            TestSending();
         }
+
         // Hàm kết nối tới server
         private static void ConnectToServer(IPEndPoint server)
         {
@@ -39,18 +39,12 @@ namespace UNOOnline
             {
                 Console.WriteLine("Unable to connect to the server");
                 Console.WriteLine(ex.Message);
-
             }
         }
         // Hàm gửi dữ liệu tới server
-        private static void TestSending()
+        public static void SendData(string message)
         {
-            string message = "CONNECT;User1";
-            SendData(message);
-        }
-        private static void SendData(string message)
-        {
-            message = datatype + ";" + message;
+            //message = datatype + ";" + message;
             byte[] data = Encoding.UTF8.GetBytes(message);
             clientSocket.Send(data);
         }
