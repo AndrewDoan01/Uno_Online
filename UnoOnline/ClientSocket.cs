@@ -6,7 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Xml;
-namespace UNOOnline
+
+namespace UnoOnline
 {
     class ClientSocket
     {
@@ -14,18 +15,10 @@ namespace UNOOnline
         public static Thread recvThread;
         public static string datatype = "";
 
-        //hàm này sẽ được dời sang form màn hình chính, khi người dùng mở ứng dụng
-        private static void Connect(string[] args)
-        {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress iPAddress = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Lấy ra IP dạng IPv4 từ host ở trên
-            IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000);
-            
-            ConnectToServer(serverEP);
-        }
+        
 
         // Hàm kết nối tới server
-        private static void ConnectToServer(IPEndPoint server)
+        public static void ConnectToServer(IPEndPoint server)
         {
             try
             {
