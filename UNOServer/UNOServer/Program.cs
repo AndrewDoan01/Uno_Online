@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 namespace UNOServer
 {
@@ -23,7 +24,9 @@ namespace UNOServer
         private static int HienTai = 1; //Đến lượt đánh của người chơi nào
         private static bool ChieuDanh = true; //Chiều đánh
         private static int RUT = 0; //Số bài rút (cho lá df, dt)
-        private static List<string> YELLUNOLIST = new List<string>();
+        private static List<string> YELLUNOLIST = new List<string>(); //List các id chỉ còn 1 lá mà chưa hô uno
+        private static int DemRestart = 0; //Đếm số lượng đồng ý restart (màn hình kết quả thắng thua)
+        private static int DemFinish = 0; //Đếm số lượng muốn finish (màn hình kết quả thắng thua)
 
         /* Hàm thiết lập (khởi động) server */
         static void Main(string[] args)
@@ -34,15 +37,30 @@ namespace UNOServer
             ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); //Tạo socket cho server
             IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000); //Tạo endpoint với IP của host và cổng
             ServerSocket.Bind(serverEP); //Socket server kết nối đến endpoint đó => địa chỉ của server
-            ServerSocket.Listen(4); //Server có số kết nối tối đa đến là 4 kết nối (1 phòng 4 người)
+            ServerSocket.Listen(4);
             Console.WriteLine("Server đã được tạo và đang chạy! Đợi các kết nối từ Clients...");
             Console.WriteLine("Địa chỉ IP của Server: " + iPAddress.ToString());
             //Lặp vô hạn để xử lý các kết nối đến server từ nhiều client
             while (true)
             {
-                ClientSocket = ServerSocket.Accept(); //Server chấp nhận kết nối từ 1 client nào đó và tạo socket client tương ứng
-                ClientThread = new Thread(() => HandleNewPlayer(ClientSocket)); //Tạo thread mới để chạy hàm HandleNewPlayer để xử lý cho socket client tương ứng 
-                ClientThread.Start();
+                //Nếu server chưa full (4 người) thì cho phép thiết lập kết nối
+                if (PLAYERLIST.Count < 4)
+                {
+                    ClientSocket = ServerSocket.Accept(); //Server chấp nhận kết nối từ 1 client nào đó và tạo socket client tương ứng
+                    Console.WriteLine("Nhận kết nối từ " + ClientSocket.RemoteEndPoint);
+                    ClientThread = new Thread(() => HandleNewPlayer(ClientSocket)); //Tạo thread mới để chạy hàm HandleNewPlayer để xử lý cho socket client tương ứng 
+                    ClientThread.Start();
+                }
+                else //Nếu server đã full, tạo socket tạm thời để gửi thông báo đã đầy rồi đóng
+                {                   
+                    Socket tempSocket = ServerSocket.Accept(); //Tạo socket tạm thời để chấp nhận
+                    string note = "Server đã đầy.";
+                    byte[] data = Encoding.UTF8.GetBytes(note);
+                    tempSocket.Send(data); //Gửi thông báo cho client
+                    Console.WriteLine("Số lượng người chơi đã đạt tối đa (4)!");
+                    tempSocket.Shutdown(SocketShutdown.Both);
+                    tempSocket.Close(); //Đóng socket tạm thời
+                }
             }
         }
 
@@ -64,7 +82,6 @@ namespace UNOServer
                         int bRead = User.PlayerSocket.Receive(data); //Nhận dữ liệu client và ghi từng byte dữ liệu vào mảng byte tên data, số byte lưu vào bRead
                         receivedata += Encoding.UTF8.GetString(data, 0, bRead); //Chuyển đổi mảng byte dữ liệu thành dạng chuỗi và nối chuỗi vào receivedata thành thông điệp
                     }
-
                     Console.WriteLine(User.PlayerSocket.RemoteEndPoint + ": " + receivedata);
                     DecryptingMessage(receivedata, User); //Thông điệp được đưa vào hàm này để xử lý yêu cầu (thông điệp) từ người chơi (client) tương ứng
                 }
@@ -105,10 +122,16 @@ namespace UNOServer
                     HandleSpecialDraw(Signal, User);
                     break;
                 case "Diem":
-                    HandleDiem (Signal, User);
+                    HandleDiem(Signal, User);
                     break;
                 case "Chat":
                     HandleChat(Signal, User);
+                    break;
+                case "Restart":
+                    HandleAfterMatch(Signal, User);
+                    break;
+                case "Finish":
+                    HandleAfterMatch(Signal, User);
                     break;
                 default:
                     break;
@@ -127,12 +150,14 @@ namespace UNOServer
          * YellUNO;ID                                                                 | Specialdraws;ID;CardName;CardName...
          * DrawPenalty;ID;SoLuongBai;                                                 | End;ID
          * Diem;ID;<Diem so>                                                          | MESSAGE;ID;<Content>
-         *                                                                            | YellUNOEnable;ID
-         *                                                                            | Penalty;ID
-         *                                                                            | 
-         * Lưu ý: Bên client sẽ tự động disable nút hô UNO sau khi người chơi ấn nút hô UNO hoặc khi lại đến lượt người chơi đó quên ấn.
-         * Bên client sẽ xử lý logic việc show những lá bài có thể đánh hoặc không trong bộ bài dựa trên thông điệp Update lá bài face up card bên server gửi đến (cùng màu, cùng số, đặc biệt trường hợp
-         * face up card là lá df, wd phải dựa trên màu người chơi đánh lá đó đã chọn).
+         * Restart;ID                                                                 | YellUNOEnable;ID
+         * Finish;ID                                                                  | Penalty;ID
+         *                                                                            | Result;ID;Diem;Rank
+         * LƯU Ý: 
+         * Bên client sẽ tự động disable nút hô UNO sau khi người chơi ấn nút hô UNO hoặc khi lại đến lượt người chơi đó quên ấn.
+         * Bên client sẽ xử lý logic việc show những lá bài có thể đánh hoặc không trong bộ bài dựa trên thông điệp Update lá bài face up card bên server gửi đến (cùng màu, cùng số, đặc biệt trường hợp face up card là lá df, wd phải dựa trên màu người chơi đánh lá đó đã chọn).
+         * Về restart/finish game: bên client sau khi hiện màn hình thắng thua thì có 2 nút restart/finish và gửi thông điệp tương ứng, server khi nào nhận đủ thông điệp từ tất cả người chơi thì mới xử lý và quyết định restart hay hiện màn hình xếp hạng kết thúc.
+         * Client ấn nút restart/finish xong thì disable tất cả các nút đi tránh gửi nhiều lần. 
         */
 
         /* Hàm khởi tạo lượt và gán số bài ban đầu cho người chơi */
@@ -217,7 +242,7 @@ namespace UNOServer
             }
         }
 
-        /* Hàm xử lý yêu cầu ngắt kết nối từ một người chơi */
+        /* Hàm xử lý yêu cầu ngắt kết nối từ một người chơi (hàm này còn sử dụng cho việc ấn nút thoát ở màn hình xếp hạng) */
         private static void HandleDisconnect(string[] Signal)
         {
             foreach (var user in PLAYERLIST.ToList()) //Duyệt qua các người chơi trong PLAYERLIST
@@ -229,13 +254,20 @@ namespace UNOServer
                     PLAYERLIST.Remove(user); //Xóa người chơi khỏi danh sách PLAYERLIST
                 }
             }
+            //Nếu tất cả người chơi đã thoát hết, đóng kết nối server
+            if (PLAYERLIST.Count == 0)
+            {
+                ServerSocket.Shutdown(SocketShutdown.Both); 
+                ServerSocket.Close();
+                Console.WriteLine("Tất cả người chơi đã thoát. Server đã đóng!");
+            }
         }
 
         /* Hàm thiết lập bắt đầu trò chơi */
         private static void SetupGame(string[] Signal, PLAYER User)
         {
             SettingUpTurn(); //Tạo lượt và gán số bài 7 bài cho mỗi người chơi
-            PLAYERLIST.Sort((x, y) => x.Luot.CompareTo(y.Luot)); //Sắp xếp lại các người chơi trong PLAYERLIST theo lượt
+            PLAYERLIST.Sort((x, y) => x.Luot.CompareTo(y.Luot)); //Sắp xếp lại các người chơi trong PLAYERLIST theo lượt tăng dần
             XaoBai(); //Xào bộ bài
             BOBAI.currentCard = ShowPileCard(); //Tự động rút lá bài đầu tiên và cập nhật lá bài hiện tại đã đánh
             //Gửi thông điệp cho tất cả người chơi InitializeStat: Gửi thông điệp thông tin khởi tạo về danh tính, thứ tự lượt, số bài, tên các lá cụ thể cho mỗi người chơi lúc ban đầu 
@@ -379,7 +411,11 @@ namespace UNOServer
                     HienTai = PLAYERLIST.Count;
                 //Nếu người chơi lượt kế tiếp là người còn 1 lá bài nhưng vẫn chưa hô Uno, gửi thông điệp xử phạt người chơi đó
                 if (YELLUNOLIST.Contains(PLAYERLIST[HienTai - 1].ID))
-                    Penalty(PLAYERLIST[HienTai-1]);
+                {
+                    string SendData = "Penalty;" + PLAYERLIST[HienTai - 1].ID;
+                    byte[] data = Encoding.UTF8.GetBytes(SendData);
+                    PLAYERLIST[HienTai - 1].PlayerSocket.Send(data);
+                }
                 //Gửi thông điệp cho tất cả người chơi Turn: Gửi thông điệp về việc đến lượt của người chơi nào
                 foreach (var user in PLAYERLIST)
                 {
@@ -399,6 +435,7 @@ namespace UNOServer
             BOBAI.CardName = BOBAI.CardName.Where(val => val != BOBAI.CardName[0]).ToArray(); //Xóa lá bài đã rút ra khỏi mảng CardName
             byte[] bf = Encoding.UTF8.GetBytes(mkmsg); //Tạo mảng byte tên bf chứa thông điệp CardDraw
             PLAYERLIST[HienTai - 1].PlayerSocket.Send(bf); //Gửi thông điệp CardDraw đến người chơi rút bài
+            Console.WriteLine("Note: " + mkmsg);
             //Gửi thông điệp Update: cập nhật số lượng bài mới của người chơi đó cho toàn bộ người chơi không đến lượt
             foreach (var user in PLAYERLIST)
             {
@@ -413,7 +450,7 @@ namespace UNOServer
             UpdateTurn();
         }
 
-        /* Hàm xử lý việc bị rút nhiều lá bài do các lá bài đặc biệt và chuyển lượt */
+        /* Hàm xử lý việc bị rút nhiều lá bài do các lá bài đặc biệt hoặc bị phạt do không hô uno và chuyển lượt */
         private static void HandleSpecialDraw(string[] Signal, PLAYER User)
         {
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy thông tin về số bài còn lại của người chơi hiện tại
@@ -433,7 +470,7 @@ namespace UNOServer
             byte[] buff = Encoding.UTF8.GetBytes(cardstack);
             PLAYERLIST[HienTai - 1].PlayerSocket.Send(buff); //Gửi thông điệp SpecialDraw đến người chơi rút bài
             RUT = 0;
-            Console.WriteLine("Sendback: " + cardstack);
+            Console.WriteLine("Note: " + cardstack);
             //Gửi thông điệp Update: cập nhật số lượng bài mới của người chơi đó cho toàn bộ người chơi không đến lượt
             foreach (var user in PLAYERLIST)
             {
@@ -481,8 +518,13 @@ namespace UNOServer
                 HienTai = 1; // Quay lại người chơi đầu tiên
             if (HienTai < 1) // Nếu HienTai giảm xuống dưới 1
                 HienTai = PLAYERLIST.Count; // Quay về người chơi cuối cùng
+            //Nếu người chơi lượt kế tiếp là người còn 1 lá bài nhưng vẫn chưa hô Uno, gửi thông điệp xử phạt người chơi đó
             if (YELLUNOLIST.Contains(PLAYERLIST[HienTai - 1].ID))
-                Penalty(PLAYERLIST[HienTai - 1]);
+            {
+                string SendData = "Penalty;" + PLAYERLIST[HienTai - 1].ID;
+                byte[] data = Encoding.UTF8.GetBytes(SendData);
+                PLAYERLIST[HienTai - 1].PlayerSocket.Send(data);
+            }                 
             //Gửi thông điệp đến tất cả người chơi Turn: Gửi thông điệp về việc đến lượt của người chơi nào
             foreach (var user in PLAYERLIST)
             {
@@ -493,14 +535,6 @@ namespace UNOServer
             }
         }
 
-        /* Hàm gửi thông điệp người chơi không hô UNO bị phạt rút 2 lá */
-        private static void Penalty(PLAYER User)
-        {
-            string SendData = "Penalty;" + User.ID;
-            byte[] data = Encoding.UTF8.GetBytes(SendData);
-            User.PlayerSocket.Send(data);
-        }
-
         /* Hàm cập nhật điểm của người chơi sau khi hết ván */
         private static void HandleDiem(string[] Signal, PLAYER User)
         {
@@ -508,6 +542,42 @@ namespace UNOServer
             {
                 if (PLAYERLIST[i].ID == Signal[1])
                     PLAYERLIST[i].Diem += int.Parse(Signal[2]);
+            }
+        }
+
+        /* Hàm xử lý restart hoặc finish game */
+        private static void HandleAfterMatch(string[] Signal, PLAYER User)
+        {
+            //Đếm Restart hoặc Finish 
+            for (int i = 0; i < PLAYERLIST.Count; i++)
+            {
+                if (PLAYERLIST[i].ID == Signal[1])
+                {
+                    if (Signal[0] == "Restart")
+                        DemRestart += 1;
+                    if (Signal[0] == "Finish")
+                        DemFinish += 1;
+                }
+            }
+            //Nếu đủ số người đã chọn thì quyết định restart hay hiện màn hình xếp hạng kết thúc.
+            if ((DemRestart + DemFinish) == PLAYERLIST.Count)
+            {
+                if (DemFinish > 0) //Có người chọn Finish thì gưi thông điệp Result: hiện màn hình xếp hạng kết thúc và điểm số.
+                {
+                    PLAYERLIST.Sort((x, y) => x.Diem.CompareTo(y.Diem)); //Sắp xếp lại PLAYERLIST theo điểm tăng dần
+                    for (int i = 0; i < PLAYERLIST.Count; i++)
+                        PLAYERLIST[i].Rank = PLAYERLIST.Count - i; //Gán hạng của người chơi (4-1)
+                    foreach (var user in PLAYERLIST)
+                    {
+                        string SendData = "Result;" + user.ID + ";" + user.Diem + ";" + user.Rank;
+                        byte[] data = Encoding.UTF8.GetBytes(SendData);
+                        user.PlayerSocket.Send(data);
+                        Thread.Sleep(200);
+                    }
+                }
+                else SetupGame(Signal, User);  //Đủ người thì lại thiết lập bắt đầu trò chơi
+                DemFinish = 0;
+                DemRestart = 0;
             }
         }
     }

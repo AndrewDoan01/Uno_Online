@@ -14,6 +14,7 @@ namespace UNOServer
         public int SoLuongBai { get; set; } //Số lượng bài của người chơi
         public int Luot { get; set; } //Thứ tự (lượt) của người chơi 
         public int Diem { get; set; } //Điểm người chơi
+        public int Rank { get; set; } //Hạng người chơi
         public Socket PlayerSocket { get; set; } //Socket người chơi 
     }
 }
