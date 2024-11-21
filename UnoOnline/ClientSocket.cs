@@ -78,7 +78,7 @@ namespace UnoOnline
             switch (datatype)
             {
                 case "Info":
-                    //gamemanager.InitializeStat(tokens[1]);
+                    gamemanager.UpdateOtherPlayerName(tokens[1]);
                     break;
                 case "InitializeStat":
                     //gamemanager.InitializeStat(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);

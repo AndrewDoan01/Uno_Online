@@ -23,7 +23,15 @@ namespace UnoOnline
                 Instance = new GameManager();
             }
         }
+        public void UpdateOtherPlayerName(string OtherPlayerName)
+        {
+            bool playerExists = Players.Exists(p => p.Name == OtherPlayerName);
+            if (!playerExists)
+            {
+                Players.Add(new Player(OtherPlayerName));
+            }
 
+        }
         public void AddPlayer(Player player)
         {
             Players.Add(player);
