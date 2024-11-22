@@ -8,6 +8,10 @@ namespace UnoOnline
 {
     internal static class Program
     {
+        //Tạo một player mới
+        //Sau này tên player sẽ được nhập từ người chơi (lấy từ form login)
+        public static Player player = new Player("Testing player502");
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
