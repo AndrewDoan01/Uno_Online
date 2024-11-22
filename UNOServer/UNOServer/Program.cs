@@ -567,12 +567,28 @@ namespace UNOServer
                     PLAYERLIST.Sort((x, y) => x.Diem.CompareTo(y.Diem)); //Sắp xếp lại PLAYERLIST theo điểm tăng dần
                     for (int i = 0; i < PLAYERLIST.Count; i++)
                         PLAYERLIST[i].Rank = PLAYERLIST.Count - i; //Gán hạng của người chơi (4-1)
+                    //Gửi thông điệp result chứa thông tin từng người chơi cho từng người chơi tương ứng
                     foreach (var user in PLAYERLIST)
                     {
                         string SendData = "Result;" + user.ID + ";" + user.Diem + ";" + user.Rank;
                         byte[] data = Encoding.UTF8.GetBytes(SendData);
                         user.PlayerSocket.Send(data);
                         Thread.Sleep(200);
+                    }
+                    //Gửi thông điệp result chứa thông tin những người chơi khác cho mỗi người chơi (để thuận lợi tạo bảng xếp hạng bên client)
+                    //Ví dụ t là người chơi thì sẽ gửi thông tin result của những người còn lại cho t để bên client của t cập nhập bảng xếp hạng.
+                    foreach (var user in PLAYERLIST)
+                    {
+                        foreach (var player_ in PLAYERLIST)
+                        {
+                            if (user.ID != player_.ID)
+                            {
+                                string SendData = "Result;" + player_.ID + ";" + player_.Diem + ";" + player_.Rank;
+                                byte[] data = Encoding.UTF8.GetBytes(SendData);
+                                user.PlayerSocket.Send(data);
+                                Thread.Sleep(200);
+                            }
+                        }
                     }
                 }
                 else SetupGame(Signal, User);  //Đủ người thì lại thiết lập bắt đầu trò chơi
