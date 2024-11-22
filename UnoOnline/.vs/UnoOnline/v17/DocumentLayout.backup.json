@@ -1,41 +1,22 @@
 {
   "Version": 1,
-<<<<<<< Updated upstream
-  "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\Uno_Online\\Uno_Online\\UnoOnline\\",
+  "WorkspaceRootPath": "D:\\Uno_Online\\UnoOnline\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\Uno_Online\\Uno_Online\\UnoOnline\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|d:\\uno_online\\unoonline\\clientsocket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:clientsocket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|d:\\uno_online\\unoonline\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|d:\\uno_online\\unoonline\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|d:\\uno_online\\unoonline\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|c:\\users\\admin\\documents\\github\\uno_online\\uno_online\\uno_online\\unoonline\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-=======
-  "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|c:\\users\\admin\\documents\\github\\uno_online\\unoonline\\gameresources.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:gameresources.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
->>>>>>> Stashed changes
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -45,109 +26,60 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-<<<<<<< Updated upstream
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ClientSocket.cs",
-              "DocumentMoniker": "C:\\Users\\ledan\\source\\repos\\Uno_Online\\UnoOnline\\ClientSocket.cs",
-              "RelativeDocumentMoniker": "ClientSocket.cs",
-              "ToolTip": "C:\\Users\\ledan\\source\\repos\\Uno_Online\\UnoOnline\\ClientSocket.cs",
-              "RelativeToolTip": "ClientSocket.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAgAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-16T04:29:44.143Z",
-=======
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GameResources.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\GameResources.cs",
-              "RelativeDocumentMoniker": "GameResources.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\GameResources.cs",
-              "RelativeToolTip": "GameResources.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAACQAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T13:00:47.732Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Form1.cs",
-              "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Form1.cs",
-              "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAAYCAAAAAAAAAADwvwsAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T12:55:22.095Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Deck.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Deck.cs",
-              "RelativeDocumentMoniker": "Deck.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Deck.cs",
-              "RelativeToolTip": "Deck.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAewCwAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "ClientSocket.cs",
+              "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\ClientSocket.cs",
+              "RelativeDocumentMoniker": "ClientSocket.cs",
+              "ToolTip": "D:\\Uno_Online\\UnoOnline\\ClientSocket.cs",
+              "RelativeToolTip": "ClientSocket.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T13:05:36.085Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Card.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Card.cs",
-              "RelativeDocumentMoniker": "Card.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Card.cs",
-              "RelativeToolTip": "Card.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwC4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T13:05:01.731Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "GameManager.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\GameManager.cs",
-              "RelativeDocumentMoniker": "GameManager.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\GameManager.cs",
-              "RelativeToolTip": "GameManager.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAIwAMAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T13:04:08.405Z",
+              "WhenOpened": "2024-11-21T02:45:40.564Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Menu.cs",
+              "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\Menu.cs",
+              "RelativeDocumentMoniker": "Menu.cs",
+              "ToolTip": "D:\\Uno_Online\\UnoOnline\\Menu.cs",
+              "RelativeToolTip": "Menu.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAASwCIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T02:45:30.788Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Menu.cs [Design]",
+              "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\Menu.cs",
+              "RelativeDocumentMoniker": "Menu.cs",
+              "ToolTip": "D:\\Uno_Online\\UnoOnline\\Menu.cs [Design]",
+              "RelativeToolTip": "Menu.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T02:45:28.232Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Form1.cs",
+              "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Uno_Online\\UnoOnline\\Form1.cs [Design]",
+              "ToolTip": "D:\\Uno_Online\\UnoOnline\\Form1.cs [Design]",
               "RelativeToolTip": "Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T12:55:19.003Z",
->>>>>>> Stashed changes
+              "WhenOpened": "2024-11-20T00:18:22.999Z",
               "EditorCaption": " [Design]"
             }
           ]
