@@ -16,5 +16,10 @@ namespace UnoOnline
         {
             InitializeComponent();
         }
+
+        private void btnJoinGame_Click(object sender, EventArgs e)
+        {
+            ClientSocket.SendData("START;" + Program.player.Name);
+        }
     }
 }
