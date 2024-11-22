@@ -5,7 +5,10 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Xml;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+using System.IO; // Added for StringWriter and StringReader
+using Newtonsoft.Json; // Add this line at the top of the file
 
 namespace UnoOnline
 {
@@ -14,8 +17,6 @@ namespace UnoOnline
         private static Socket clientSocket;
         public static Thread recvThread;
         public static string datatype = "";
-
-        
 
         // Hàm kết nối tới server
         public static void ConnectToServer(IPEndPoint server)
@@ -34,82 +35,199 @@ namespace UnoOnline
                 Console.WriteLine(ex.Message);
             }
         }
+
         // Hàm gửi dữ liệu tới server
+        private static readonly object lockObject = new object();
+
         public static void SendData(string message)
         {
-            //message = datatype + ";" + message;
             byte[] data = Encoding.UTF8.GetBytes(message);
-            clientSocket.Send(data);
+            lock (lockObject)
+            {
+                clientSocket.Send(data);
+            }
         }
-        // Hàm nhận dữ liệu từ server
+
+        // Hàm gửi dữ liệu kiểu MyMessageType tới server
+        public static void SendData(MyMessageType message) // Ensure this is your custom message type
+        {
+            string serializedMessage = SerializeMessage(new Message { Type = MessageType.Message, Data = new string[] { message.Sender, message.Content, message.Timestamp.ToString() } });
+            SendData(serializedMessage); // Call the string sending method
+        }
+
         private static void ReceiveData()
         {
             byte[] receivedBuffer = new byte[1024];
             int rec;
-            while (true)
+            try
             {
-                rec = clientSocket.Receive(receivedBuffer);
-                byte[] data = new byte[rec];
-                Array.Copy(receivedBuffer, data, rec);
-                string receivedMessage = Encoding.UTF8.GetString(data);
-                AnalyzeData(receivedMessage);
+                while (true)
+                {
+                    rec = clientSocket.Receive(receivedBuffer);
+                    byte[] data = new byte[rec];
+                    Array.Copy(receivedBuffer, data, rec);
+                    string receivedMessage = Encoding.UTF8.GetString(data);
+                    var message = DeserializeMessage(receivedMessage);
+                    AnalyzeData(receivedMessage); // Pass the string instead of the deserialized message
+                }
+            }
+            catch (SocketException ex)
+            {
+                Console.WriteLine("Connection lost.");
+                Console.WriteLine(ex.Message);
+                // Handle disconnection logic here
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while receiving data.");
+                Console.WriteLine(ex.Message);
             }
         }
-        // Gọi hàm hiện thị bàn chơi từ Class GameManager
+
+        // Gọi hàm hiện thị bàn' chơi từ Class GameManager
         public static GameManager gamemanager;
-        // public static List<OtherPlayers> otherplayers;
+
         private static void AnalyzeData(string data)
         {
-            /*  Cấu trúc thông điệp giữa Server và Client
-            |   Server -> Client
-            | Info;ID         
-            | InitializeStat;ID;Luot;SoLuongBai;CardName;CardName...;CardName (7 bài người chơi + 1 bài hệ thống tự đánh)              
-            | OtherPlayerStat;ID;Luot;SoLuongBai
-            | Boot;ID                                   
-            | Update;ID;SoluongBai;CardName(Nếu đánh bài);color(df,wd) (Nếu đánh bài)          
-            | Turn;ID                      
-            | CardDraw;ID;CardName                
-            | SpecialDraw;ID;CardName;CardName...
-            | End;ID
-            | MESSAGE;ID;<Content>
-            */
             string[] tokens = data.Split(';');
             datatype = tokens[0];
             switch (datatype)
             {
-                case "Info":
+                case nameof(MessageType.Info):
                     gamemanager.UpdateOtherPlayerName(tokens[1]);
                     break;
-                case "InitializeStat":
-                    //gamemanager.InitializeStat(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);
+                case nameof(MessageType.InitializeStat):
+                    // Handle InitializeStat
                     break;
-                case "OtherPlayerStat":
-                    //gamemanager.OtherPlayerStat(tokens[1], tokens[2], tokens[3], tokens[4]);
+                case nameof(MessageType.OtherPlayerStat):
+                    // Handle OtherPlayerStat
                     break;
-                case "Boot":
-                    //gamemanager.Boot(tokens[1]);
+                case nameof(MessageType.Boot):
+                    // Handle Boot
                     break;
-                case "Update":
-                    //gamemanager.Update(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
+                case nameof(MessageType.Update):
+                    // Handle Update
                     break;
-                case "Turn":
-                    //gamemanager.StartTurn(tokens[1]);
+                case nameof(MessageType.Turn):
+                    // Handle Turn
                     break;
-                case "CardDraw":
-                    //gamemanager.CardDraw(tokens[1], tokens[2]);
+                case nameof(MessageType.CardDraw):
+                    // Handle CardDraw
                     break;
-                case "SpecialDraw":
-                    //gamemanager.SpecialDraw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
+                case nameof(MessageType.SpecialDraw):
+                    // Handle SpecialDraw
                     break;
-                case "End":
-                    //gamemanager.End(tokens[1]);
+                case nameof(MessageType.End):
+                    // Handle End
                     break;
-                case "MESSAGE":
-                    //gamemanager.MESSAGE(tokens[1], tokens[2]);
+                case nameof(MessageType.Message):
+                    // Handle Message
                     break;
                 default:
                     break;
+
+                    //case "Info":
+                    //    gamemanager.UpdateOtherPlayerName(tokens[1]);
+                    //    break;
+                    //case "InitializeStat":
+                    //    //gamemanager.InitializeStat(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);
+                    //    break;
+                    //case "OtherPlayerStat":
+                    //    //gamemanager.OtherPlayerStat(tokens[1], tokens[2], tokens[3], tokens[4]);
+                    //    break;
+                    //case "Boot":
+                    //    //gamemanager.Boot(tokens[1]);
+                    //    break;
+                    //case "Update":
+                    //    //gamemanager.Update(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
+                    //    break;
+                    //case "Turn":
+                    //    //gamemanager.StartTurn(tokens[1]);
+                    //    break;
+                    //case "CardDraw":
+                    //    //gamemanager.CardDraw(tokens[1], tokens[2]);
+                    //    break;
+                    //case "SpecialDraw":
+                    //    //gamemanager.SpecialDraw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
+                    //    break;
+                    //case "End":
+                    //    //gamemanager.End(tokens[1]);
+                    //    break;
+                    //case "MESSAGE":
+                    //    //gamemanager.MESSAGE(tokens[1], tokens[2]);
+
             }
         }
+
+        public static void Disconnect()
+        {
+            try
+            {
+                if (clientSocket != null && clientSocket.Connected)
+                {
+                    clientSocket.Shutdown(SocketShutdown.Both);
+                    clientSocket.Close();
+                }
+                if (recvThread != null && recvThread.IsAlive)
+                {
+                    recvThread.Abort();
+                }
+                Console.WriteLine("Disconnected from the server");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while disconnecting.");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static Message DeserializeMessage(string message)
+        {
+            return JsonConvert.DeserializeObject<Message>(message);
+        }
+
+        public static string SerializeMessage(Message message)
+        {
+            return JsonConvert.SerializeObject(message);
+        }
+    }
+
+    public enum MessageType
+    {
+        Info,
+        InitializeStat,
+        OtherPlayerStat,
+        Boot,
+        Update,
+        Turn,
+        CardDraw,
+        SpecialDraw,
+        End,
+        Message
+    }
+
+    // Define your custom message class here
+    public class MyMessageType
+    {
+        public string Sender { get; set; } // The sender of the message
+        public string Content { get; set; } // The content of the message
+        public DateTime Timestamp { get; set; } // The time the message was sent
+
+        // Constructor to initialize the message
+        public MyMessageType(string sender, string content)
+        {
+            Sender = sender;
+            Content = content;
+            Timestamp = DateTime.Now;
+        }
+
+        // Default constructor
+        public MyMessageType() { }
+    }
+
+    public class Message
+    {
+        public MessageType Type { get; set; }
+        public string[] Data { get; set; }
     }
 }
