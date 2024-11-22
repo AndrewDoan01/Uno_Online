@@ -44,7 +44,4 @@ public class Deck
             Cards[n] = value;
         }
     }
-
-
-    
 }
