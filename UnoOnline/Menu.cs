@@ -15,9 +15,7 @@ namespace UnoOnline
     public partial class Menu : Form
     {
         ClientSocket clientSocket = new ClientSocket();
-        //Tạo một player mới
-        //Sau này tên player sẽ được nhập từ người chơi (lấy từ form login)
-        Player player = new Player("Testing player502");
+        
         public List<Player> players = new List<Player>();
         public Menu()
         {
@@ -37,7 +35,7 @@ namespace UnoOnline
         }
         private void BtnJoinGame_Click(object sender, EventArgs e)
         {
-            ClientSocket.SendData("CONNECT;" + player.Name);
+            ClientSocket.SendData("CONNECT;" + Program.player.Name);
             WaitingLobby waitingLobby = new WaitingLobby();
             waitingLobby.Show();
         }
