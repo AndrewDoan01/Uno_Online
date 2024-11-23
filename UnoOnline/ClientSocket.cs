@@ -34,6 +34,12 @@ namespace UnoOnline
                 Console.WriteLine("Unable to connect to the server");
                 Console.WriteLine(ex.Message);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An unexpected error occurred while connecting to the server");
+                Console.WriteLine(ex.Message);
+                // Log the error or handle it as needed
+            }
         }
 
         // Hàm gửi dữ liệu tới server
@@ -49,10 +55,14 @@ namespace UnoOnline
         }
 
         // Hàm gửi dữ liệu kiểu MyMessageType tới server
-        public static void SendData(MyMessageType message) // Ensure this is your custom message type
+        public static void SendData(Message message)
         {
-            string serializedMessage = SerializeMessage(new Message { Type = MessageType.Message, Data = new string[] { message.Sender, message.Content, message.Timestamp.ToString() } });
-            SendData(serializedMessage); // Call the string sending method
+            string serializedMessage = MessageSerializer.SerializeMessage(message);
+            byte[] data = Encoding.UTF8.GetBytes(serializedMessage);
+            lock (lockObject)
+            {
+                clientSocket.Send(data);
+            }
         }
 
         private static void ReceiveData()
@@ -67,8 +77,8 @@ namespace UnoOnline
                     byte[] data = new byte[rec];
                     Array.Copy(receivedBuffer, data, rec);
                     string receivedMessage = Encoding.UTF8.GetString(data);
-                    var message = DeserializeMessage(receivedMessage);
-                    AnalyzeData(receivedMessage); // Pass the string instead of the deserialized message
+                    var message = MessageSerializer.DeserializeMessage(receivedMessage);
+                    AnalyzeData(message);
                 }
             }
             catch (SocketException ex)
@@ -87,75 +97,83 @@ namespace UnoOnline
         // Gọi hàm hiện thị bàn' chơi từ Class GameManager
         public static GameManager gamemanager;
 
-        private static void AnalyzeData(string data)
+        private static void AnalyzeData(Message message)
         {
-            string[] tokens = data.Split(';');
-            datatype = tokens[0];
-            switch (datatype)
+            try
             {
-                case nameof(MessageType.Info):
-                    gamemanager.UpdateOtherPlayerName(tokens[1]);
-                    break;
-                case nameof(MessageType.InitializeStat):
-                    // Handle InitializeStat
-                    break;
-                case nameof(MessageType.OtherPlayerStat):
-                    // Handle OtherPlayerStat
-                    break;
-                case nameof(MessageType.Boot):
-                    // Handle Boot
-                    break;
-                case nameof(MessageType.Update):
-                    // Handle Update
-                    break;
-                case nameof(MessageType.Turn):
-                    // Handle Turn
-                    break;
-                case nameof(MessageType.CardDraw):
-                    // Handle CardDraw
-                    break;
-                case nameof(MessageType.SpecialDraw):
-                    // Handle SpecialDraw
-                    break;
-                case nameof(MessageType.End):
-                    // Handle End
-                    break;
-                case nameof(MessageType.Message):
-                    // Handle Message
-                    break;
-                default:
-                    break;
-
-                    //case "Info":
-                    //    gamemanager.UpdateOtherPlayerName(tokens[1]);
-                    //    break;
-                    //case "InitializeStat":
-                    //    //gamemanager.InitializeStat(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);
-                    //    break;
-                    //case "OtherPlayerStat":
-                    //    //gamemanager.OtherPlayerStat(tokens[1], tokens[2], tokens[3], tokens[4]);
-                    //    break;
-                    //case "Boot":
-                    //    //gamemanager.Boot(tokens[1]);
-                    //    break;
-                    //case "Update":
-                    //    //gamemanager.Update(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
-                    //    break;
-                    //case "Turn":
-                    //    //gamemanager.StartTurn(tokens[1]);
-                    //    break;
-                    //case "CardDraw":
-                    //    //gamemanager.CardDraw(tokens[1], tokens[2]);
-                    //    break;
-                    //case "SpecialDraw":
-                    //    //gamemanager.SpecialDraw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]);
-                    //    break;
-                    //case "End":
-                    //    //gamemanager.End(tokens[1]);
-                    //    break;
-                    //case "MESSAGE":
-                    //    //gamemanager.MESSAGE(tokens[1], tokens[2]);
-
+                switch (message.Type)
+                {
+                    case MessageType.Info:
+                        Console.WriteLine("Processing Info message");
+                        gamemanager.UpdateOtherPlayerName(message.Data[0]);
+                        break;
+                    case MessageType.InitializeStat:
+                        Console.WriteLine("Processing InitializeStat message");
+                        // Initialize game state
+                        GameManager.InitializeGame();
+                        break;
+                    case MessageType.OtherPlayerStat:
+                        Console.WriteLine("Processing OtherPlayerStat message");
+                        // Update other player's stats
+                        var otherPlayer = new Player(message.Data[0]);
+                        gamemanager.AddPlayer(otherPlayer);
+                        break;
+                    case MessageType.Boot:
+                        Console.WriteLine("Processing Boot message");
+                        // Boot the game
+                        GameManager.InitializeGame();
+                        break;
+                        //hãy bổ sung cho update
+                    case MessageType.Update:
+                        Console.WriteLine("Processing Update message");
+                        // Handle Update
+                        break;
+                    case MessageType.Turn:
+                        Console.WriteLine("Processing Turn message");
+                        // Start the turn for the current player
+                        gamemanager.StartTurn();
+                        break;
+                    case MessageType.CardDraw:
+                        Console.WriteLine("Processing CardDraw message");
+                        // Handle card draw
+                        var player = gamemanager.Players.FirstOrDefault(p => p.Name == message.Data[0]);
+                        if (player != null)
+                        {
+                            var card = new Card(message.Data[1], message.Data[2]);
+                            player.Hand.Add(card);
+                        }
+                        break;
+                    case MessageType.SpecialDraw:
+                        Console.WriteLine("Processing SpecialDraw message");
+                        // Handle special draw (e.g., Draw Two, Wild Draw Four)
+                        var specialPlayer = gamemanager.Players.FirstOrDefault(p => p.Name == message.Data[0]);
+                        if (specialPlayer != null)
+                        {
+                            var specialCard = new Card(message.Data[1], message.Data[2]);
+                            specialCard.DetermineCardType(); // Call this method to set IsDrawCard
+                            specialPlayer.Hand.Add(specialCard);
+                        }
+                        break;
+                    case MessageType.End:
+                        Console.WriteLine("Processing End message");
+                        // Handle end of game
+                        Console.WriteLine("Game has ended.");
+                        break;
+                    case MessageType.Message:
+                        Console.WriteLine("Processing Message");
+                        // Handle chat or other messages
+                        Console.WriteLine($"Message from {message.Data[0]}: {message.Data[1]}");
+                        break;
+                    default:
+                        Console.WriteLine("Unknown message type received");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while analyzing data.");
+                Console.WriteLine(ex.Message);
+                // Log the error or handle it as needed
             }
         }
 
@@ -229,5 +247,18 @@ namespace UnoOnline
     {
         public MessageType Type { get; set; }
         public string[] Data { get; set; }
+    }
+
+    public static class MessageSerializer
+    {
+        public static string SerializeMessage(Message message)
+        {
+            return JsonConvert.SerializeObject(message);
+        }
+
+        public static Message DeserializeMessage(string message)
+        {
+            return JsonConvert.DeserializeObject<Message>(message);
+        }
     }
 }

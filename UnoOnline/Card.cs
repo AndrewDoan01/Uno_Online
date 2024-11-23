@@ -19,7 +19,7 @@
     }
 
     // Phương thức tự động xác định loại thẻ
-    private void DetermineCardType()
+    public void DetermineCardType()
     {
         if (Color == "Wild")
         {
