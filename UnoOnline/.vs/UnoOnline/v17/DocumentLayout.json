@@ -3,19 +3,20 @@
   "WorkspaceRootPath": "D:\\Uno_Online\\UnoOnline\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|D:\\Uno_Online\\UnoOnline\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|d:\\uno_online\\unoonline\\clientsocket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:clientsocket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|d:\\uno_online\\unoonline\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|D:\\Uno_Online\\UnoOnline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Uno_Online\\UNOServer\\UNOServer\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|D:\\Uno_Online\\UnoOnline\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|solutionrelative:gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{190E376C-6381-49A3-BD62-E9A3F238F28A}|UnoOnline.csproj|D:\\Uno_Online\\UnoOnline\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -53,34 +54,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "D:\\Uno_Online\\UnoOnline\\Form1.cs",
+              "RelativeToolTip": "Form1.cs",
+              "ViewState": "AgIAABQCAAAAAAAAAADwv8IAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:58:45.146Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Uno_Online\\UNOServer\\UNOServer\\Program.cs",
-              "RelativeDocumentMoniker": "..\\UNOServer\\UNOServer\\Program.cs",
-              "ToolTip": "D:\\Uno_Online\\UNOServer\\UNOServer\\Program.cs",
-              "RelativeToolTip": "..\\UNOServer\\UNOServer\\Program.cs",
-              "ViewState": "AgIAAGsBAAAAAAAAAAAAAOwBAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-22T22:43:19.472Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ClientSocket.cs",
               "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\ClientSocket.cs",
               "RelativeDocumentMoniker": "ClientSocket.cs",
               "ToolTip": "D:\\Uno_Online\\UnoOnline\\ClientSocket.cs",
               "RelativeToolTip": "ClientSocket.cs",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAiwNsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAP0AAAAAAAAAAAAuwIcAAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-21T02:45:40.564Z",
               "EditorCaption": ""
@@ -95,12 +96,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-21T14:49:09.191Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T14:49:09.191Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "GameManager.cs",
               "DocumentMoniker": "D:\\Uno_Online\\UnoOnline\\GameManager.cs",
               "RelativeDocumentMoniker": "GameManager.cs",
@@ -108,8 +108,7 @@
               "RelativeToolTip": "GameManager.cs",
               "ViewState": "AgIAACMAAAAAAAAAAAAYwEgAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-21T14:49:08.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T14:49:08.203Z"
             },
             {
               "$type": "Document",
@@ -133,8 +132,7 @@
               "RelativeToolTip": "Card.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAIA5wBUAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-21T14:49:06.969Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T14:49:06.969Z"
             },
             {
               "$type": "Document",
@@ -192,7 +190,8 @@
               "ToolTip": "D:\\Uno_Online\\UnoOnline\\Form1.cs [Design]",
               "RelativeToolTip": "Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T00:18:22.999Z"
+              "WhenOpened": "2024-11-20T00:18:22.999Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }
