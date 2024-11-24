@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using System.IO; // Added for StringWriter and StringReader
-using Newtonsoft.Json; // Add this line at the top of the file
+using System.IO;
+using Newtonsoft.Json;
 
 namespace UnoOnline
 {
@@ -123,7 +123,6 @@ namespace UnoOnline
                         // Boot the game
                         GameManager.InitializeGame();
                         break;
-                        //hãy bổ sung cho update
                     case MessageType.Update:
                         Console.WriteLine("Processing Update message");
                         // Handle Update
@@ -207,6 +206,48 @@ namespace UnoOnline
         public static string SerializeMessage(Message message)
         {
             return JsonConvert.SerializeObject(message);
+        }
+        public void PlayCard(Player player, Card card)
+        {
+            if (GameManager.Instance.IsValidMove(card))
+            {
+                GameManager.Instance.PlayCard(player, card);
+                var message = new Message
+                {
+                    Type = MessageType.Update,
+                    Data = new string[] { player.Name, card.Color, card.Value }
+                };
+                ClientSocket.SendData(message);
+            }
+        }
+
+        private static Player currentPlayer; // Define currentPlayer
+
+        private static void HandleTurnMessage(string playerId)
+        {
+            currentPlayer = gamemanager.Players.FirstOrDefault(p => p.Name == playerId); // Initialize currentPlayer
+            if (currentPlayer != null && playerId == currentPlayer.Name)
+            {
+                // Enable UI elements for the current player to take their turn
+                EnablePlayerControls();
+            }
+            else
+            {
+                // Disable UI elements for other players
+                DisablePlayerControls();
+            }
+        }
+
+        private static void EnablePlayerControls()
+        {
+            // Implement the logic to enable player controls
+            Console.WriteLine("Player controls enabled.");
+        }
+
+        private static void DisablePlayerControls()
+        {
+            // Implement the logic to disable player controls
+            Console.WriteLine("Player controls disabled.");
         }
     }
 
