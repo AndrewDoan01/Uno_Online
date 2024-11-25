@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 namespace UnoOnline
 {
+
     class ClientSocket
     {
         private static Socket clientSocket;
@@ -40,6 +41,35 @@ namespace UnoOnline
                 Console.WriteLine(ex.Message);
                 // Log the error or handle it as needed
             }
+        }
+        public static void SendConnectMessage(string playerId)
+        {
+            var message = new Message
+            {
+                Type = MessageType.CONNECT,
+                Data = new string[] { playerId }
+            };
+            SendData(message);
+        }
+
+        public static void SendDisconnectMessage(string playerId)
+        {
+            var message = new Message
+            {
+                Type = MessageType.DISCONNECT,
+                Data = new string[] { playerId }
+            };
+            SendData(message);
+        }
+
+        public static void SendStartMessage(string playerId)
+        {
+            var message = new Message
+            {
+                Type = MessageType.START,
+                Data = new string[] { playerId }
+            };
+            SendData(message);
         }
 
         // Hàm gửi dữ liệu tới server
@@ -79,6 +109,7 @@ namespace UnoOnline
                     string receivedMessage = Encoding.UTF8.GetString(data);
                     var message = MessageSerializer.DeserializeMessage(receivedMessage);
                     AnalyzeData(message);
+
                 }
             }
             catch (SocketException ex)
@@ -109,59 +140,92 @@ namespace UnoOnline
                         break;
                     case MessageType.InitializeStat:
                         Console.WriteLine("Processing InitializeStat message");
-                        // Initialize game state
                         GameManager.InitializeGame();
                         break;
                     case MessageType.OtherPlayerStat:
                         Console.WriteLine("Processing OtherPlayerStat message");
-                        // Update other player's stats
                         var otherPlayer = new Player(message.Data[0]);
                         gamemanager.AddPlayer(otherPlayer);
                         break;
                     case MessageType.Boot:
                         Console.WriteLine("Processing Boot message");
-                        // Boot the game
                         GameManager.InitializeGame();
                         break;
                     case MessageType.Update:
                         Console.WriteLine("Processing Update message");
-                        // Handle Update
+                        MessageHandlers.HandleUpdate(message);
                         break;
                     case MessageType.Turn:
                         Console.WriteLine("Processing Turn message");
-                        // Start the turn for the current player
                         gamemanager.StartTurn();
                         break;
                     case MessageType.CardDraw:
                         Console.WriteLine("Processing CardDraw message");
-                        // Handle card draw
-                        var player = gamemanager.Players.FirstOrDefault(p => p.Name == message.Data[0]);
-                        if (player != null)
-                        {
-                            var card = new Card(message.Data[1], message.Data[2]);
-                            player.Hand.Add(card);
-                        }
+                        MessageHandlers.HandleCardDraw(message);
                         break;
                     case MessageType.SpecialDraw:
                         Console.WriteLine("Processing SpecialDraw message");
-                        // Handle special draw (e.g., Draw Two, Wild Draw Four)
-                        var specialPlayer = gamemanager.Players.FirstOrDefault(p => p.Name == message.Data[0]);
-                        if (specialPlayer != null)
-                        {
-                            var specialCard = new Card(message.Data[1], message.Data[2]);
-                            specialCard.DetermineCardType(); // Call this method to set IsDrawCard
-                            specialPlayer.Hand.Add(specialCard);
-                        }
+                       MessageHandlers.HandleSpecialDraw(message);
                         break;
                     case MessageType.End:
                         Console.WriteLine("Processing End message");
-                        // Handle end of game
                         Console.WriteLine("Game has ended.");
                         break;
                     case MessageType.Message:
                         Console.WriteLine("Processing Message");
-                        // Handle chat or other messages
                         Console.WriteLine($"Message from {message.Data[0]}: {message.Data[1]}");
+                        break;
+                    case MessageType.NewMessageType:
+                        Console.WriteLine("Processing NewMessageType message");
+                        MessageHandlers.HandleNewMessageType(message);
+                        break;
+                    case MessageType.CONNECT:
+                        Console.WriteLine("Processing CONNECT message");
+                        MessageHandlers.HandleConnect(message);
+                        break;
+                    case MessageType.DISCONNECT:
+                        Console.WriteLine("Processing DISCONNECT message");
+                        MessageHandlers.HandleDisconnect(message);
+                        break;
+                    case MessageType.START:
+                        Console.WriteLine("Processing START message");
+                        MessageHandlers.HandleStart(message);
+                        break;
+                    case MessageType.DanhBai:
+                        Console.WriteLine("Processing DanhBai message");
+                        MessageHandlers.HandleDanhBai(message);
+                        break;
+                    case MessageType.RutBai:
+                        Console.WriteLine("Processing RutBai message");
+                        MessageHandlers.HandleRutBai(message);
+                        break;
+                    case MessageType.SpecialCardEffect:
+                        Console.WriteLine("Processing SpecialCardEffect message");
+                        MessageHandlers.HandleSpecialCardEffect(message);
+                        break;
+                    case MessageType.YellUNO:
+                        Console.WriteLine("Processing YellUNO message");
+                        MessageHandlers.HandleYellUNO(message);
+                        break;
+                    case MessageType.DrawPenalty:
+                        Console.WriteLine("Processing DrawPenalty message");
+                        MessageHandlers.HandleDrawPenalty(message);
+                        break;
+                    case MessageType.Diem:
+                        Console.WriteLine("Processing Diem message");
+                        MessageHandlers.HandleDiem(message);
+                        break;
+                    case MessageType.Chat:
+                        Console.WriteLine("Processing Chat message");
+                        MessageHandlers.HandleChat(message);
+                        break;
+                    case MessageType.Restart:
+                        Console.WriteLine("Processing Restart message");
+                        MessageHandlers.HandleRestart(message);
+                        break;
+                    case MessageType.Finish:
+                        Console.WriteLine("Processing Finish message");
+                        MessageHandlers.HandleFinish(message);
                         break;
                     default:
                         Console.WriteLine("Unknown message type received");
@@ -172,7 +236,6 @@ namespace UnoOnline
             {
                 Console.WriteLine("An error occurred while analyzing data.");
                 Console.WriteLine(ex.Message);
-                // Log the error or handle it as needed
             }
         }
 
@@ -262,7 +325,21 @@ namespace UnoOnline
         CardDraw,
         SpecialDraw,
         End,
-        Message
+        Message,
+        // Add new message types
+        CONNECT,
+        DISCONNECT,
+        START,
+        DanhBai,
+        RutBai,
+        SpecialCardEffect,
+        YellUNO,
+        DrawPenalty,
+        Diem,
+        Chat,
+        NewMessageType,
+        Restart,
+        Finish
     }
 
     // Define your custom message class here
@@ -302,4 +379,8 @@ namespace UnoOnline
             return JsonConvert.DeserializeObject<Message>(message);
         }
     }
+    
+
+
+    // Add similar methods for other message types...
 }
