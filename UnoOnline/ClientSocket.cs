@@ -199,10 +199,7 @@ namespace UnoOnline
                         Console.WriteLine("Processing RutBai message");
                         MessageHandlers.HandleRutBai(message);
                         break;
-                    case MessageType.SpecialCardEffect:
-                        Console.WriteLine("Processing SpecialCardEffect message");
-                        MessageHandlers.HandleSpecialCardEffect(message);
-                        break;
+                    
                     case MessageType.YellUNO:
                         Console.WriteLine("Processing YellUNO message");
                         MessageHandlers.HandleYellUNO(message);
@@ -379,8 +376,4 @@ namespace UnoOnline
             return JsonConvert.DeserializeObject<Message>(message);
         }
     }
-    
-
-
-    // Add similar methods for other message types...
 }

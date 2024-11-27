@@ -7,12 +7,39 @@ namespace UnoOnline
     {
         public static void HandleUpdate(Message message)
         {
-            // Add your handling logic here
+            string playerId = message.Data[0];
+            string cardColor = message.Data[1];
+            string cardValue = message.Data[2];
+
+            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                Card card = new Card(cardColor, cardValue);
+                if (GameManager.Instance.IsValidMove(card))
+                {
+                    GameManager.Instance.PlayCard(player, card);
+                    Console.WriteLine($"{player.Name} played a {card.Color} {card.Value} card.");
+                }
+                else
+                {
+                    Console.WriteLine($"Invalid move by {player.Name} with card {card.Color} {card.Value}.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Player with ID {playerId} not found.");
+            }
         }
 
         public static void HandleNewMessageType(Message message)
         {
             // Add your handling logic here
+            Console.WriteLine("Handling new message type.");
+            // Example: Log the message data
+            foreach (var data in message.Data)
+            {
+                Console.WriteLine(data);
+            }
         }
 
         public static void HandleConnect(Message message)
@@ -59,24 +86,66 @@ namespace UnoOnline
             }
         }
 
-        public static void HandleSpecialCardEffect(Message message)
-        {
-            // Add your handling logic here
-        }
-
         public static void HandleYellUNO(Message message)
         {
-            // Add your handling logic here
+            string playerId = message.Data[0];
+            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                Console.WriteLine($"{player.Name} yelled UNO!");
+                // Implement additional logic if needed
+            }
+            else
+            {
+                Console.WriteLine($"Player with ID {playerId} not found.");
+            }
         }
 
         public static void HandleDrawPenalty(Message message)
         {
-            // Add your handling logic here
+            string playerId = message.Data[0];
+            int penaltyCount = int.Parse(message.Data[1]);
+
+            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                for (int i = 0; i < penaltyCount; i++)
+                {
+                    Card penaltyCard = GameManager.Instance.Deck.Cards.FirstOrDefault();
+                    if (penaltyCard != null)
+                    {
+                        player.Hand.Add(penaltyCard);
+                        GameManager.Instance.Deck.Cards.Remove(penaltyCard);
+                        Console.WriteLine($"{player.Name} drew a {penaltyCard.Color} {penaltyCard.Value} card as a penalty.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No cards left in the deck to draw.");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Player with ID {playerId} not found.");
+            }
         }
 
         public static void HandleDiem(Message message)
         {
-            // Add your handling logic here
+            string playerId = message.Data[0];
+            int points = int.Parse(message.Data[1]);
+
+            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                Console.WriteLine($"{player.Name} scored {points} points.");
+                // Implement additional logic to update the player's score if needed
+            }
+            else
+            {
+                Console.WriteLine($"Player with ID {playerId} not found.");
+            }
         }
 
         public static void HandleChat(Message message)
@@ -95,14 +164,37 @@ namespace UnoOnline
         }
         public static void HandleCardDraw(Message message)
         {
-            var drawingPlayer = ClientSocket.gamemanager.Players.FirstOrDefault(p => p.Name == message.Data[0]);
-            if (drawingPlayer != null)
+            string playerId = message.Data[0];
+            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
             {
-                var drawnCard = ClientSocket.gamemanager.Deck.Cards.FirstOrDefault();
+                Card drawnCard = GameManager.Instance.Deck.Cards.FirstOrDefault();
                 if (drawnCard != null)
                 {
-                    drawingPlayer.Hand.Add(drawnCard);
-                    ClientSocket.gamemanager.Deck.Cards.Remove(drawnCard);
+                    player.Hand.Add(drawnCard);
+                    GameManager.Instance.Deck.Cards.Remove(drawnCard);
+                    Console.WriteLine($"{player.Name} drew a {drawnCard.Color} {drawnCard.Value} card.");
+                }
+                else
+                {
+                    Console.WriteLine("No cards left in the deck to draw.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Player with ID {playerId} not found.");
+            }
+        }
+        public static void HandleSpecialDraw(Message message)
+        {
+            var specialDrawPlayer = ClientSocket.gamemanager.Players.FirstOrDefault(p => p.Name == message.Data[0]);
+            if (specialDrawPlayer != null)
+            {
+                var specialDrawCard = ClientSocket.gamemanager.Deck.Cards.FirstOrDefault();
+                if (specialDrawCard != null)
+                {
+                    specialDrawPlayer.Hand.Add(specialDrawCard);
+                    ClientSocket.gamemanager.Deck.Cards.Remove(specialDrawCard);
                 }
             }
         }
