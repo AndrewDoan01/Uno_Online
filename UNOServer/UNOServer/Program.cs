@@ -340,20 +340,17 @@ namespace UNOServer
                     byte[] data = Encoding.UTF8.GetBytes(SendData);
                     PLAYERLIST[HienTai - 1].PlayerSocket.Send(data);
                 }
-                //Gửi thông điệp Update: Cập nhật lá bài mới đánh ra và số lượng bài còn lại của người chơi đó cho toàn bộ người chơi không đến lượt 
+                //Gửi thông điệp Update: Cập nhật lá bài mới đánh ra và số lượng bài còn lại của người chơi đó cho toàn bộ người chơi 
                 foreach (var user in PLAYERLIST)
                 {
-                    if (user.Luot != HienTai)
+                    string SendData = "Update;" + Signal[1] + ";" + Signal[2] + ";" + Signal[3];
+                    if (Signal[3].Contains("Wild_Draw") || Signal[3].Contains("Wild_Card")) //Đáng lý là chỉ cần contains Wild nhưng t trình bày hết cho dễ hiểu trường hợp này do chỉ có 2 lá đó là có màu được chọn đi kèm
                     {
-                        string SendData = "Update;" + Signal[1] + ";" + Signal[2] + ";" + Signal[3];
-                        if (Signal[3].Contains("Wild_Draw") || Signal[3].Contains("Wild_Card")) //Đáng lý là chỉ cần contains Wild nhưng t trình bày hết cho dễ hiểu trường hợp này do chỉ có 2 lá đó là có màu được chọn đi kèm
-                        {
-                            SendData += ";" + Signal[4];
-                        }
-                        byte[] data = Encoding.UTF8.GetBytes(SendData);
-                        user.PlayerSocket.Send(data);
-                        Thread.Sleep(200);
+                        SendData += ";" + Signal[4];
                     }
+                    byte[] data = Encoding.UTF8.GetBytes(SendData);
+                    user.PlayerSocket.Send(data);
+                    Thread.Sleep(200);
                 }
                 if (Signal[3].Contains("Blue_Draw") || Signal[3].Contains("Red_Draw") || Signal[3].Contains("Green_Draw") || Signal[3].Contains("Yellow_Draw")) //Nếu lá bài người chơi đánh là draw 2 (sử dụng Contains() xác nhận trong lá bài có phần cần tìm tương ứng)
                     RUT += 2;
@@ -436,16 +433,13 @@ namespace UNOServer
             byte[] bf = Encoding.UTF8.GetBytes(mkmsg); //Tạo mảng byte tên bf chứa thông điệp CardDraw
             PLAYERLIST[HienTai - 1].PlayerSocket.Send(bf); //Gửi thông điệp CardDraw đến người chơi rút bài
             Console.WriteLine("Note: " + mkmsg);
-            //Gửi thông điệp Update: cập nhật số lượng bài mới của người chơi đó cho toàn bộ người chơi không đến lượt
+            //Gửi thông điệp Update: cập nhật số lượng bài mới của người chơi đó cho toàn bộ người chơi
             foreach (var user in PLAYERLIST)
             {
-                if (user.Luot != HienTai)
-                {
-                    string SendData = "Update;" + Signal[1] + ";" + Signal[2];
-                    byte[] data = Encoding.UTF8.GetBytes(SendData);
-                    user.PlayerSocket.Send(data);
-                    Thread.Sleep(200);
-                }
+                string SendData = "Update;" + Signal[1] + ";" + Signal[2];
+                byte[] data = Encoding.UTF8.GetBytes(SendData);
+                user.PlayerSocket.Send(data);
+                Thread.Sleep(200);
             }
             UpdateTurn();
         }
@@ -471,16 +465,13 @@ namespace UNOServer
             PLAYERLIST[HienTai - 1].PlayerSocket.Send(buff); //Gửi thông điệp SpecialDraw đến người chơi rút bài
             RUT = 0;
             Console.WriteLine("Note: " + cardstack);
-            //Gửi thông điệp Update: cập nhật số lượng bài mới của người chơi đó cho toàn bộ người chơi không đến lượt
+            //Gửi thông điệp Update: cập nhật số lượng bài mới của người chơi đó cho toàn bộ người chơi
             foreach (var user in PLAYERLIST)
             {
-                if (user.Luot != HienTai)
-                {
-                    string SendData = "Update;" + Signal[1] + ";" + Signal[2];
-                    byte[] data = Encoding.UTF8.GetBytes(SendData);
-                    user.PlayerSocket.Send(data);
-                    Thread.Sleep(200);
-                }
+                string SendData = "Update;" + Signal[1] + ";" + Signal[2];
+                byte[] data = Encoding.UTF8.GetBytes(SendData);
+                user.PlayerSocket.Send(data);
+                Thread.Sleep(200);
             }
             UpdateTurn();
         }
