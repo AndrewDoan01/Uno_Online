@@ -210,7 +210,7 @@ namespace UNOServer
             {
                 temp = BOBAI.CardName[i]; //Lấy lá bài của mảng CardName và lưu vào chuỗi temp
                 //Nếu thỏa điều kiện chỉ là lá bài số thì break khỏi vòng lặp
-                if (!temp.Contains("Reverse") && !temp.Contains("Skip") && !temp.Contains("Wild_Card") && !temp.Contains("Wild_Draw") && !temp.Contains("Draw")) //Sử dụng Contains() để xác định trong lá bài có phần cần tìm hay không
+                if (!temp.Contains("Reverse") && !temp.Contains("Skip") && !temp.Contains("Wild") && !temp.Contains("Wild_Draw") && !temp.Contains("Draw")) //Sử dụng Contains() để xác định trong lá bài có phần cần tìm hay không
                 //Lưu ý là contains() sử dụng với chuỗi không yêu cầu chuỗi gốc phải khớp hoàn toàn nên đáng lý ra là chỉ cần contains Wild và Draw nhưng t trình bày hết cho dễ hiểu
                     break;
             }
@@ -344,7 +344,7 @@ namespace UNOServer
                 foreach (var user in PLAYERLIST)
                 {
                     string SendData = "Update;" + Signal[1] + ";" + Signal[2] + ";" + Signal[3];
-                    if (Signal[3].Contains("Wild_Draw") || Signal[3].Contains("Wild_Card")) //Đáng lý là chỉ cần contains Wild nhưng t trình bày hết cho dễ hiểu trường hợp này do chỉ có 2 lá đó là có màu được chọn đi kèm
+                    if (Signal[3].Contains("Wild_Draw") || Signal[3].Contains("Wild")) //Đáng lý là chỉ cần contains Wild nhưng t trình bày hết cho dễ hiểu trường hợp này do chỉ có 2 lá đó là có màu được chọn đi kèm
                     {
                         SendData += ";" + Signal[4];
                     }
