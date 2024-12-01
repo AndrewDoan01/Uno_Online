@@ -241,7 +241,7 @@ namespace UnoOnline {
                 {
                     Size = new Size(cardWidth, cardHeight),
                     Location = new Point(xOffset, yOffset),
-                    BackgroundImage = GameResources.GetCardImage(card),
+                    BackgroundImage = GetCardImage(card),
                     BackgroundImageLayout = ImageLayout.Stretch,
                     FlatStyle = FlatStyle.Flat,
                     Tag = card,
@@ -361,78 +361,88 @@ namespace UnoOnline {
 
         private void InitializeComponent()
         {
-                this.skipTurnButton = new System.Windows.Forms.Button();
-                this.drawCardButton = new System.Windows.Forms.Button();
-                this.turnTimer = new System.Windows.Forms.ProgressBar();
-                this.PlayerHandPanel = new System.Windows.Forms.FlowLayoutPanel();
-                this.currentCardLabel = new System.Windows.Forms.Label();
-                this.currentPlayerLabel = new System.Windows.Forms.Label();
-                this.SuspendLayout();
-                // 
-                // skipTurnButton
-                // 
-                this.skipTurnButton.Location = new System.Drawing.Point(522, 262);
-                this.skipTurnButton.Name = "skipTurnButton";
-                this.skipTurnButton.Size = new System.Drawing.Size(75, 23);
-                this.skipTurnButton.TabIndex = 1;
-                this.skipTurnButton.Text = "Skip";
-                this.skipTurnButton.UseVisualStyleBackColor = true;
-                // 
-                // drawCardButton
-                // 
-                this.drawCardButton.Location = new System.Drawing.Point(522, 221);
-                this.drawCardButton.Name = "drawCardButton";
-                this.drawCardButton.Size = new System.Drawing.Size(75, 23);
-                this.drawCardButton.TabIndex = 2;
-                this.drawCardButton.Text = "Draw";
-                this.drawCardButton.UseVisualStyleBackColor = true;
-                // 
-                // turnTimer
-                // 
-                this.turnTimer.Location = new System.Drawing.Point(514, 108);
-                this.turnTimer.Name = "turnTimer";
-                this.turnTimer.Size = new System.Drawing.Size(100, 23);
-                this.turnTimer.TabIndex = 5;
-                // 
-                // PlayerHandPanel
-                // 
-                this.PlayerHandPanel.Location = new System.Drawing.Point(12, 291);
-                this.PlayerHandPanel.Name = "PlayerHandPanel";
-                this.PlayerHandPanel.Size = new System.Drawing.Size(602, 100);
-                this.PlayerHandPanel.TabIndex = 6;
-                // 
-                // currentCardLabel
-                // 
-                this.currentCardLabel.AutoSize = true;
-                this.currentCardLabel.Location = new System.Drawing.Point(519, 184);
-                this.currentCardLabel.Name = "currentCardLabel";
-                this.currentCardLabel.Size = new System.Drawing.Size(0, 16);
-                this.currentCardLabel.TabIndex = 3;
-                // 
-                // currentPlayerLabel
-                // 
-                this.currentPlayerLabel.AutoSize = true;
-                this.currentPlayerLabel.Location = new System.Drawing.Point(519, 150);
-                this.currentPlayerLabel.Name = "currentPlayerLabel";
-                this.currentPlayerLabel.Size = new System.Drawing.Size(0, 16);
-                this.currentPlayerLabel.TabIndex = 4;
-                // 
-                // Form1
-                // 
-                this.BackgroundImage = global::UnoOnline.Properties.Resources.Table_2;
-                this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-                this.ClientSize = new System.Drawing.Size(647, 441);
-                this.Controls.Add(this.PlayerHandPanel);
-                this.Controls.Add(this.turnTimer);
-                this.Controls.Add(this.currentPlayerLabel);
-                this.Controls.Add(this.currentCardLabel);
-                this.Controls.Add(this.drawCardButton);
-                this.Controls.Add(this.skipTurnButton);
-                this.DoubleBuffered = true;
-                this.Name = "Form1";
-                this.Load += new System.EventHandler(this.Form1_Load);
-                this.ResumeLayout(false);
-                this.PerformLayout();
+            this.skipTurnButton = new System.Windows.Forms.Button();
+            this.drawCardButton = new System.Windows.Forms.Button();
+            this.turnTimer = new System.Windows.Forms.ProgressBar();
+            this.PlayerHandPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.currentCardLabel = new System.Windows.Forms.Label();
+            this.currentPlayerLabel = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.SuspendLayout();
+            // 
+            // skipTurnButton
+            // 
+            this.skipTurnButton.Location = new System.Drawing.Point(522, 262);
+            this.skipTurnButton.Name = "skipTurnButton";
+            this.skipTurnButton.Size = new System.Drawing.Size(75, 23);
+            this.skipTurnButton.TabIndex = 1;
+            this.skipTurnButton.Text = "Skip";
+            this.skipTurnButton.UseVisualStyleBackColor = true;
+            // 
+            // drawCardButton
+            // 
+            this.drawCardButton.Location = new System.Drawing.Point(522, 221);
+            this.drawCardButton.Name = "drawCardButton";
+            this.drawCardButton.Size = new System.Drawing.Size(75, 23);
+            this.drawCardButton.TabIndex = 2;
+            this.drawCardButton.Text = "Draw";
+            this.drawCardButton.UseVisualStyleBackColor = true;
+            // 
+            // turnTimer
+            // 
+            this.turnTimer.Location = new System.Drawing.Point(514, 108);
+            this.turnTimer.Name = "turnTimer";
+            this.turnTimer.Size = new System.Drawing.Size(100, 23);
+            this.turnTimer.TabIndex = 5;
+            // 
+            // PlayerHandPanel
+            // 
+            this.PlayerHandPanel.Location = new System.Drawing.Point(12, 291);
+            this.PlayerHandPanel.Name = "PlayerHandPanel";
+            this.PlayerHandPanel.Size = new System.Drawing.Size(602, 100);
+            this.PlayerHandPanel.TabIndex = 6;
+            // 
+            // currentCardLabel
+            // 
+            this.currentCardLabel.AutoSize = true;
+            this.currentCardLabel.Location = new System.Drawing.Point(519, 184);
+            this.currentCardLabel.Name = "currentCardLabel";
+            this.currentCardLabel.Size = new System.Drawing.Size(0, 16);
+            this.currentCardLabel.TabIndex = 3;
+            // 
+            // currentPlayerLabel
+            // 
+            this.currentPlayerLabel.AutoSize = true;
+            this.currentPlayerLabel.Location = new System.Drawing.Point(519, 150);
+            this.currentPlayerLabel.Name = "currentPlayerLabel";
+            this.currentPlayerLabel.Size = new System.Drawing.Size(0, 16);
+            this.currentPlayerLabel.TabIndex = 4;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(12, 12);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(776, 426);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
+            // Form1
+            // 
+            this.BackgroundImage = global::UnoOnline.Properties.Resources.Table_2;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ClientSize = new System.Drawing.Size(647, 441);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.PlayerHandPanel);
+            this.Controls.Add(this.turnTimer);
+            this.Controls.Add(this.currentPlayerLabel);
+            this.Controls.Add(this.currentCardLabel);
+            this.Controls.Add(this.drawCardButton);
+            this.Controls.Add(this.skipTurnButton);
+            this.DoubleBuffered = true;
+            this.Name = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -443,7 +453,10 @@ namespace UnoOnline {
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            InitializeGame();
+            InitializeGameBoard();
+            InitializeTimer();
+            DisplayPlayerHand(playerHand); // Display initial hand of cards
         }
 
         private Label currentCardLabel;
@@ -534,6 +547,8 @@ namespace UnoOnline {
                 MessageBox.Show("Lá bài không hợp lệ.");
             }
         }
+
+        private RichTextBox richTextBox1;
     }
 
 // Helper classes
