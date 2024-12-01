@@ -59,7 +59,7 @@ namespace UnoOnline
 
         public static void HandleStart(Message message)
         {
-            GameManager.InitializeGame();
+            //GameManager.InitializeGame();
         }
 
         public static void HandleDanhBai(Message message)
@@ -155,7 +155,7 @@ namespace UnoOnline
 
         public static void HandleRestart(Message message)
         {
-            GameManager.InitializeGame();
+            //GameManager.InitializeGame();
         }
 
         public static void HandleFinish(Message message)

@@ -70,19 +70,15 @@ namespace UnoOnline
                         break;
                     case MessageType.InitializeStat:
                         OnMessageReceived?.Invoke("Processing InitializeStat message");
-                        GameManager.InitializeGame();
+                        GameManager.InitializeStat(message);
                         break;
                     case MessageType.OtherPlayerStat:
                         OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
-                        if (gamemanager != null)
-                        {
-                            var otherPlayer = new Player(message.Data[0]);
-                            gamemanager.AddPlayer(otherPlayer);
-                        }
+                        //GameManager.UpdateOtherPlayerStat(message);
                         break;
                     case MessageType.Boot:
                         OnMessageReceived?.Invoke("Processing Boot message");
-                        GameManager.InitializeGame();
+                        //GameManager.InitializeGame();
                         break;
                     case MessageType.Update:
                         MessageHandlers.HandleUpdate(message);
