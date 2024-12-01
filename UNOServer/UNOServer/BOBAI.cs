@@ -18,7 +18,7 @@ namespace UNOServer
                 "Gold_0", "Gold_1", "Gold_2", "Gold_3", "Gold_4", "Gold_5", "Gold_6", "Gold_7", "Gold_8", "Gold_9", "Gold_1_", "Gold_2_", "Gold_3_", "Gold_4_", "Gold_5_", "Gold_6_", "Gold_7_", "Gold_8_", "Gold_9_",
                 "Blue_Reverse", "Blue_Reverse_", "Red_Reverse", "Red_Reverse_", "Yellow_Reverse", "Yellow_Reverse_", "Green_Reverse", "Green_Reverse_",
                 "Blue_Skip", "Blue_Skip_", "Red_Skip", "Red_Skip_", "Yellow_Skip", "Yellow_Skip_", "Green_Skip", "Green_Skip_",
-                "Wild_Card_1", "Wild_Card_2", "Wild_Card_3", "Wild_Card_4",
+                "Wild_1", "Wild_2", "Wild_3", "Wild_4",
                 "Wild_Draw_1", "Wild_Draw_2", "Wild_Draw_3", "Wild_Draw_4",
                 "Blue_Draw", "Blue_Draw_", "Red_Draw", "Red_Draw_", "Yellow_Draw", "Yellow_Draw_", "Green_Draw", "Green_Draw_"
         }; //Mảng string chứa tên các lá bài trong bộ bài
