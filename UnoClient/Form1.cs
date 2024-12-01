@@ -23,8 +23,9 @@ namespace UnoOnline {
         private List<Card> playerHand = new List<Card>();
         private int currentPlayerIndex = 0;
         private string currentCard = string.Empty;
+        private Button yellUNOButton;
 
-    
+
 
 
         public Form1()
@@ -180,7 +181,13 @@ namespace UnoOnline {
             Controls.Add(drawCardButton);
         }
 
-
+        private void yellUNOButton_Click(object sender, EventArgs e)
+        {
+            // Assuming the player ID is stored in a variable playerID
+            string playerID = "Player1"; // Replace with actual player ID logic
+            Message yellUNOMessage = new Message(MessageType.YellUNOEnable, new List<string> { playerID });
+            ClientSocket.SendData(yellUNOMessage);
+        }
 
 
         private void InitializeTimer()
@@ -367,7 +374,8 @@ namespace UnoOnline {
             this.PlayerHandPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.currentCardLabel = new System.Windows.Forms.Label();
             this.currentPlayerLabel = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.yellUNOButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // skipTurnButton
@@ -418,20 +426,35 @@ namespace UnoOnline {
             this.currentPlayerLabel.Size = new System.Drawing.Size(0, 16);
             this.currentPlayerLabel.TabIndex = 4;
             // 
-            // richTextBox1
+            // yellUNOButton
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 12);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(776, 426);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.yellUNOButton.Location = new System.Drawing.Point(525, 147);
+            this.yellUNOButton.Name = "yellUNOButton";
+            this.yellUNOButton.Size = new System.Drawing.Size(75, 23);
+            this.yellUNOButton.TabIndex = 3;
+            this.yellUNOButton.Text = "UNO";
+            this.yellUNOButton.UseVisualStyleBackColor = true;
+            this.yellUNOButton.Click += new System.EventHandler(this.yellUNOButton_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.yellUNOButton.Click += new System.EventHandler(this.yellUNOButton_Click);
+            this.Controls.Add(this.yellUNOButton);
+
             // 
             // Form1
             // 
             this.BackgroundImage = global::UnoOnline.Properties.Resources.Table_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(647, 441);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.yellUNOButton);
             this.Controls.Add(this.PlayerHandPanel);
             this.Controls.Add(this.turnTimer);
             this.Controls.Add(this.currentPlayerLabel);
@@ -548,7 +571,9 @@ namespace UnoOnline {
             }
         }
 
-        private RichTextBox richTextBox1;
+        private Button button1;
+
+        
     }
 
 // Helper classes
