@@ -575,7 +575,12 @@ namespace UnoOnline {
         private Button button1;
         public static void YellUNOEnable()
         {
-             //yellUNOButton.Enabled = true;
+            // Assuming you have a reference to the Form1 instance
+            Form1 form = Application.OpenForms.OfType<Form1>().FirstOrDefault();
+            if (form != null)
+            {
+                form.Invoke(new Action(() => form.yellUNOButton.Enabled = true));
+            }
         }
     }
 
