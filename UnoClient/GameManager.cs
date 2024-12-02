@@ -34,14 +34,14 @@ namespace UnoOnline
             }
 
             // Ensure thread safety when checking and displaying the form
-            if (!Program.IsFormOpen(typeof(WaitingLobby)))
+            if (!Program.IsFormOpen(typeof(Form1)))
             {
                 Application.OpenForms[0].Invoke(new Action(() =>
                 {
-                    if (!Program.IsFormOpen(typeof(WaitingLobby)))
+                    if (!Program.IsFormOpen(typeof(Form1)))
                     {
-                        WaitingLobby waitingLobby = new WaitingLobby();
-                        waitingLobby.Show();
+                        Form1 form1 = new Form1();
+                        form1.Show();
                     }
                 }));
             }
