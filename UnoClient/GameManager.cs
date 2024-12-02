@@ -52,7 +52,6 @@ namespace UnoOnline
                     string value = card[1];
                     player.Hand.Add(new Card(color, value));
                 }
-            }
             //Hiển thị những lá bài được chia 
             //Form1.DisplayPlayerHand();
         }
