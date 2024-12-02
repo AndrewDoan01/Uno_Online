@@ -32,8 +32,6 @@ namespace UnoOnline
             {
                 Instance = new GameManager();
             }
-            try
-            {
                 // Tách dữ liệu từ message
                 string[] data = message.Data[0].Split(';');
 
@@ -51,14 +49,9 @@ namespace UnoOnline
                 {
                     string[] card = cardData.Split('_');
                     string color = card[0];
-                    string value = card.Length > 1 ? card[1] : "Unknown"; // Trường hợp thiếu giá trị
+                    string value = card[1];
                     player.Hand.Add(new Card(color, value));
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error initializing player: {ex.Message}");
-                //hiển thị lỗi qua message box
             }
             //Hiển thị những lá bài được chia 
             //Form1.DisplayPlayerHand();
