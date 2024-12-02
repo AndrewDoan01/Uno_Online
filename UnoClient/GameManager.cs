@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 namespace UnoOnline
 {
@@ -31,20 +32,38 @@ namespace UnoOnline
             {
                 Instance = new GameManager();
             }
-            // Xử lý thông điệp thông tin khởi tạo về danh tính, thứ tự lượt, số bài, tên các lá cụ thể cho mỗi người chơi lúc ban đầu
-            string turnOrder = message.Data[1];
-            int cardCount = int.Parse(message.Data[2]);
-            List<string> cardNames = message.Data.GetRange(3, cardCount);
-            //Nhận bài được gửi đến và hiển thị về tay
-            Instance.Players[0].Hand = new List<Card>();
-            for (int i = 0; i < cardCount; i++)
+            try
             {
-                string[] card = cardNames[i].Split('_');
-                string color = card[0];
-                string value = card[1];
-                Instance.Players[0].Hand.Add(new Card(color, value));
+                // Tách dữ liệu từ message
+                string[] data = message.Data[0].Split(';');
+
+                // Lấy thông tin từ chuỗi
+                string playerName = data[0];
+                string turnOrder = data[1];
+                int cardCount = int.Parse(data[2]);
+
+                // Lấy danh sách các lá bài
+                List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
+                Player player = new Player(playerName);
+
+                // Thêm các lá bài vào tay người chơi
+                foreach (var cardData in cardNames)
+                {
+                    string[] card = cardData.Split('_');
+                    string color = card[0];
+                    string value = card.Length > 1 ? card[1] : "Unknown"; // Trường hợp thiếu giá trị
+                    player.Hand.Add(new Card(color, value));
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initializing player: {ex.Message}");
+                //hiển thị lỗi qua message box
+            }
+            //Hiển thị những lá bài được chia 
+            //Form1.DisplayPlayerHand();
         }
+
 
         public static void UpdateOtherPlayerStat(Message message)
         {
@@ -64,7 +83,7 @@ namespace UnoOnline
                     player.Hand.Add(new Card(color, value));
                 }
             }
-            //Gọi Displayplayerhand trong form1 để hiển thị bài của người chơi
+            //Gọi Displayplayerhand trong form1 để hiển thị bài của người chơi khac
         }
         public void AddPlayer(Player player)
         {
