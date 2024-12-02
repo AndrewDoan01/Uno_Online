@@ -22,5 +22,16 @@ namespace UnoOnline
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Menu());
         }
+        public static bool IsFormOpen(Type formType)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == formType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

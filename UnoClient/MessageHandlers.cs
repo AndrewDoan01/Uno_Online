@@ -5,6 +5,20 @@ namespace UnoOnline
 {
     public static class MessageHandlers
     {
+        public static void HandleTurnMessage(Message message)
+        {
+            string playerId = message.Data[0];
+            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                GameManager.Instance.CurrentPlayerIndex = GameManager.Instance.Players.IndexOf(player);
+                Console.WriteLine($"{player.Name} has the turn.");
+            }
+            else
+            {
+                Console.WriteLine($"Player with ID {playerId} not found.");
+            }
+        }
         public static void HandleUpdate(Message message)
         {
             string playerId = message.Data[0];

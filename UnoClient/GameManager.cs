@@ -32,28 +32,43 @@ namespace UnoOnline
             {
                 Instance = new GameManager();
             }
-                // Tách dữ liệu từ message
-                string[] data = message.Data[0].Split(';');
 
-                // Lấy thông tin từ chuỗi
-                string playerName = data[0];
-                string turnOrder = data[1];
-                int cardCount = int.Parse(data[2]);
-
-                // Lấy danh sách các lá bài
-                List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
-                Player player = new Player(playerName);
-
-                // Thêm các lá bài vào tay người chơi
-                foreach (var cardData in cardNames)
+            // Ensure thread safety when checking and displaying the form
+            if (!Program.IsFormOpen(typeof(WaitingLobby)))
+            {
+                Application.OpenForms[0].Invoke(new Action(() =>
                 {
-                    string[] card = cardData.Split('_');
-                    string color = card[0];
-                    string value = card[1];
-                    player.Hand.Add(new Card(color, value));
-                }
-            //Hiển thị những lá bài được chia 
-            //Form1.DisplayPlayerHand();
+                    if (!Program.IsFormOpen(typeof(WaitingLobby)))
+                    {
+                        WaitingLobby waitingLobby = new WaitingLobby();
+                        waitingLobby.Show();
+                    }
+                }));
+            }
+
+            // Tách dữ liệu từ message
+            string[] data = message.Data[0].Split(';');
+
+            // Lấy thông tin từ chuỗi
+            string playerName = data[0];
+            string turnOrder = data[1];
+            int cardCount = int.Parse(data[2]);
+
+            // Lấy danh sách các lá bài
+            List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
+            Player player = new Player(playerName);
+
+            // Thêm các lá bài vào tay người chơi
+            foreach (var cardData in cardNames)
+            {
+                string[] card = cardData.Split('_');
+                string color = card[0];
+                string value = card[1];
+                player.Hand.Add(new Card(color, value));
+            }
+
+            // Hiển thị những lá bài được chia 
+            // Form1.DisplayPlayerHand();
         }
 
 

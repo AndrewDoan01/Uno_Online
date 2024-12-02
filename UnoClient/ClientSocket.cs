@@ -85,7 +85,8 @@ namespace UnoOnline
                         MessageHandlers.HandleUpdate(message);
                         break;
                     case MessageType.Turn:
-                        //HandleTurnMessage(message.Data[0]);
+                        OnMessageReceived?.Invoke("Processing Turn message");
+                        MessageHandlers.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:
                         MessageHandlers.HandleCardDraw(message);
