@@ -76,7 +76,8 @@ namespace UnoOnline
                         OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
                         GameManager.UpdateOtherPlayerStat(message);
                         break;
-                    case MessageType.Boot:
+                    case MessageType.Boot: 
+                        // Có thể ko cần vì game đã hiển thị khi nhấn nút Start
                         OnMessageReceived?.Invoke("Processing Boot message");
                         //GameManager.InitializeGame();
                         break;

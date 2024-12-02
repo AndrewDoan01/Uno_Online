@@ -41,32 +41,6 @@ namespace UnoOnline {
         }
         // Tạo class ResourceManager để quản lý tài nguyên
 
-        private void DealCardsToPlayers()
-        {
-            List<Card> deck = GenerateDeck(); // Tạo và trộn bộ bài
-            int cardsPerPlayer = 7;
-
-            foreach (Player player in players)
-            {
-                for (int i = 0; i < cardsPerPlayer; i++)
-                {
-                    player.Hand.Add(deck[0]); // Thêm thẻ đầu tiên từ bộ bài vào tay người chơi
-                    deck.RemoveAt(0); // Xóa thẻ vừa phát khỏi bộ bài
-                }
-            }
-
-            // Gửi tay bài tới mỗi client (giả lập)
-            foreach (Player player in players)
-            {
-                SendPlayerHandToClient(player);
-            }
-        }
-
-        private void SendPlayerHandToClient(Player player)
-        {
-            // Giả lập việc gửi tay bài qua mạng
-            DisplayPlayerHand(player.Hand); // Hiển thị tay bài trên giao diện
-        }
         private void InitializeGame()
         {
         
@@ -226,14 +200,7 @@ namespace UnoOnline {
             DisplayPlayerHand(players[currentPlayerIndex].Hand);
         }
 
-
-        private void UpdateUIForCurrentPlayer()
-        {
-            // Cập nhật tay bài cho người chơi mới
-            DisplayPlayerHand(playerHand);
-        }
-
-        private void DisplayPlayerHand(List<Card> playerHand)
+        public void DisplayPlayerHand(List<Card> playerHand)
         {
             PlayerHandPanel.Controls.Clear(); // Clear existing controls
 

@@ -64,8 +64,8 @@ namespace UnoOnline
                     player.Hand.Add(new Card(color, value));
                 }
             }
+            //Gọi Displayplayerhand trong form1 để hiển thị bài của người chơi
         }
-
         public void AddPlayer(Player player)
         {
             Players.Add(player);
