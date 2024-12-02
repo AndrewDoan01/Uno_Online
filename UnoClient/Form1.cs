@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Deck;
@@ -183,9 +184,8 @@ namespace UnoOnline {
 
         private void yellUNOButton_Click(object sender, EventArgs e)
         {
-            // Assuming the player ID is stored in a variable playerID
-            string playerID = "Player1"; // Replace with actual player ID logic
-            Message yellUNOMessage = new Message(MessageType.YellUNOEnable, new List<string> { playerID });
+            string playerID = Program.player.Name;
+            Message yellUNOMessage = new Message(MessageType.YellUNO, new List<string> { playerID });
             ClientSocket.SendData(yellUNOMessage);
         }
 
@@ -428,6 +428,7 @@ namespace UnoOnline {
             // 
             // yellUNOButton
             // 
+            this.yellUNOButton.Enabled = false;
             this.yellUNOButton.Location = new System.Drawing.Point(525, 147);
             this.yellUNOButton.Name = "yellUNOButton";
             this.yellUNOButton.Size = new System.Drawing.Size(75, 23);
@@ -572,8 +573,10 @@ namespace UnoOnline {
         }
 
         private Button button1;
-
-        
+        public static void YellUNOEnable()
+        {
+            //yellUNOButton.Enabled = true;
+        }
     }
 
 // Helper classes

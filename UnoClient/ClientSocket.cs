@@ -106,6 +106,7 @@ namespace UnoOnline
                         break;
                     case MessageType.YellUNOEnable:
                         OnMessageReceived?.Invoke("Processing YellUNOEnable");
+                        Form1.YellUNOEnable();
                         break;
                     default:
                         OnMessageReceived?.Invoke("Unknown message type: " + message.Type);
@@ -148,8 +149,10 @@ namespace UnoOnline
             MESSAGE,
             Penalty,
             Result,
+            YellUNO,
             YellUNOEnable
-        }
+
+    }
 
     public class Message
     {
