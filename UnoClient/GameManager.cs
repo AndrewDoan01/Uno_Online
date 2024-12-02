@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 namespace UnoOnline
 {
@@ -16,7 +17,14 @@ namespace UnoOnline
             Deck.Shuffle();
             CurrentPlayerIndex = 0;
         }
-
+        public void UpdateOtherPlayerName(string OtherPlayerName)
+        {
+            bool playerExists = Players.Exists(p => p.Name == OtherPlayerName);
+            if (!playerExists)
+            {
+                Players.Add(new Player(OtherPlayerName));
+            }
+        }
         public static void InitializeStat(Message message)
         {
             if (Instance == null)
@@ -31,18 +39,30 @@ namespace UnoOnline
             Instance.Players[0].Hand = new List<Card>();
             for (int i = 0; i < cardCount; i++)
             {
-                //Split ('_')
-                //Instance.Players[0].Hand.Add(new Card(cardNames[i]));
+                string[] card = cardNames[i].Split('_');
+                string color = card[0];
+                string value = card[1];
+                Instance.Players[0].Hand.Add(new Card(color, value));
             }
-
         }
 
-        public void UpdateOtherPlayerName(string OtherPlayerName)
+        public static void UpdateOtherPlayerStat(Message message)
         {
-            bool playerExists = Players.Exists(p => p.Name == OtherPlayerName);
-            if (!playerExists)
+            string playerName = message.Data[0];
+            string turnOrder = message.Data[1];
+            int cardCount = int.Parse(message.Data[2]);
+            List<string> cardNames = message.Data.GetRange(3, cardCount);
+            Player player = Instance.Players.Find(p => p.Name == playerName);
+            if (player != null)
             {
-                Players.Add(new Player(OtherPlayerName));
+                player.Hand = new List<Card>();
+                for (int i = 0; i < cardCount; i++)
+                {
+                    string[] card = cardNames[i].Split('_');
+                    string color = card[0];
+                    string value = card[1];
+                    player.Hand.Add(new Card(color, value));
+                }
             }
         }
 

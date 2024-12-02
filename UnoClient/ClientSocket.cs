@@ -74,7 +74,7 @@ namespace UnoOnline
                         break;
                     case MessageType.OtherPlayerStat:
                         OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
-                        //GameManager.UpdateOtherPlayerStat(message);
+                        GameManager.UpdateOtherPlayerStat(message);
                         break;
                     case MessageType.Boot:
                         OnMessageReceived?.Invoke("Processing Boot message");
