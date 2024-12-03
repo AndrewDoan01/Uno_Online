@@ -92,14 +92,7 @@ namespace UnoOnline
             // Hiển thị những lá bài được chia 
             // Form1.DisplayPlayerHand();
 
-            /*
-            Gọi Displayplayerhand trong form1 để hiển thị bài của những người chơi khác
-            Application.OpenForms[0].Invoke(new Action(() =>
-            {
-                Form1 form1 = (Form1)Application.OpenForms[0];
-                form1.DisplayPlayerHand();
-            }));
-            */
+            //Gọi Displayplayerhand trong form1 để hiển thị bài của những người chơi khác
         }
         public void AddPlayer(Player player)
         {
