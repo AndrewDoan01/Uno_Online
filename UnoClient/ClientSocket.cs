@@ -79,6 +79,7 @@ namespace UnoOnline
                     case MessageType.Boot: 
                         // Có thể ko cần vì game đã hiển thị khi nhấn nút Start
                         OnMessageReceived?.Invoke("Processing Boot message");
+                        GameManager.Boot();
                         //GameManager.InitializeGame();
                         break;
                     case MessageType.Update:

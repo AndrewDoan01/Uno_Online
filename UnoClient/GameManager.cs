@@ -33,19 +33,6 @@ namespace UnoOnline
                 Instance = new GameManager();
             }
 
-            // Ensure thread safety when checking and displaying the form
-            if (!Program.IsFormOpen(typeof(Form1)))
-            {
-                Application.OpenForms[0].Invoke(new Action(() =>
-                {
-                    if (!Program.IsFormOpen(typeof(Form1)))
-                    {
-                        Form1 form1 = new Form1();
-                        form1.Show();
-                    }
-                }));
-            }
-
             // Tách dữ liệu từ message
             string[] data = message.Data[0].Split(';');
 
@@ -66,9 +53,6 @@ namespace UnoOnline
                 string value = card[1];
                 player.Hand.Add(new Card(color, value));
             }
-
-            // Hiển thị những lá bài được chia 
-            // Form1.DisplayPlayerHand();
         }
 
 
@@ -90,7 +74,32 @@ namespace UnoOnline
                     player.Hand.Add(new Card(color, value));
                 }
             }
-            //Gọi Displayplayerhand trong form1 để hiển thị bài của người chơi khac
+        }
+        public static void Boot()
+        {
+            //Mở màn hình game mở (nếu chưa)
+            if (!Program.IsFormOpen(typeof(Form1)))
+            {
+                Application.OpenForms[0].Invoke(new Action(() =>
+                {
+                    if (!Program.IsFormOpen(typeof(Form1)))
+                    {
+                        Form1 form1 = new Form1();
+                        form1.Show();
+                    }
+                }));
+            }
+            // Hiển thị những lá bài được chia 
+            // Form1.DisplayPlayerHand();
+
+            /*
+            Gọi Displayplayerhand trong form1 để hiển thị bài của những người chơi khác
+            Application.OpenForms[0].Invoke(new Action(() =>
+            {
+                Form1 form1 = (Form1)Application.OpenForms[0];
+                form1.DisplayPlayerHand();
+            }));
+            */
         }
         public void AddPlayer(Player player)
         {
