@@ -74,6 +74,7 @@ namespace UnoOnline {
             InitializeTimer();
             DisplayPlayerHand(playerHand); // Hiển thị tay bài ban đầu
             ApplyCustomTheme();
+            InitializeCustomComponents();
 
         }
         // Tạo class ResourceManager để quản lý tài nguyên
@@ -596,7 +597,7 @@ namespace UnoOnline {
             };
             this.Controls.Add(playerCards);
         }
-s
+
 
     }
 
