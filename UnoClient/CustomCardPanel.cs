@@ -7,10 +7,9 @@ using UnoOnline;
 
 public class CustomCardPanel : Panel
 {
-    private GameManager gameManager;
-
     private const int CARD_SPACING = 30;
     private const int HOVER_LIFT = 20;
+    private GameManager gameManager;
 
     private List<Card> cards;
     private int hoveredCardIndex = -1;
@@ -27,7 +26,6 @@ public class CustomCardPanel : Panel
         cards = new List<Card>();
         gameManager = manager; // Gán GameManager
     }
-
 
     protected override void OnPaint(PaintEventArgs e)
     {
