@@ -117,4 +117,55 @@ public class CustomCardPanel : Panel
             gameManager.PlayCard(currentPlayer, cards[clickedCardIndex]);
         }
     }
+
+    private Card _card;
+    private bool _isPlayable;
+    private bool _isHovered;
+    private const int HOVER_OFFSET = 20;
+
+    public CustomCardPanel(Card card) : base()
+    {
+        _card = card;
+        InitializePanel();
+        SetupEvents();
+    }
+
+    private void InitializePanel()
+    {
+        this.Size = new Size(71, 96);  // Giữ nguyên kích thước như cũ
+        this.BackgroundImageLayout = ImageLayout.Stretch;
+        this.BackgroundImage = GetCardImage(_card);
+        this.Margin = new Padding(5, 5, 5, 5);
+    }
+
+    private void SetupEvents()
+    {
+        this.MouseEnter += (s, e) => {
+            if (_isPlayable)
+            {
+                _isHovered = true;
+                this.Top -= HOVER_OFFSET;
+                this.Cursor = Cursors.Hand;
+                this.Invalidate(); // Trigger paint để vẽ highlight effect
+            }
+        };
+
+        this.MouseLeave += (s, e) => {
+            if (_isHovered)
+            {
+                _isHovered = false;
+                this.Top += HOVER_OFFSET;
+                this.Cursor = Cursors.Default;
+                this.Invalidate();
+            }
+        };
+    }
+
+    public void SetPlayable(bool playable)
+    {
+        _isPlayable = playable;
+        this.Invalidate();
+    }
+
+    
 }
