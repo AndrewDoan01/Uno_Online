@@ -29,5 +29,13 @@ namespace UnoOnline
             Form1 form1 = new Form1();
             form1.Show();
         }
+
+        private void WaitingLobby_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var message = new Message(MessageType.DISCONNECT, new List<string> { Program.player.Name });
+            ClientSocket.SendData(message);
+            //ClientSocket.clientSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+            //ClientSocket.clientSocket.Close();
+        }
     }
 }

@@ -34,11 +34,11 @@
             // 
             // BtnJoinGame
             // 
-            this.BtnJoinGame.Location = new System.Drawing.Point(177, 92);
+            this.BtnJoinGame.Location = new System.Drawing.Point(12, 12);
             this.BtnJoinGame.Name = "BtnJoinGame";
-            this.BtnJoinGame.Size = new System.Drawing.Size(75, 23);
+            this.BtnJoinGame.Size = new System.Drawing.Size(100, 42);
             this.BtnJoinGame.TabIndex = 0;
-            this.BtnJoinGame.Text = "button1";
+            this.BtnJoinGame.Text = "Join room";
             this.BtnJoinGame.UseVisualStyleBackColor = true;
             this.BtnJoinGame.Click += new System.EventHandler(this.BtnJoinGame_Click);
             // 

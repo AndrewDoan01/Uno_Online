@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnJoinGame = new System.Windows.Forms.Button();
+            this.btnStartGame = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // btnJoinGame
+            // btnStartGame
             // 
-            this.btnJoinGame.Location = new System.Drawing.Point(216, 130);
-            this.btnJoinGame.Name = "btnJoinGame";
-            this.btnJoinGame.Size = new System.Drawing.Size(75, 23);
-            this.btnJoinGame.TabIndex = 0;
-            this.btnJoinGame.Text = "button1";
-            this.btnJoinGame.UseVisualStyleBackColor = true;
-            this.btnJoinGame.Click += new System.EventHandler(this.btnJoinGame_Click);
+            this.btnStartGame.Location = new System.Drawing.Point(12, 12);
+            this.btnStartGame.Name = "btnStartGame";
+            this.btnStartGame.Size = new System.Drawing.Size(89, 34);
+            this.btnStartGame.TabIndex = 0;
+            this.btnStartGame.Text = "Start";
+            this.btnStartGame.UseVisualStyleBackColor = true;
+            this.btnStartGame.Click += new System.EventHandler(this.btnJoinGame_Click);
             // 
             // richTextBox1
             // 
@@ -56,16 +56,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.btnJoinGame);
+            this.Controls.Add(this.btnStartGame);
             this.Name = "WaitingLobby";
             this.Text = "WaitingLobby";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WaitingLobby_FormClosing);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnJoinGame;
+        private System.Windows.Forms.Button btnStartGame;
         private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }

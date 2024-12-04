@@ -11,9 +11,8 @@ namespace UnoOnline
 {
     public class ClientSocket
     {
-        private static Socket clientSocket;
+        public static Socket clientSocket;
         public static Thread recvThread;
-        public static string datatype = "";
         private static readonly object lockObject = new object();
         public static GameManager gamemanager = new GameManager();
         public static event Action<string> OnMessageReceived;
@@ -153,7 +152,8 @@ namespace UnoOnline
             Penalty,
             Result,
             YellUNO,
-            YellUNOEnable
+            YellUNOEnable,
+            DISCONNECT
 
     }
 

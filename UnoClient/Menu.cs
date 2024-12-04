@@ -51,6 +51,7 @@ namespace UnoOnline
             ClientSocket.SendData(message);
             WaitingLobby waitingLobby = new WaitingLobby();
             waitingLobby.Show();
+            this.Hide();
         }
     }
 }
