@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -18,7 +19,8 @@ namespace UnoOnline {
         //private Panel PlayerHandPanel;
         //private Button skipTurnButton;
         //private Button drawCardButton;
-        
+        private CustomCardPanel playerCards;
+
         private Timer timer;
         private List<Player> players = new List<Player>();
         private List<Card> playerHand = new List<Card>();
@@ -27,6 +29,40 @@ namespace UnoOnline {
         private Button yellUNOButton;
 
 
+
+        private void ApplyCustomTheme()
+        {
+            // Set màu nền gradient
+            this.Paint += (sender, e) =>
+            {
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    this.ClientRectangle,
+                    Color.FromArgb(41, 128, 185), // Màu xanh đậm
+                    Color.FromArgb(44, 62, 80),   // Màu xám đen
+                    90F))
+                {
+                    e.Graphics.FillRectangle(brush, this.ClientRectangle);
+                }
+            };
+
+            // Style cho buttons
+            foreach (Control control in this.Controls)
+            {
+                if (control is Button btn)
+                {
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.BackColor = Color.FromArgb(52, 152, 219);
+                    btn.ForeColor = Color.White;
+                    btn.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+                    btn.Cursor = Cursors.Hand;
+
+                    // Hover effect
+                    btn.MouseEnter += (s, e) => btn.BackColor = Color.FromArgb(41, 128, 185);
+                    btn.MouseLeave += (s, e) => btn.BackColor = Color.FromArgb(52, 152, 219);
+                }
+            }
+        }
 
 
         public Form1()
@@ -37,6 +73,8 @@ namespace UnoOnline {
             InitializeGameBoard();
             InitializeTimer();
             DisplayPlayerHand(playerHand); // Hiển thị tay bài ban đầu
+            ApplyCustomTheme();
+            InitializeCustomComponents();
 
         }
         // Tạo class ResourceManager để quản lý tài nguyên
@@ -181,7 +219,6 @@ namespace UnoOnline {
             else
             {
                 // Nếu hết thời gian, chuyển sang lượt tiếp theo
-                MessageBox.Show("Hết thời gian! Chuyển lượt.");
                 NextTurn();
             }
         }
@@ -549,9 +586,22 @@ namespace UnoOnline {
                 form.Invoke(new Action(() => form.yellUNOButton.Enabled = true));
             }
         }
+
+        private void InitializeCustomComponents()
+        {
+            // Initialize custom card panel
+            playerCards = new CustomCardPanel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 200
+            };
+            this.Controls.Add(playerCards);
+        }
+
+
     }
 
-// Helper classes
+    // Helper classes
 
-// end aaasddd
+    // end aaasddd
 }
