@@ -6,6 +6,8 @@ namespace UnoOnline
 {
     public class GameManager
     {
+        private Player currentPlayer; // Giả sử bạn đã có Player hiện tại
+
         public List<Player> Players { get; set; }
         public Deck Deck { get; set; }
         public int CurrentPlayerIndex { get; set; }

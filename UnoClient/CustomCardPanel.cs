@@ -10,6 +10,7 @@ public class CustomCardPanel : Panel
     private const int CARD_SPACING = 30;
     private const int HOVER_LIFT = 20;
     private GameManager gameManager;
+    private Player currentPlayer; // Declare currentPlayer
 
     private List<Card> cards;
     private int hoveredCardIndex = -1;
@@ -24,8 +25,17 @@ public class CustomCardPanel : Panel
     {
         this.DoubleBuffered = true;
         cards = new List<Card>();
-        gameManager = manager; // Gán GameManager
+        gameManager = manager; // Assign GameManager
     }
+
+    public CustomCardPanel(GameManager manager, Player player)
+    {
+        this.DoubleBuffered = true;
+        cards = new List<Card>();
+        gameManager = manager; // Assign GameManager
+        currentPlayer = player; // Assign Player
+    }
+
 
     protected override void OnPaint(PaintEventArgs e)
     {
@@ -60,7 +70,7 @@ public class CustomCardPanel : Panel
         // Draw card with smooth edges
         g.DrawImage(cardImage, x, y);
 
-        // Kiểm tra xem thẻ có thể chơi được không
+        // Check if the card can be played
         if (gameManager.IsValidMove(card))
         {
             using (var glow = new Pen(Color.Yellow, 2))
@@ -94,5 +104,17 @@ public class CustomCardPanel : Panel
     {
         // Implement logic to load card image based on card properties
         return null; // Placeholder
+    }
+
+    protected override void OnMouseClick(MouseEventArgs e)
+    {
+        base.OnMouseClick(e);
+
+        int clickedCardIndex = (e.X / CARD_SPACING);
+        if (clickedCardIndex >= 0 && clickedCardIndex < cards.Count)
+        {
+            // Call PlayCard method in GameManager
+            gameManager.PlayCard(currentPlayer, cards[clickedCardIndex]);
+        }
     }
 }

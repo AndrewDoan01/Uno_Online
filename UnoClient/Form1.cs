@@ -449,9 +449,6 @@ namespace UnoOnline {
             this.button1.TabIndex = 7;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
-            this.yellUNOButton.Click += new System.EventHandler(this.yellUNOButton_Click);
-            this.Controls.Add(this.yellUNOButton);
-
             // 
             // Form1
             // 
@@ -598,7 +595,10 @@ namespace UnoOnline {
             this.Controls.Add(playerCards);
         }
 
+        private void customCardPanel1_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
     }
 
     // Helper classes
