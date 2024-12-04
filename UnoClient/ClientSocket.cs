@@ -70,6 +70,8 @@ namespace UnoOnline
                         break;
                     case MessageType.InitializeStat:
                         OnMessageReceived?.Invoke("Processing InitializeStat message");
+                        //Hiển thị toàn bộ message.data được nhận 
+                        OnMessageReceived?.Invoke(string.Join(" ", message.Data));
                         GameManager.InitializeStat(message);
                         break;
                     case MessageType.OtherPlayerStat:
@@ -77,10 +79,8 @@ namespace UnoOnline
                         GameManager.UpdateOtherPlayerStat(message);
                         break;
                     case MessageType.Boot: 
-                        // Có thể ko cần vì game đã hiển thị khi nhấn nút Start
                         OnMessageReceived?.Invoke("Processing Boot message");
                         GameManager.Boot();
-                        //GameManager.InitializeGame();
                         break;
                     case MessageType.Update:
                         MessageHandlers.HandleUpdate(message);
@@ -180,9 +180,20 @@ namespace UnoOnline
 
             public static Message FromString(string messageString)
             {
-                var parts = messageString.Split(';');
+                var parts = messageString.Split(new[] { ';' }, 2);
                 var type = (MessageType)Enum.Parse(typeof(MessageType), parts[0]);
-                var data = new List<string> { parts[1] };
+                var data = new List<string>();
+
+                // Handle the case where the data contains underscores
+                if (parts.Length > 1)
+                {
+                    var dataParts = parts[1].Split(';');
+                    foreach (var part in dataParts)
+                    {
+                        data.Add(part);
+                    }
+                }
+
                 return new Message(type, data);
             }
         }

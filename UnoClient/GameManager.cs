@@ -34,12 +34,30 @@ namespace UnoOnline
             }
 
             // Tách dữ liệu từ message
-            string[] data = message.Data[0].Split(';');
+            string[] data = message.Data.ToArray();
+
+            // Validate the data length
+            if (data.Length < 11)
+            {
+                throw new ArgumentException("Invalid message data format: not enough elements.");
+            }
 
             // Lấy thông tin từ chuỗi
             string playerName = data[0];
-            string turnOrder = data[1];
-            int cardCount = int.Parse(data[2]);
+            if (!int.TryParse(data[1], out int turnOrder))
+            {
+                throw new ArgumentException("Invalid turn order format: must be an integer.");
+            }
+            if (!int.TryParse(data[2], out int cardCount))
+            {
+                throw new ArgumentException("Invalid card count format: must be an integer.");
+            }
+
+            // Validate the card count
+            if (data.Length < 3 + cardCount)
+            {
+                throw new ArgumentException("Invalid message data format: not enough card data.");
+            }
 
             // Lấy danh sách các lá bài
             List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
@@ -53,27 +71,53 @@ namespace UnoOnline
                 string value = card[1];
                 player.Hand.Add(new Card(color, value));
             }
+
+            Instance.AddPlayer(player);
         }
 
 
         public static void UpdateOtherPlayerStat(Message message)
         {
-            string playerName = message.Data[0];
-            string turnOrder = message.Data[1];
-            int cardCount = int.Parse(message.Data[2]);
-            List<string> cardNames = message.Data.GetRange(3, cardCount);
-            Player player = Instance.Players.Find(p => p.Name == playerName);
-            if (player != null)
+            // Tách dữ liệu từ message
+            string[] data = message.Data.ToArray();
+
+            // Validate the data length
+            if (data.Length < 11)
             {
-                player.Hand = new List<Card>();
-                for (int i = 0; i < cardCount; i++)
-                {
-                    string[] card = cardNames[i].Split('_');
-                    string color = card[0];
-                    string value = card[1];
-                    player.Hand.Add(new Card(color, value));
-                }
+                throw new ArgumentException("Invalid message data format: not enough elements.");
             }
+
+            // Lấy thông tin từ chuỗi
+            string playerName = data[0];
+            if (!int.TryParse(data[1], out int turnOrder))
+            {
+                throw new ArgumentException("Invalid turn order format: must be an integer.");
+            }
+            if (!int.TryParse(data[2], out int cardCount))
+            {
+                throw new ArgumentException("Invalid card count format: must be an integer.");
+            }
+
+            // Validate the card count
+            if (data.Length < 3 + cardCount)
+            {
+                throw new ArgumentException("Invalid message data format: not enough card data.");
+            }
+
+            // Lấy danh sách các lá bài
+            List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
+            Player player = new Player(playerName);
+
+            // Thêm các lá bài vào tay người chơi
+            foreach (var cardData in cardNames)
+            {
+                string[] card = cardData.Split('_');
+                string color = card[0];
+                string value = card[1];
+                player.Hand.Add(new Card(color, value));
+            }
+
+            Instance.AddPlayer(player);
         }
         public static void Boot()
         {
