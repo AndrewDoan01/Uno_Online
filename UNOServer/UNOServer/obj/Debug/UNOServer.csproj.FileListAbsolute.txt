@@ -5,3 +5,10 @@ D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.AssemblyRefer
 D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.CoreCompileInputs.cache
 D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.exe
 D:\C++\c# code\UNO2\UNOServer\UNOServer\obj\Debug\UNOServer.pdb
+E:\Uno_Online\UNOServer\UNOServer\bin\Debug\UNOServer.exe.config
+E:\Uno_Online\UNOServer\UNOServer\bin\Debug\UNOServer.exe
+E:\Uno_Online\UNOServer\UNOServer\bin\Debug\UNOServer.pdb
+E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.AssemblyReference.cache
+E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.CoreCompileInputs.cache
+E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.exe
+E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.pdb
