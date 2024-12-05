@@ -20,7 +20,6 @@ namespace UnoOnline
         {
             InitializeComponent();
             ClientSocket.OnMessageReceived += ClientSocket_OnMessageReceived;
-            Connect();
         }
 
         private void ClientSocket_OnMessageReceived(string message)
@@ -33,7 +32,6 @@ namespace UnoOnline
             }));
         }
 
-        //Thiết lập kết nối tới server
         private static void Connect()
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -41,14 +39,14 @@ namespace UnoOnline
             IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000);
 
             ClientSocket.ConnectToServer(serverEP);
-            //test
-            //
+
+            var message = new Message(MessageType.CONNECT, new List<string> { Program.player.Name });
+            ClientSocket.SendData(message);
         }
 
         private void BtnJoinGame_Click(object sender, EventArgs e)
         {
-            var message = new Message(MessageType.CONNECT, new List<string> { Program.player.Name });
-            ClientSocket.SendData(message);
+            Connect();
             WaitingLobby waitingLobby = new WaitingLobby();
             waitingLobby.Show();
             this.Hide();
