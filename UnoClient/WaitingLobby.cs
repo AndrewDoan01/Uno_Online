@@ -32,10 +32,20 @@ namespace UnoOnline
 
         private void WaitingLobby_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var message = new Message(MessageType.DISCONNECT, new List<string> { Program.player.Name });
-            ClientSocket.SendData(message);
-            //ClientSocket.clientSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
-            //ClientSocket.clientSocket.Close();
+            try
+            {
+                // Send disconnect message to the server
+                var message = new Message(MessageType.DISCONNECT, new List<string> { Program.player.Name });
+                ClientSocket.SendData(message);
+
+                // Close the client socket
+                ClientSocket.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as needed
+                MessageBox.Show($"Error during disconnect: {ex.Message}");
+            }
         }
     }
 }

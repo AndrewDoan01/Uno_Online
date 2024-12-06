@@ -16,6 +16,7 @@ namespace UnoOnline
         public static readonly object lockObject = new object();
         public static GameManager gamemanager = new GameManager();
         public static event Action<string> OnMessageReceived;
+        private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         // Hàm kết nối tới server
         public static void ConnectToServer(IPEndPoint server)
@@ -24,7 +25,8 @@ namespace UnoOnline
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 clientSocket.Connect(server);
-                recvThread = new Thread(ReceiveData);
+                cancellationTokenSource = new CancellationTokenSource();
+                recvThread = new Thread(() => ReceiveData(cancellationTokenSource.Token));
                 recvThread.Start();
             }
             catch (Exception ex)
@@ -33,22 +35,31 @@ namespace UnoOnline
             }
         }
 
-        private static void ReceiveData()
+        private static void ReceiveData(CancellationToken cancellationToken)
         {
-            while (true)
+            try
             {
-                try
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     byte[] buffer = new byte[1024];
                     int bytesRead = clientSocket.Receive(buffer);
-                    string messageString = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Message receivedMessage = Message.FromString(messageString);
-                    AnalyzeData(receivedMessage);
+                    if (bytesRead > 0)
+                    {
+                        string messageString = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        Message receivedMessage = Message.FromString(messageString);
+                        AnalyzeData(receivedMessage);
+                    }
                 }
-                catch (Exception ex)
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Error socket exception");
+            }
+            catch (Exception ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
                 {
                     MessageBox.Show("Error receiving data: " + ex.Message);
-                    break;
                 }
             }
         }
@@ -59,7 +70,6 @@ namespace UnoOnline
             {
                 switch (message.Type)
                 {
-                    // Các OnMessageReceived sẽ chỉ được dùng tạm thời để test
                     case MessageType.Info:
                         OnMessageReceived?.Invoke(message.Data[0]);
                         if (gamemanager != null)
@@ -69,7 +79,6 @@ namespace UnoOnline
                         break;
                     case MessageType.InitializeStat:
                         OnMessageReceived?.Invoke("Processing InitializeStat message");
-                        //Hiển thị toàn bộ message.data được nhận 
                         OnMessageReceived?.Invoke(string.Join(" ", message.Data));
                         GameManager.InitializeStat(message);
                         break;
@@ -77,7 +86,7 @@ namespace UnoOnline
                         OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
                         GameManager.UpdateOtherPlayerStat(message);
                         break;
-                    case MessageType.Boot: 
+                    case MessageType.Boot:
                         OnMessageReceived?.Invoke("Processing Boot message");
                         GameManager.Boot();
                         break;
@@ -134,8 +143,34 @@ namespace UnoOnline
                 MessageBox.Show("Error sending data: " + ex.Message);
             }
         }
+
+        public static void Disconnect()
+        {
+            try
+            {
+                cancellationTokenSource.Cancel();
+
+                // Close the client socket
+                if (clientSocket != null && clientSocket.Connected)
+                {
+                    clientSocket.Shutdown(SocketShutdown.Both);
+                    clientSocket.Close();
+                }
+
+                // Wait for the receive thread to finish
+                if (recvThread != null && recvThread.IsAlive)
+                {
+                    recvThread.Join();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error during disconnect: " + ex.Message);
+            }
+        }
     }
-    public enum MessageType
+}
+public enum MessageType
         {
             START,
             CONNECT,
@@ -197,4 +232,3 @@ namespace UnoOnline
                 return new Message(type, data);
             }
         }
-}
