@@ -51,10 +51,6 @@ namespace UnoOnline
                     }
                 }
             }
-            catch (SocketException)
-            {
-                MessageBox.Show("Error socket exception");
-            }
             catch (Exception ex)
             {
                 if (!cancellationToken.IsCancellationRequested)
