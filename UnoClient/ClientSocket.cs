@@ -183,9 +183,10 @@ public enum MessageType
             Result,
             YellUNO,
             YellUNOEnable,
-            DISCONNECT
+            DISCONNECT,
+            DanhBai,
 
-    }
+}
 
     public class Message
     {

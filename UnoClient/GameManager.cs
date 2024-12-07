@@ -9,8 +9,10 @@ namespace UnoOnline
 
         public List<Player> Players { get; set; }
         public Deck Deck { get; set; }
+        public Card CurrentCard { get; set; }
         public int CurrentPlayerIndex { get; set; }
         public static GameManager Instance { get; private set; }
+
 
         public GameManager()
         {
@@ -117,7 +119,10 @@ namespace UnoOnline
                 string value = card[1];
                 player.Hand.Add(new Card(color, value));
             }
-
+            string[] currentCard= data[8].Split('_');
+            string currentColor = currentCard[0];
+            string currentValue = currentCard[1];
+            Instance.CurrentCard = new Card(currentColor, currentValue);
             Instance.AddPlayer(player);
         }
         public static void Boot()
@@ -158,19 +163,31 @@ namespace UnoOnline
             StartTurn();
         }
 
-        public bool PlayCard(Player player, Card card)
+        public void PlayCard(Player player, Card card)
         {
             if (IsValidMove(card))
             {
                 player.Hand.Remove(card);
-                return true;
+                CurrentCard = card;
+                //Gửi thông điệp đến server theo định dạng DanhBai;ID;SoLuongBai;CardName;color
+                //VD: DanhBai;1;1;Skip;Red
+                ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, card.Color, card.Value }));
+                //Gửi thông điệp này khi người chơi chọn lá bài để đánh
+                //Sau khi gửi thông điệp, cập nhật lại giao diện người chơi
+                //Form1.DisplayPlayerHand();
             }
-            return false;
         }
 
         public bool IsValidMove(Card card)
         {
-            return true;
+            if (card.Color == CurrentCard.Color || card.Value == CurrentCard.Value || card.Color == "Wild")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public static void HandleChatMessage(Message message)
         {
