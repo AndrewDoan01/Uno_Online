@@ -149,20 +149,6 @@ namespace UnoOnline
             Players.Add(player);
         }
 
-        public void StartTurn()
-        {
-            var currentPlayer = Players[CurrentPlayerIndex];
-            currentPlayer.IsTurn = true;
-        }
-
-        public void NextTurn()
-        {
-            var currentPlayer = Players[CurrentPlayerIndex];
-            currentPlayer.IsTurn = false;
-            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % Players.Count;
-            StartTurn();
-        }
-
         public void PlayCard(Player player, Card card)
         {
             if (IsValidMove(card))

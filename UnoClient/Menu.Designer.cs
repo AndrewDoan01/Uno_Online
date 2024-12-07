@@ -59,6 +59,7 @@
             this.Controls.Add(this.BtnJoinGame);
             this.Name = "Menu";
             this.Text = "Menu";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Menu_FormClosing);
             this.ResumeLayout(false);
 
         }
