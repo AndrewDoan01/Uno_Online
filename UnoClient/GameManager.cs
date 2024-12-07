@@ -155,10 +155,9 @@ namespace UnoOnline
             {
                 player.Hand.Remove(card);
                 CurrentCard = card;
-                //Gửi thông điệp đến server theo định dạng DanhBai;ID;SoLuongBai;CardName;color
-                //VD: DanhBai;1;1;Skip;Red
-                ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, card.Color, card.Value }));
-                //Gửi thông điệp này khi người chơi chọn lá bài để đánh
+                //Gửi thông điệp đến server theo định dạng DanhBai;ID;SoLuongBaiTrenTay;CardName;color
+                ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, player.Hand.Count.ToString(), card.CardType, card.Color }));
+ 
                 //Sau khi gửi thông điệp, cập nhật lại giao diện người chơi
                 //Form1.DisplayPlayerHand();
             }

@@ -8,15 +8,9 @@ namespace UnoOnline
         public static void HandleTurnMessage(Message message)
         {
             string playerId = message.Data[0];
-            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
-            if (player != null)
+            if (playerId == Program.player.Name)
             {
-                GameManager.Instance.CurrentPlayerIndex = GameManager.Instance.Players.IndexOf(player);
-                Console.WriteLine($"{player.Name} has the turn.");
-            }
-            else
-            {
-                Console.WriteLine($"Player with ID {playerId} not found.");
+                //Enable các lá bài có thể đánh
             }
         }
         public static void HandleUpdate(Message message)
@@ -38,10 +32,6 @@ namespace UnoOnline
                 {
                     Console.WriteLine($"Invalid move by {player.Name} with card {card.Color} {card.Value}.");
                 }
-            }
-            else
-            {
-                Console.WriteLine($"Player with ID {playerId} not found.");
             }
         }
 
