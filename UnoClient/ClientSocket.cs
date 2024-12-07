@@ -101,6 +101,7 @@ namespace UnoOnline
                         break;
                     case MessageType.End:
                         OnMessageReceived?.Invoke("Processing End message");
+                        MessageHandlers.HandleEndMessage(message);
                         break;
                     case MessageType.MESSAGE:
                         OnMessageReceived?.Invoke("Processing MESSAGE");

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 
 namespace UnoOnline
@@ -159,6 +159,19 @@ namespace UnoOnline
             else
             {
                 Console.WriteLine($"Player with ID {playerId} not found.");
+            }
+        }
+        public static void HandleEndMessage(Message message)
+        {
+            string[] data = message.Data.ToArray();
+            string winnerName = data[0];
+            if(winnerName == Program.player.Name)
+            {
+                //Hiển thị màn hình thắng
+            }
+            else
+            {
+                //Hiển thị màn hình thua
             }
         }
 
