@@ -105,6 +105,7 @@ namespace UnoOnline
                         break;
                     case MessageType.MESSAGE:
                         OnMessageReceived?.Invoke("Processing MESSAGE");
+                        GameManager.HandleChatMessage(message);
                         break;
                     case MessageType.Penalty:
                         OnMessageReceived?.Invoke("Processing Penalty");
@@ -115,9 +116,6 @@ namespace UnoOnline
                     case MessageType.YellUNOEnable:
                         OnMessageReceived?.Invoke("Processing YellUNOEnable");
                         Form1.YellUNOEnable();
-                        break;
-                    default:
-                        OnMessageReceived?.Invoke("Unknown message type: " + message.Type);
                         break;
                 }
             }

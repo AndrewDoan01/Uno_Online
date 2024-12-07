@@ -172,16 +172,18 @@ namespace UnoOnline
         {
             return true;
         }
-
-        public void SkipTurn()
+        public static void HandleChatMessage(Message message)
         {
-            NextTurn();
+            string playerName = message.Data[0];
+            string chatMessage = message.Data[1];
+            //Hiển thị lên form1
+            // VD vầy Form1.DisplayChatMessage(playerName, chatMessage);
+            // An tạo giùm tui phần chat trong Form1 nha
         }
-
-        public void ReverseOrder()
+        public static void SendChatMessage(string message)
         {
-            Players.Reverse();
-            NextTurn();
+            //Gọi phương thức này khi người chơi gửi tin nhắn
+            ClientSocket.SendData(new Message(MessageType.MESSAGE, new List<string> {message}));
         }
     }
 }
