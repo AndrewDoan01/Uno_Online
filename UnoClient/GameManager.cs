@@ -188,4 +188,6 @@ namespace UnoOnline
             ClientSocket.SendData(new Message(MessageType.MESSAGE, new List<string> {message}));
         }
     }
+
+
 }

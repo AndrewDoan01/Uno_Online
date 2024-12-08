@@ -7,13 +7,18 @@ using UnoOnline;
 
 public class CustomCardPanel : Panel
 {
-    private const int CARD_SPACING = 30;
-    private const int HOVER_LIFT = 20;
     private GameManager gameManager;
     private Player currentPlayer; // Declare currentPlayer
 
     private List<Card> cards;
     private int hoveredCardIndex = -1;
+
+
+    private const int CARD_WIDTH = 71;
+    private const int CARD_HEIGHT = 96;
+    private const int CARD_SPACING = 10;
+    private const int HOVER_LIFT = 20;
+
 
     public CustomCardPanel()
     {
@@ -126,9 +131,14 @@ public class CustomCardPanel : Panel
     public CustomCardPanel(Card card) : base()
     {
         _card = card;
+        this.Size = new Size(CARD_WIDTH, CARD_HEIGHT);
+        this.Margin = new Padding(CARD_SPACING, 0, 0, 0);
+        this.BackgroundImageLayout = ImageLayout.Stretch;
+        this.BackgroundImage = GetCardImage(card);
         InitializePanel();
         SetupEvents();
     }
+
 
     private void InitializePanel()
     {
