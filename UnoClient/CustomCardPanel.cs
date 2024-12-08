@@ -24,6 +24,17 @@ public class CustomCardPanel : Panel
     {
         this.DoubleBuffered = true;
         cards = new List<Card>();
+        this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        this.BackColor = Color.FromArgb(100, 255, 255, 255); // Alpha = 100 cho độ trong suốt
+    }
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            CreateParams cp = base.CreateParams;
+            cp.ExStyle |= 0x20;  // WS_EX_TRANSPARENT
+            return cp;
+        }
     }
 
     public CustomCardPanel(GameManager manager)
@@ -176,6 +187,4 @@ public class CustomCardPanel : Panel
         _isPlayable = playable;
         this.Invalidate();
     }
-
-    
 }
