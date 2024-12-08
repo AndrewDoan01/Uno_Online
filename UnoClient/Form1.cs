@@ -250,12 +250,6 @@ namespace UnoOnline {
             }
         }
 
-        [STAThread]
-        public static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.Run(new Form1());
-        }
         private void SetupGameStatusPanel()
         {
             Label turnLabel = new Label

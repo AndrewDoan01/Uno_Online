@@ -91,7 +91,7 @@ namespace UnoOnline
                         break;
                     case MessageType.Turn:
                         OnMessageReceived?.Invoke("Processing Turn message");
-                        MessageHandlers.HandleTurnMessage(message);
+                        GameManager.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:
                         //MessageHandlers.HandleCardDraw(message);
@@ -101,7 +101,7 @@ namespace UnoOnline
                         break;
                     case MessageType.End:
                         OnMessageReceived?.Invoke("Processing End message");
-                        MessageHandlers.HandleEndMessage(message);
+                        GameManager.HandleEndMessage(message);
                         break;
                     case MessageType.MESSAGE:
                         OnMessageReceived?.Invoke("Processing MESSAGE");
