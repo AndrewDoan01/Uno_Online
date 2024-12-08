@@ -10,7 +10,7 @@ namespace UnoOnline
         public List<Player> Players { get; set; }
         public Card CurrentCard { get; set; }
         public int CurrentPlayerIndex { get; set; }
-        public static GameManager Instance { get; private set; }
+        public static GameManager Instance { get; private set; } = new GameManager();
 
         public GameManager()
         {
