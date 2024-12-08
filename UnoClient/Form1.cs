@@ -34,6 +34,136 @@ namespace UnoOnline {
 
         private void InitializeGameLayout()
         {
+            this.ClientSize = new Size(1280, 720); // Kích thước chuẩn HD
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            CustomCardPanel playerHandPanel = new CustomCardPanel
+            {
+                Location = new Point(180, this.ClientSize.Height - 150),
+                Size = new Size(920, 130),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+            };
+
+            // Panel hiển thị bài trên bàn (ở giữa)
+            CustomCardPanel tableDeckPanel = new CustomCardPanel
+            {
+                Location = new Point(540, 260),
+                Size = new Size(200, 200),
+                Anchor = AnchorStyles.None
+            };
+
+            // Panel hiển thị người chơi đối thủ (phía trên)
+            CustomCardPanel opponentPanel = new CustomCardPanel
+            {
+                Location = new Point(180, 20),
+                Size = new Size(920, 130),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+            };
+
+
+            // Panel thông tin game bên trái
+            Panel gameInfoPanel = new Panel
+            {
+                Location = new Point(20, 160),
+                Size = new Size(150, 400),
+                Anchor = AnchorStyles.Left,
+                BackColor = Color.FromArgb(100, 0, 0, 0)
+            };
+
+
+
+            // Thêm các controls thông tin vào gameInfoPanel
+            Label currentPlayerLabel = new Label
+            {
+                Location = new Point(10, 10),
+                Size = new Size(130, 25),
+                Text = "Current Player:",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F)
+            };
+
+            Label scoreLabel = new Label
+            {
+                Location = new Point(10, 45),
+                Size = new Size(130, 25),
+                Text = "Score: 0",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F)
+            };
+
+            // Panel chứa các nút điều khiển (bên phải)
+            Panel controlPanel = new Panel
+            {
+                Location = new Point(this.ClientSize.Width - 170, 160),
+                Size = new Size(150, 400),
+                Anchor = AnchorStyles.Right,
+                BackColor = Color.FromArgb(100, 0, 0, 0)
+            };
+
+            // Thêm các nút vào controlPanel
+            Button drawCardButton = new Button
+            {
+                Location = new Point(10, 10),
+                Size = new Size(130, 40),
+                Text = "Draw Card",
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(100, 0, 122, 204),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F)
+            };
+
+            Button unoButton = new Button
+            {
+                Location = new Point(10, 60),
+                Size = new Size(130, 40),
+                Text = "UNO!",
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(100, 204, 0, 0),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F)
+            };
+
+            // Thêm chat box và input (phía dưới bên phải)
+            RichTextBox chatBox = new RichTextBox
+            {
+                Location = new Point(this.ClientSize.Width - 300, this.ClientSize.Height - 200),
+                Size = new Size(280, 150),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                BackColor = Color.FromArgb(150, 255, 255, 255),
+                ReadOnly = true
+            };
+
+            TextBox chatInput = new TextBox
+            {
+                Location = new Point(this.ClientSize.Width - 300, this.ClientSize.Height - 40),
+                Size = new Size(280, 30),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                BackColor = Color.FromArgb(150, 255, 255, 255)
+            };
+
+            // Thêm các controls vào form
+            this.Controls.AddRange(new Control[] {
+                playerHandPanel,
+                tableDeckPanel,
+                opponentPanel,
+                gameInfoPanel,
+                controlPanel,
+                chatBox,
+                chatInput
+             });
+
+            // Thêm controls vào các panel
+            gameInfoPanel.Controls.AddRange(new Control[] {
+        currentPlayerLabel,
+        scoreLabel
+    });
+            controlPanel.Controls.AddRange(new Control[] {
+        drawCardButton,
+        unoButton
+    });
+
+            drawCardButton.Click += DrawCardButton_Click;
+            
             // Main layout chia làm 3 phần: status, game area, player cards
             mainLayout = new TableLayoutPanel
             {
@@ -682,13 +812,12 @@ namespace UnoOnline {
 
         private void InitializeCustomComponents()
         {
-            // Initialize custom card panel
-            playerCards = new CustomCardPanel
-            {
-                Dock = DockStyle.Bottom,
-                Height = 200
-            };
-            this.Controls.Add(playerCards);
+            // Initialize yellUNOButton
+            yellUNOButton = new Button();
+            yellUNOButton.Text = "Yell UNO!";
+            yellUNOButton.Click += yellUNOButton_Click;
+            // Add yellUNOButton to the form or a specific panel
+            // Initialize other custom components if needed
         }
 
         private void customCardPanel1_Paint(object sender, PaintEventArgs e)
