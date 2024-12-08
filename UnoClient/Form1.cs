@@ -33,15 +33,39 @@ namespace UnoOnline {
 
         private void InitializeGameLayout()
         {
-            this.ClientSize = new Size(1280, 720); // Kích thước chuẩn HD
+            this.ClientSize = new Size(1280, 720);
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            CustomCardPanel playerHandPanel = new CustomCardPanel
+            // Panel chứa bài của người chơi (có tính năng cuộn)
+            Panel playerHandPanel = new Panel
             {
                 Location = new Point(180, this.ClientSize.Height - 150),
-                Size = new Size(920, 130),
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+                Size = new Size(920, 130), // Kích thước panel
+                AutoScroll = true, // Bật tính năng cuộn
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                BackColor = Color.FromArgb(100, 0, 0, 0) // Màu nền
             };
+
+
+
+            // Thêm panel vào form
+            this.Controls.Add(playerHandPanel);
+
+            // Tạo và thêm thẻ vào playerHandPanel
+            int cardWidth = 70; // Kích thước thẻ
+            int cardHeight = 100; // Kích thước thẻ
+            int spacing = 10; // Khoảng cách giữa các thẻ
+            int numberOfCards = 15; // Số thẻ bạn muốn hiển thị
+
+            for (int i = 0; i < numberOfCards; i++)
+            {
+                CustomCard card = new CustomCard
+                {
+                    Size = new Size(cardWidth, cardHeight),
+                    Location = new Point(i * (cardWidth + spacing), 0) // Sắp xếp theo hàng ngang
+                };
+                playerHandPanel.Controls.Add(card);
+            }
 
             // Panel hiển thị bài trên bàn (ở giữa)
             CustomCardPanel tableDeckPanel = new CustomCardPanel
@@ -217,6 +241,21 @@ namespace UnoOnline {
             this.Controls.Add(mainLayout);
         }
 
+        public class CustomCard : UserControl
+        {
+            public CustomCard()
+            {
+                this.BackColor = Color.White; // Màu nền của thẻ
+                this.BorderStyle = BorderStyle.FixedSingle; // Đường viền cho thẻ
+            }
+        }
+
+        [STAThread]
+        public static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.Run(new Form1());
+        }
         private void SetupGameStatusPanel()
         {
             Label turnLabel = new Label
