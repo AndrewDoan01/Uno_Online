@@ -27,7 +27,114 @@ namespace UnoOnline {
         private int currentPlayerIndex = 0;
         private string currentCard = string.Empty;
         private Button yellUNOButton;
+        private TableLayoutPanel mainLayout;
+        private Panel gameStatusPanel;
+        private FlowLayoutPanel playerCardsPanel;
+        private Panel actionPanel;
 
+        private void InitializeGameLayout()
+        {
+            // Main layout chia làm 3 phần: status, game area, player cards
+            mainLayout = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                RowCount = 3,
+                ColumnCount = 1,
+                BackColor = Color.FromArgb(41, 128, 185) // Màu xanh dương đậm
+            };
+
+            // Game status panel
+            gameStatusPanel = new Panel
+            {
+                Height = 60,
+                Dock = DockStyle.Top,
+                BackColor = Color.FromArgb(52, 73, 94)
+            };
+
+            // Khu vực chơi bài chính
+            Panel gameArea = new Panel
+            {
+                Dock = DockStyle.Fill,
+                Padding = new Padding(20)
+            };
+
+            // Panel chứa bài của người chơi
+            playerCardsPanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 150,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoScroll = true
+            };
+
+            // Panel chứa các nút action
+            actionPanel = new Panel
+            {
+                Dock = DockStyle.Right,
+                Width = 150,
+                BackColor = Color.FromArgb(44, 62, 80)
+            };
+
+            // Setup các controls
+            SetupGameStatusPanel();
+            SetupActionPanel();
+
+            // Thêm vào form
+            mainLayout.Controls.Add(gameStatusPanel, 0, 0);
+            mainLayout.Controls.Add(gameArea, 0, 1);
+            mainLayout.Controls.Add(playerCardsPanel, 0, 2);
+
+            this.Controls.Add(mainLayout);
+        }
+
+        private void SetupGameStatusPanel()
+        {
+            Label turnLabel = new Label
+            {
+                Text = "Lượt của người chơi",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(10, 10)
+            };
+
+            Label currentCardLabel = new Label
+            {
+                Text = "Lá bài hiện tại:",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12),
+                AutoSize = true,
+                Location = new Point(10, 35)
+            };
+
+            gameStatusPanel.Controls.AddRange(new Control[] { turnLabel, currentCardLabel });
+        }
+
+        private void SetupActionPanel()
+        {
+            // Tạo các button với style thống nhất
+            Button drawButton = CreateStyledButton("Rút bài", 0);
+            Button skipButton = CreateStyledButton("Bỏ qua", 1);
+            Button unoButton = CreateStyledButton("UNO!", 2);
+
+            actionPanel.Controls.AddRange(new Control[] { drawButton, skipButton, unoButton });
+        }
+
+        private Button CreateStyledButton(string text, int index)
+        {
+            return new Button
+            {
+                Text = text,
+                Width = 130,
+                Height = 40,
+                Location = new Point(10, 10 + (index * 50)),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(52, 152, 219),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+        }
 
 
         private void ApplyCustomTheme()
@@ -379,7 +486,6 @@ namespace UnoOnline {
             this.currentCardLabel = new System.Windows.Forms.Label();
             this.currentPlayerLabel = new System.Windows.Forms.Label();
             this.yellUNOButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // skipTurnButton
@@ -406,6 +512,7 @@ namespace UnoOnline {
             this.turnTimer.Name = "turnTimer";
             this.turnTimer.Size = new System.Drawing.Size(100, 23);
             this.turnTimer.TabIndex = 5;
+            this.turnTimer.Visible = false;
             // 
             // PlayerHandPanel
             // 
@@ -441,21 +548,11 @@ namespace UnoOnline {
             this.yellUNOButton.UseVisualStyleBackColor = true;
             this.yellUNOButton.Click += new System.EventHandler(this.yellUNOButton_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(0, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.BackgroundImage = global::UnoOnline.Properties.Resources.Table_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(647, 441);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.yellUNOButton);
             this.Controls.Add(this.PlayerHandPanel);
             this.Controls.Add(this.turnTimer);
@@ -573,7 +670,6 @@ namespace UnoOnline {
             }
         }
 
-        private Button button1;
         public static void YellUNOEnable()
         {
             // Assuming you have a reference to the Form1 instance
