@@ -143,7 +143,7 @@ namespace UnoOnline
             // Hiển thị những lá bài được chia 
             // Form1.DisplayPlayerHand();
 
-            //Gọi Displayplayerhand trong form1 để hiển thị bài của những người chơi khác
+            //Hiển thị số lá bài của 3 người chơi còn lại
         }
         public void AddPlayer(Player player)
         {
