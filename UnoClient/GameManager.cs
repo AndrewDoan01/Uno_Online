@@ -73,6 +73,13 @@ namespace UnoOnline
                 string value = card[1];
                 player.Hand.Add(new Card(cardname, color, value));
             }
+            string currentCardName = data[8];
+            string[] currentCard = data[8].Split('_');
+            string currentColor = currentCard[0];
+            string currentValue = currentCard[1];
+            Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
+
+
 
             Instance.AddPlayer(player);
         }
@@ -160,8 +167,10 @@ namespace UnoOnline
                 if(card.Color == "Wild")
                 {
                     //Hiển thị form chọn màu, bên dưới chỉ là giả sử
+                    //string color = Form1.ColorPicker();
                     string color = "Red";
                     card.Color = color;
+
                 }
                 ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, player.Hand.Count.ToString(), card.CardName, card.Color }));
 
@@ -183,7 +192,43 @@ namespace UnoOnline
                 return false;
             }
         }
+        public void HandleUpdate(Message message)
+        {
+            //Message nhận được: Update; ID; SoluongBaiConLai; CardName(Nếu đánh bài); color(red/blue/green/yellow nếu trường hợp cardname chứa wild)(Nếu đánh bài)
+            string playerId = message.Data[0];
+            int remainingCards = int.Parse(message.Data[1]);
+            //Tìm người chơi đó trong list player và cập nhật số bài đang trên tay họ
+            Player player = Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                player.HandCount = remainingCards;
+            }
+            if (playerId != Program.player.Name)
+            {
+            //Nếu người chơi  khác đã đánh bài
+                if (message.Data.Count == 3)
+                {
+                    CurrentCard.CardName = message.Data[2];
+                    string[] card = message.Data[2].Split('_');
+                    CurrentCard.Color = card[0];
+                    CurrentCard.Value = card[1];
+                }
+                //Trường hợp lá đó là lá đổi màu
+                else if (message.Data.Count == 4)
+                {
+                    CurrentCard.CardName = message.Data[2];
+                    CurrentCard.Color = message.Data[3];
+                }
+            //Nếu người chơi khác đã rút bài
+                else if(message.Data.Count == 2)
+                {
 
+                }
+
+
+
+            }
+        }
         public static void HandleChatMessage(Message message)
         {
             string playerName = message.Data[0];

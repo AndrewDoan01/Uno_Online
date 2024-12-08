@@ -4,9 +4,8 @@ public class Player
 {
     public string Name { get; set; }
     public List<Card> Hand { get; set; }
-
+    public int HandCount { get; set; }
     public bool IsTurn { get; set; }
-
 
     public Player() // Constructor mặc định 
     {

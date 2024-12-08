@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 
 namespace UnoOnline
@@ -13,30 +14,6 @@ namespace UnoOnline
                 //Enable các lá bài có thể đánh
             }
         }
-        public static void HandleUpdate(Message message)
-        {
-            string playerId = message.Data[0];
-            string cardName = message.Data[1];
-            string[] cardname = message.Data[1].Split('_');
-            string cardColor = cardname[0];
-            string cardValue = cardname[1];
-
-            Player player = GameManager.Instance.Players.FirstOrDefault(p => p.Name == playerId);
-            if (player != null)
-            {
-                Card card = new Card(cardName, cardColor, cardValue);
-                if (GameManager.Instance.IsValidMove(card))
-                {
-                    GameManager.Instance.PlayCard(player, card);
-                    Console.WriteLine($"{player.Name} played a {card.Color} {card.Value} card.");
-                }
-                else
-                {
-                    Console.WriteLine($"Invalid move by {player.Name} with card {card.Color} {card.Value}.");
-                }
-            }
-        }
-
         public static void HandleNewMessageType(Message message)
         {
             // Add your handling logic here
