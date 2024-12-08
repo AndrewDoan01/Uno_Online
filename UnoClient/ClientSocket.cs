@@ -94,10 +94,10 @@ namespace UnoOnline
                         MessageHandlers.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:
-                        MessageHandlers.HandleCardDraw(message);
+                        //MessageHandlers.HandleCardDraw(message);
                         break;
                     case MessageType.Specialdraws:
-                        MessageHandlers.HandleSpecialDraw(message);
+                        //MessageHandlers.HandleSpecialDraw(message);
                         break;
                     case MessageType.End:
                         OnMessageReceived?.Invoke("Processing End message");
@@ -109,6 +109,7 @@ namespace UnoOnline
                         break;
                     case MessageType.Penalty:
                         OnMessageReceived?.Invoke("Processing Penalty");
+                        GameManager.Penalty(message);
                         break;
                     case MessageType.Result:
                         OnMessageReceived?.Invoke("Processing Result");
@@ -166,65 +167,65 @@ namespace UnoOnline
     }
 }
 public enum MessageType
-        {
-            START,
-            CONNECT,
-            Info,
-            InitializeStat,
-            OtherPlayerStat,
-            Boot,
-            Update,
-            Turn,
-            CardDraw,
-            Specialdraws,
-            End,
-            MESSAGE,
-            Penalty,
-            Result,
-            YellUNO,
-            YellUNOEnable,
-            DISCONNECT,
-            DanhBai,
-
+{
+    CONNECT,
+    DISCONNECT,
+    START,
+    RutBai,
+    YellUNO,
+    Penalty,
+    MESSAGE,
+    DanhBai,
+    DrawPenalty,
+    Info,
+    InitializeStat,
+    OtherPlayerStat,
+    Boot,
+    Update,
+    Turn,
+    CardDraw,
+    Specialdraws,
+    End,
+    Result,
+    YellUNOEnable
 }
+public class Message
+{
+    public MessageType Type { get; set; }
+    public List<string> Data { get; set; }
 
-    public class Message
+    public Message()
     {
-            public MessageType Type { get; set; }
-            public List<string> Data { get; set; }
+        Data = new List<string>();
+    }
 
-            public Message()
+    public Message(MessageType type, List<string> data)
+    {
+        Type = type;
+        Data = data;
+    }
+
+    public override string ToString()
+    {
+        return $"{Type};{string.Join(";", Data)}";
+    }
+
+    public static Message FromString(string messageString)
+    {
+        var parts = messageString.Split(new[] { ';' }, 2);
+        var type = (MessageType)Enum.Parse(typeof(MessageType), parts[0]);
+        var data = new List<string>();
+
+        // Handle the case where the data contains underscores
+        if (parts.Length > 1)
+        {
+            var dataParts = parts[1].Split(';');
+            foreach (var part in dataParts)
             {
-                Data = new List<string>();
-            }
-
-            public Message(MessageType type, List<string> data)
-            {
-                Type = type;
-                Data = data;
-            }
-
-            public override string ToString()
-            {
-                return $"{Type};{string.Join(";", Data)}";
-            }
-
-            public static Message FromString(string messageString)
-            {
-                var parts = messageString.Split(new[] { ';' }, 2);
-                var type = (MessageType)Enum.Parse(typeof(MessageType), parts[0]);
-                var data = new List<string>();
-
-                // Handle the case where the data contains underscores
-                if (parts.Length > 1)
-                {
-                    var dataParts = parts[1].Split(';');
-                    foreach (var part in dataParts)
-                    {
-                        data.Add(part);
-                    }
-                }
-
-                return new Message(type, data);
+                data.Add(part);
             }
         }
+
+        return new Message(type, data);
+    }
+}

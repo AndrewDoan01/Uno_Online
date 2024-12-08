@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Windows.Forms;
 namespace UnoOnline
 {
@@ -8,7 +9,6 @@ namespace UnoOnline
     {
 
         public List<Player> Players { get; set; }
-        public Deck Deck { get; set; }
         public Card CurrentCard { get; set; }
         public int CurrentPlayerIndex { get; set; }
         public static GameManager Instance { get; private set; }
@@ -17,8 +17,6 @@ namespace UnoOnline
         public GameManager()
         {
             Players = new List<Player>();
-            Deck = new Deck();
-            Deck.Shuffle();
             CurrentPlayerIndex = 0;
         }
         public void UpdateOtherPlayerName(string OtherPlayerName)
@@ -69,10 +67,11 @@ namespace UnoOnline
             // Thêm các lá bài vào tay người chơi
             foreach (var cardData in cardNames)
             {
+                string cardname = cardData;
                 string[] card = cardData.Split('_');
                 string color = card[0];
                 string value = card[1];
-                player.Hand.Add(new Card(color, value));
+                player.Hand.Add(new Card(cardname, color, value));
             }
 
             Instance.AddPlayer(player);
@@ -114,15 +113,17 @@ namespace UnoOnline
             // Thêm các lá bài vào tay người chơi
             foreach (var cardData in cardNames)
             {
+                string cardname = cardData;
                 string[] card = cardData.Split('_');
                 string color = card[0];
                 string value = card[1];
-                player.Hand.Add(new Card(color, value));
+                player.Hand.Add(new Card(cardname, color, value));
             }
+            string currentCardName = data[8];
             string[] currentCard= data[8].Split('_');
             string currentColor = currentCard[0];
             string currentValue = currentCard[1];
-            Instance.CurrentCard = new Card(currentColor, currentValue);
+            Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
             Instance.AddPlayer(player);
         }
         public static void Boot()
@@ -156,10 +157,18 @@ namespace UnoOnline
                 player.Hand.Remove(card);
                 CurrentCard = card;
                 //Gửi thông điệp đến server theo định dạng DanhBai;ID;SoLuongBaiTrenTay;CardName;color
-                ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, player.Hand.Count.ToString(), card.CardType, card.Color }));
- 
+                if(card.Color == "Wild")
+                {
+                    //Hiển thị form chọn màu, bên dưới chỉ là giả sử
+                    string color = "Red";
+                    card.Color = color;
+                }
+                ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, player.Hand.Count.ToString(), card.CardName, card.Color }));
+
+
                 //Sau khi gửi thông điệp, cập nhật lại giao diện người chơi
                 //Form1.DisplayPlayerHand();
+                //Form1.UpdateCurrentCard(CurrentCard);
             }
         }
 
@@ -174,6 +183,7 @@ namespace UnoOnline
                 return false;
             }
         }
+
         public static void HandleChatMessage(Message message)
         {
             string playerName = message.Data[0];
@@ -182,10 +192,15 @@ namespace UnoOnline
             // VD vầy Form1.DisplayChatMessage(playerName, chatMessage);
             // An tạo giùm tui phần chat trong Form1 nha
         }
-        public static void SendChatMessage(string message)
+        public static void Penalty(Message message)
         {
-            //Gọi phương thức này khi người chơi gửi tin nhắn
-            ClientSocket.SendData(new Message(MessageType.MESSAGE, new List<string> {message}));
+            string playerGotPenalty = message.Data[0];
+            if(playerGotPenalty == Program.player.Name)
+            {
+                //Hiển thị tin nhắn bị phạt
+                //VD: MessageBox.Show("You got penalty");
+                ClientSocket.SendData(new Message(MessageType.DrawPenalty, new List<string> { Program.player.Name, "2" }));
+            }
         }
     }
 

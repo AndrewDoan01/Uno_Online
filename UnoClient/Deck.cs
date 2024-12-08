@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
-
+/*
 public class Deck
 {
     public List<Card> Cards { get; set; }
@@ -29,19 +29,5 @@ public class Deck
         Cards.Add(new Card("Wild", "Wild")); // Chỉ sử dụng constructor với 2 tham số
         Cards.Add(new Card("Wild", "Draw Four")); // Chỉ sử dụng constructor với 2 tham số
     }
-
-
-    public void Shuffle()
-    {
-        Random rng = new Random();
-        int n = Cards.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = rng.Next(n + 1);
-            Card value = Cards[k];
-            Cards[k] = Cards[n];
-            Cards[n] = value;
-        }
-    }
 }
+*/
