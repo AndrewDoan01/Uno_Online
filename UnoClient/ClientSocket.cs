@@ -14,7 +14,7 @@ namespace UnoOnline
         public static Socket clientSocket;
         public static Thread recvThread;
         public static readonly object lockObject = new object();
-        public static GameManager gamemanager = new GameManager();
+        public static GameManager gamemanager = GameManager.Instance;
         public static event Action<string> OnMessageReceived;
         private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -84,7 +84,14 @@ namespace UnoOnline
                         break;
                     case MessageType.Boot:
                         OnMessageReceived?.Invoke("Processing Boot message");
-                        GameManager.Boot();
+                        if (Application.OpenForms[0].InvokeRequired)
+                        {
+                            Application.OpenForms[0].Invoke(new Action(() => GameManager.Boot()));
+                        }
+                        else
+                        {
+                            GameManager.Boot();
+                        }
                         break;
                     case MessageType.Update:
                         gamemanager.HandleUpdate(message);
@@ -94,10 +101,10 @@ namespace UnoOnline
                         GameManager.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:
-                        //MessageHandlers.HandleCardDraw(message);
+                        GameManager.HandleCardDraw(message);
                         break;
                     case MessageType.Specialdraws:
-                        //MessageHandlers.HandleSpecialDraw(message);
+                        GameManager.HandleSpecialDraw(message);
                         break;
                     case MessageType.End:
                         OnMessageReceived?.Invoke("Processing End message");
@@ -113,6 +120,7 @@ namespace UnoOnline
                         break;
                     case MessageType.Result:
                         OnMessageReceived?.Invoke("Processing Result");
+                        GameManager.HandleResult(message);
                         break;
                     case MessageType.YellUNOEnable:
                         OnMessageReceived?.Invoke("Processing YellUNOEnable");
@@ -122,7 +130,14 @@ namespace UnoOnline
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while analyzing data: " + ex.Message);
+                if (Application.OpenForms[0].InvokeRequired)
+                {
+                    Application.OpenForms[0].Invoke(new Action(() => MessageBox.Show("Error analyzing data: " + ex.Message)));
+                }
+                else
+                {
+                    MessageBox.Show("Error analyzing data: " + ex.Message);
+                }
             }
         }
 
@@ -146,14 +161,12 @@ namespace UnoOnline
             {
                 cancellationTokenSource.Cancel();
 
-                // Close the client socket
                 if (clientSocket != null && clientSocket.Connected)
                 {
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Close();
                 }
 
-                // Wait for the receive thread to finish
                 if (recvThread != null && recvThread.IsAlive)
                 {
                     recvThread.Join();
@@ -187,6 +200,7 @@ public enum MessageType
     Specialdraws,
     End,
     Result,
+    Diem,
     YellUNOEnable
 }
 public class Message

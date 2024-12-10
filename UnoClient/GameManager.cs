@@ -10,11 +10,27 @@ namespace UnoOnline
         public List<Player> Players { get; set; }
         public Card CurrentCard { get; set; }
         public int CurrentPlayerIndex { get; set; }
-        public static GameManager Instance { get; private set; } = new GameManager();
+        private static GameManager instance { get; set; } = new GameManager();
+        private static readonly object lockObject = new object();
+        public static GameManager Instance
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (instance == null)
+                    {
+                        instance = new GameManager();
+                    }
+                    return instance;
+                }
+            }
+        }
 
-        public GameManager()
+        private GameManager()
         {
             Players = new List<Player>();
+            CurrentCard = new Card();
             CurrentPlayerIndex = 0;
         }
 
@@ -31,75 +47,48 @@ namespace UnoOnline
         {
             if (Instance == null)
             {
-                Instance = new GameManager();
+                instance = new GameManager();
             }
 
             string[] data = message.Data.ToArray();
-            if (data.Length < 11)
-            {
-                throw new ArgumentException("Invalid message data format: not enough elements.");
-            }
-
             string playerName = data[0];
-            if (!int.TryParse(data[1], out int turnOrder))
-            {
-                throw new ArgumentException("Invalid turn order format: must be an integer.");
-            }
-            if (!int.TryParse(data[2], out int cardCount))
-            {
-                throw new ArgumentException("Invalid card count format: must be an integer.");
-            }
-
-            if (data.Length < 3 + cardCount)
-            {
-                throw new ArgumentException("Invalid message data format: not enough card data.");
-            }
+            int turnOrder = int.Parse(data[1]);
+            int cardCount = int.Parse(data[2]);
 
             // Lấy danh sách các lá bài
             List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
             Player player = new Player(playerName);
 
             // Thêm các lá bài vào tay người chơi
-            foreach (var cardData in cardNames)
+            player.Hand = cardNames.Select(cardData =>
             {
-                string cardname = cardData;
                 string[] card = cardData.Split('_');
                 string color = card[0];
                 string value = card[1];
-                player.Hand.Add(new Card(cardname, color, value));
-            }
+                if (color =="Wild")
+                {
+                    value = "Wild";
+                }
+                return new Card(cardData, color, value);
+            }).ToList();
 
             string currentCardName = data[8];
-            string[] currentCard = data[8].Split('_');
+            string[] currentCard = currentCardName.Split('_');
             string currentColor = currentCard[0];
             string currentValue = currentCard[1];
             Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
-
             Instance.AddPlayer(player);
+            //Hiển thị bài trên tay người chơi
+            Form1 form1 = new Form1();
+            form1.DisplayPlayerHand(player.Hand);
         }
 
         public static void UpdateOtherPlayerStat(Message message)
         {
             string[] data = message.Data.ToArray();
-            if (data.Length < 11)
-            {
-                throw new ArgumentException("Invalid message data format: not enough elements.");
-            }
-
             string playerName = data[0];
-            if (!int.TryParse(data[1], out int turnOrder))
-            {
-                throw new ArgumentException("Invalid turn order format: must be an integer.");
-            }
-            if (!int.TryParse(data[2], out int cardCount))
-            {
-                throw new ArgumentException("Invalid card count format: must be an integer.");
-            }
-
-            if (data.Length < 3 + cardCount)
-            {
-                throw new ArgumentException("Invalid message data format: not enough card data.");
-            }
+            int turnOrder = int.Parse(data[1]);
+            int cardCount = int.Parse(data[2]);
 
             List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
             Player player = new Player(playerName);
@@ -120,7 +109,10 @@ namespace UnoOnline
             Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
             Instance.AddPlayer(player);
         }
-
+        public void AddPlayer(Player player)
+        {
+            Players.Add(player);
+        }
         public static void Boot()
         {
             //Mở màn hình game mở (nếu chưa)
@@ -141,11 +133,6 @@ namespace UnoOnline
             //Hiển thị số lá bài của 3 người chơi còn lại
         }
 
-        public void AddPlayer(Player player)
-        {
-            Players.Add(player);
-        }
-
         public void PlayCard(Player player, Card card)
         {
             if (IsValidMove(card))
@@ -161,11 +148,10 @@ namespace UnoOnline
                     card.Color = color;
                 }
                 ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, player.Hand.Count.ToString(), card.CardName, card.Color }));
-
-
-                //Sau khi gửi thông điệp, cập nhật lại giao diện người chơi
-                //Form1.DisplayPlayerHand();
-                //Form1.UpdateCurrentCard(CurrentCard);
+            }
+            else
+            {
+                MessageBox.Show("Lá bài không hợp lệ.");
             }
         }
 
@@ -204,15 +190,45 @@ namespace UnoOnline
             }
         }
 
-        public static void HandleChatMessage(Message message)
+        public static void HandleTurnMessage(Message message)
+        {
+            string playerId = message.Data[0];
+            if (playerId == Program.player.Name)
+            {
+                // Enable playable cards
+            }
+        }
+        public static void HandleCardDraw(Message message)
+        {
+            //Specialdraws; ID; CardName; CardName...
+            string playerId = message.Data[0];
+            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                for (int i = 1; i < message.Data.Count; i++)
+                {
+                    string cardName = message.Data[i];
+                    string[] card = cardName.Split('_');
+                    string color = card[0];
+                    string value = card[1];
+                    player.Hand.Add(new Card(cardName, color, value));
+                }
+            }
+
+        }
+        public static void HandleSpecialDraw(Message message)
         {
             string playerName = message.Data[0];
-            string chatMessage = message.Data[1];
-            //Hiển thị lên form1
-            // VD vầy Form1.DisplayChatMessage(playerName, chatMessage);
-            // An tạo giùm tui phần chat trong Form1 nha
+            string cardName = message.Data[1];
+            string[] card = cardName.Split('_');
+            string color = card[0];
+            string value = card[1];
+            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerName);
+            if (player != null)
+            {
+                player.Hand.Add(new Card(cardName, color, value));
+            }
         }
-
         public static void Penalty(Message message)
         {
             string playerGotPenalty = message.Data[0];
@@ -222,15 +238,45 @@ namespace UnoOnline
                 ClientSocket.SendData(new Message(MessageType.DrawPenalty, new List<string> { Program.player.Name, "2" }));
             }
         }
-
-        public static void HandleTurnMessage(Message message)
+        public static void HandleChatMessage(Message message)
         {
+            string playerName = message.Data[0];
+            string chatMessage = message.Data[1];
+            //Hiển thị lên form1
+            // VD vầy Form1.DisplayChatMessage(playerName, chatMessage);
+            // An tạo giùm tui phần chat trong Form1 nha
+        }
+
+        public static void HandleResult(Message message)
+        {
+            //Result;ID;Diem;Rank
             string playerId = message.Data[0];
-            if (playerId == Program.player.Name)
+            int points = int.Parse(message.Data[1]);
+            int rank = int.Parse(message.Data[2]);
+            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
             {
-                // Enable playable cards
+                player.Points = points;
+                player.Rank = rank;
             }
         }
+
+        public static void HandleEndMessage(Message message)
+        {
+            string[] data = message.Data.ToArray();
+            string winnerName = data[0];
+            int PenaltyPoint = Instance.Players[0].Hand.Count * 10;
+            if (winnerName == Program.player.Name)
+            {
+                // Display win screen
+            }
+            else
+            {
+                ClientSocket.SendData(new Message(MessageType.Diem, new List<string> { Program.player.Name, PenaltyPoint.ToString() }));
+                // Display lose screen
+            }
+        }
+
 
         public static void HandleConnect(Message message)
         {
@@ -245,65 +291,6 @@ namespace UnoOnline
             {
                 ClientSocket.gamemanager.Players.Remove(disconnectingPlayer);
             }
-        }
-
-        public static void HandleStart(Message message)
-        {
-            // Initialize game logic
-        }
-
-        public static void HandleYellUNO(Message message)
-        {
-            string playerId = message.Data[0];
-            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
-            if (player != null)
-            {
-                Console.WriteLine($"{player.Name} yelled UNO!");
-            }
-            else
-            {
-                Console.WriteLine($"Player with ID {playerId} not found.");
-            }
-        }
-
-        public static void HandleResult(Message message)
-        {
-            string playerId = message.Data[0];
-            int points = int.Parse(message.Data[1]);
-
-            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
-            if (player != null)
-            {
-                Console.WriteLine($"{player.Name} scored {points} points.");
-            }
-            else
-            {
-                Console.WriteLine($"Player with ID {playerId} not found.");
-            }
-        }
-
-        public static void HandleEndMessage(Message message)
-        {
-            string[] data = message.Data.ToArray();
-            string winnerName = data[0];
-            if (winnerName == Program.player.Name)
-            {
-                // Display win screen
-            }
-            else
-            {
-                // Display lose screen
-            }
-        }
-
-        public static void HandleRestart(Message message)
-        {
-            // Initialize game logic
-        }
-
-        public static void HandleFinish(Message message)
-        {
-            Console.WriteLine("Game has finished.");
         }
     }
 }
