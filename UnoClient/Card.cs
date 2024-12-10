@@ -7,6 +7,7 @@ public class Card
     public string Color { get; set; }
     public string Value { get; set; }
     public string CardType { get; set; }  // "Number", "Wild", "Action"
+    public string CardName { get; set; }
 
     // Constructor mặc định
     public Card()
@@ -15,8 +16,9 @@ public class Card
     }
 
     // Constructor với đầy đủ tham số
-    public Card(string color, string value)
+    public Card(string cardName, string color, string value)
     {
+        CardName = cardName;
         Color = color;
         Value = value;
         DetermineCardType();

@@ -13,9 +13,10 @@ namespace UnoOnline
     {
         public static Socket clientSocket;
         public static Thread recvThread;
-        private static readonly object lockObject = new object();
-        public static GameManager gamemanager = new GameManager();
+        public static readonly object lockObject = new object();
+        public static GameManager gamemanager = GameManager.Instance;
         public static event Action<string> OnMessageReceived;
+        private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         // Hàm kết nối tới server
         public static void ConnectToServer(IPEndPoint server)
@@ -24,7 +25,8 @@ namespace UnoOnline
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 clientSocket.Connect(server);
-                recvThread = new Thread(ReceiveData);
+                cancellationTokenSource = new CancellationTokenSource();
+                recvThread = new Thread(() => ReceiveData(cancellationTokenSource.Token));
                 recvThread.Start();
             }
             catch (Exception ex)
@@ -33,22 +35,27 @@ namespace UnoOnline
             }
         }
 
-        private static void ReceiveData()
+        private static void ReceiveData(CancellationToken cancellationToken)
         {
-            while (true)
+            try
             {
-                try
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     byte[] buffer = new byte[1024];
                     int bytesRead = clientSocket.Receive(buffer);
-                    string messageString = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Message receivedMessage = Message.FromString(messageString);
-                    AnalyzeData(receivedMessage);
+                    if (bytesRead > 0)
+                    {
+                        string messageString = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        Message receivedMessage = Message.FromString(messageString);
+                        AnalyzeData(receivedMessage);
+                    }
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
                 {
                     MessageBox.Show("Error receiving data: " + ex.Message);
-                    break;
                 }
             }
         }
@@ -59,7 +66,6 @@ namespace UnoOnline
             {
                 switch (message.Type)
                 {
-                    // Các OnMessageReceived sẽ chỉ được dùng tạm thời để test
                     case MessageType.Info:
                         OnMessageReceived?.Invoke(message.Data[0]);
                         if (gamemanager != null)
@@ -69,7 +75,6 @@ namespace UnoOnline
                         break;
                     case MessageType.InitializeStat:
                         OnMessageReceived?.Invoke("Processing InitializeStat message");
-                        //Hiển thị toàn bộ message.data được nhận 
                         OnMessageReceived?.Invoke(string.Join(" ", message.Data));
                         GameManager.InitializeStat(message);
                         break;
@@ -77,47 +82,62 @@ namespace UnoOnline
                         OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
                         GameManager.UpdateOtherPlayerStat(message);
                         break;
-                    case MessageType.Boot: 
+                    case MessageType.Boot:
                         OnMessageReceived?.Invoke("Processing Boot message");
-                        GameManager.Boot();
+                        if (Application.OpenForms[0].InvokeRequired)
+                        {
+                            Application.OpenForms[0].Invoke(new Action(() => GameManager.Boot()));
+                        }
+                        else
+                        {
+                            GameManager.Boot();
+                        }
                         break;
                     case MessageType.Update:
-                        MessageHandlers.HandleUpdate(message);
+                        gamemanager.HandleUpdate(message);
                         break;
                     case MessageType.Turn:
                         OnMessageReceived?.Invoke("Processing Turn message");
-                        MessageHandlers.HandleTurnMessage(message);
+                        GameManager.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:
-                        MessageHandlers.HandleCardDraw(message);
+                        GameManager.HandleCardDraw(message);
                         break;
                     case MessageType.Specialdraws:
-                        MessageHandlers.HandleSpecialDraw(message);
+                        GameManager.HandleSpecialDraw(message);
                         break;
                     case MessageType.End:
                         OnMessageReceived?.Invoke("Processing End message");
+                        GameManager.HandleEndMessage(message);
                         break;
                     case MessageType.MESSAGE:
                         OnMessageReceived?.Invoke("Processing MESSAGE");
+                        GameManager.HandleChatMessage(message);
                         break;
                     case MessageType.Penalty:
                         OnMessageReceived?.Invoke("Processing Penalty");
+                        GameManager.Penalty(message);
                         break;
                     case MessageType.Result:
                         OnMessageReceived?.Invoke("Processing Result");
+                        GameManager.HandleResult(message);
                         break;
                     case MessageType.YellUNOEnable:
                         OnMessageReceived?.Invoke("Processing YellUNOEnable");
                         Form1.YellUNOEnable();
                         break;
-                    default:
-                        OnMessageReceived?.Invoke("Unknown message type: " + message.Type);
-                        break;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while analyzing data: " + ex.Message);
+                if (Application.OpenForms[0].InvokeRequired)
+                {
+                    Application.OpenForms[0].Invoke(new Action(() => MessageBox.Show("Error analyzing data: " + ex.Message)));
+                }
+                else
+                {
+                    MessageBox.Show("Error analyzing data: " + ex.Message);
+                }
             }
         }
 
@@ -134,67 +154,92 @@ namespace UnoOnline
                 MessageBox.Show("Error sending data: " + ex.Message);
             }
         }
-    }
-    public enum MessageType
+
+        public static void Disconnect()
         {
-            START,
-            CONNECT,
-            Info,
-            InitializeStat,
-            OtherPlayerStat,
-            Boot,
-            Update,
-            Turn,
-            CardDraw,
-            Specialdraws,
-            End,
-            MESSAGE,
-            Penalty,
-            Result,
-            YellUNO,
-            YellUNOEnable,
-            DISCONNECT
-
-    }
-
-    public class Message
-    {
-            public MessageType Type { get; set; }
-            public List<string> Data { get; set; }
-
-            public Message()
+            try
             {
-                Data = new List<string>();
-            }
+                cancellationTokenSource.Cancel();
 
-            public Message(MessageType type, List<string> data)
-            {
-                Type = type;
-                Data = data;
-            }
-
-            public override string ToString()
-            {
-                return $"{Type};{string.Join(";", Data)}";
-            }
-
-            public static Message FromString(string messageString)
-            {
-                var parts = messageString.Split(new[] { ';' }, 2);
-                var type = (MessageType)Enum.Parse(typeof(MessageType), parts[0]);
-                var data = new List<string>();
-
-                // Handle the case where the data contains underscores
-                if (parts.Length > 1)
+                if (clientSocket != null && clientSocket.Connected)
                 {
-                    var dataParts = parts[1].Split(';');
-                    foreach (var part in dataParts)
-                    {
-                        data.Add(part);
-                    }
+                    clientSocket.Shutdown(SocketShutdown.Both);
+                    clientSocket.Close();
                 }
 
-                return new Message(type, data);
+                if (recvThread != null && recvThread.IsAlive)
+                {
+                    recvThread.Join();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error during disconnect: " + ex.Message);
             }
         }
+    }
+}
+public enum MessageType
+{
+    CONNECT,
+    DISCONNECT,
+    START,
+    RutBai,
+    YellUNO,
+    Penalty,
+    MESSAGE,
+    DanhBai,
+    DrawPenalty,
+    Info,
+    InitializeStat,
+    OtherPlayerStat,
+    Boot,
+    Update,
+    Turn,
+    CardDraw,
+    Specialdraws,
+    End,
+    Result,
+    Diem,
+    YellUNOEnable
+}
+public class Message
+{
+    public MessageType Type { get; set; }
+    public List<string> Data { get; set; }
+
+    public Message()
+    {
+        Data = new List<string>();
+    }
+
+    public Message(MessageType type, List<string> data)
+    {
+        Type = type;
+        Data = data;
+    }
+
+    public override string ToString()
+    {
+        return $"{Type};{string.Join(";", Data)}";
+    }
+
+    public static Message FromString(string messageString)
+    {
+        var parts = messageString.Split(new[] { ';' }, 2);
+        var type = (MessageType)Enum.Parse(typeof(MessageType), parts[0]);
+        var data = new List<string>();
+
+        // Handle the case where the data contains underscores
+        if (parts.Length > 1)
+        {
+            var dataParts = parts[1].Split(';');
+            foreach (var part in dataParts)
+            {
+                data.Add(part);
+            }
+        }
+
+        return new Message(type, data);
+    }
 }

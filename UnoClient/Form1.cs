@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Deck;
 
 
 namespace UnoOnline { 
@@ -22,16 +21,12 @@ namespace UnoOnline {
         private CustomCardPanel playerCards;
 
         private Timer timer;
-        private List<Player> players = new List<Player>();
-        private List<Card> playerHand = new List<Card>();
-        private int currentPlayerIndex = 0;
-        private string currentCard = string.Empty;
         private Button yellUNOButton;
         private TableLayoutPanel mainLayout;
         private Panel gameStatusPanel;
         private FlowLayoutPanel playerCardsPanel;
         private Panel actionPanel;
-
+        Card currentCard = GameManager.Instance.CurrentCard;
         private void InitializeGameLayout()
         {
             this.ClientSize = new Size(1280, 720);
@@ -296,7 +291,6 @@ namespace UnoOnline {
             }
         }
 
-        
         private void SetupGameStatusPanel()
         {
             Label turnLabel = new Label
@@ -380,71 +374,20 @@ namespace UnoOnline {
             }
         }
 
-
         public Form1()
         {
             InitializeComponent();
-
             InitializeGame();
             InitializeGameBoard();
             InitializeTimer();
-            DisplayPlayerHand(playerHand); // Hiển thị tay bài ban đầu
             ApplyCustomTheme();
             InitializeCustomComponents();
-
         }
-        // Tạo class ResourceManager để quản lý tài nguyên
 
+        // Inside the Form1 class
         private void InitializeGame()
         {
-        
-            // Khởi tạo người chơi
-            //Phần nãy sẽ bỏ khi có form đăng nhập
-            players.Add(new Player { Name = "Người chơi 1" });
-            players.Add(new Player("Người chơi 2"));
-
-            playerHand = new List<Card>();
-
-            // Giả sử tạo tay bài cho người chơi 1
-            playerHand.Add(new Card { Color = "Red", Value = "3" });
-            playerHand.Add(new Card { Color = "Blue", Value = "5" });
-            playerHand.Add(new Card { Color = "Green", Value = "8" });
-
-            // Hiển thị tay bài ban đầu
-            DisplayPlayerHand(playerHand);
         }
-
-        // Phương thức tạo bộ bài
-        private List<Card> GenerateDeck()
-        {
-            List<Card> deck = new List<Card>();
-            string[] colors = { "Red", "Blue", "Green", "Yellow" };
-            string[] numbers = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-
-            foreach (string color in colors)
-            {
-                foreach (string number in numbers)
-                {
-                    deck.Add(new Card { Color = color, Value = number });
-                }
-                // Thêm các thẻ đặc biệt (Skip, Reverse, Draw Two)
-                deck.Add(new Card { Color = "Red", Value = "Skip" });
-                deck.Add(new Card { Color = color, Value = "Reverse" });
-                deck.Add(new Card { Color = color, Value = "Draw Two" });
-            }
-
-            // Thêm các thẻ Wild và Wild Draw Four (không màu)
-            for (int i = 0; i < 4; i++)
-            {
-                deck.Add(new Card { Value = "Wild" });
-                deck.Add(new Card { Value = "Draw Four" });
-            }
-
-            // Trộn bộ bài
-            deck = deck.OrderBy(a => Guid.NewGuid()).ToList();
-            return deck;
-        }
-
 
 
         private void InitializeGameBoard()
@@ -454,7 +397,7 @@ namespace UnoOnline {
             {
                 Location = new Point(20, 10),
                 Size = new Size(200, 30),
-                Text = $"Lượt của: {players[currentPlayerIndex].Name}",
+                Text = $"Lượt của: {GameManager.Instance.Players[0].Name}",
                 Font = new Font("Arial", 14)
             };
             Controls.Add(currentPlayerLabel);
@@ -512,8 +455,7 @@ namespace UnoOnline {
 
         private void yellUNOButton_Click(object sender, EventArgs e)
         {
-            string playerID = Program.player.Name;
-            Message yellUNOMessage = new Message(MessageType.YellUNO, new List<string> { playerID });
+            Message yellUNOMessage = new Message(MessageType.YellUNO, new List<string> { Program.player.Name });
             ClientSocket.SendData(yellUNOMessage);
         }
 
@@ -535,22 +477,8 @@ namespace UnoOnline {
             else
             {
                 // Nếu hết thời gian, chuyển sang lượt tiếp theo
-                NextTurn();
+                //Phải thông  báo cho server biết nữa
             }
-        }
-
-        private void NextTurn()
-        {
-            // Reset and start the turn timer for the next player
-            turnTimer.Value = 100;
-            timer.Start();
-
-            // Move to the next player
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
-
-            // Update the UI to reflect the new current player
-            currentPlayerLabel.Text = $"Lượt của: {players[currentPlayerIndex].Name}";
-            DisplayPlayerHand(players[currentPlayerIndex].Hand);
         }
 
         public void DisplayPlayerHand(List<Card> playerHand)
@@ -588,10 +516,10 @@ namespace UnoOnline {
         }
         private Image GetCardImage(Card card)
         {
-            // Xử lý các thẻ đặc biệt như "Wild" hay "Draw Four"
-            if (card.Value == "Wild" || card.Value == "Draw Four")
+            // Xử lý các thẻ đặc biệt như "Wild" 
+            if (card.Color == "Wild" )
             {
-                return Image.FromFile($"Resources/CardImages/{card.Value}.png");
+                return Image.FromFile($"Resources/CardImages/{card.Color}.png");
             }
 
             // Đối với các lá bài màu
@@ -603,48 +531,23 @@ namespace UnoOnline {
         {
             Button clickedButton = (Button)sender;
             Card selectedCard = clickedButton.Tag as Card;
-
-            if (IsValidMove(selectedCard))
+            //Gọi phương thức kiểm tra lá ở GameManager
+            if (GameManager.Instance.IsValidMove(selectedCard))
             {
+                GameManager.Instance.PlayCard(Program.player, selectedCard);
                 // Cập nhật lá bài hiện tại với lá bài được chọn
-                currentCard = $"{selectedCard.Color} {selectedCard.Value}";
+                GameManager.Instance.CurrentCard = selectedCard;
                 currentCardLabel.Text = $"Lá bài hiện tại: {currentCard}";
 
                 // Xóa lá bài khỏi tay người chơi
-                playerHand.Remove(selectedCard);
+                GameManager.Instance.Players[0].Hand.Remove(selectedCard);
                 PlayerHandPanel.Controls.Remove(clickedButton);
-
-                // Kiểm tra nếu người chơi đã chiến thắng
-                CheckForWinner();
-
-                // Tiến hành lượt chơi tiếp theo
-                NextTurn();
             }
             else
             {
                 MessageBox.Show("Lá bài không hợp lệ.");
             }
         }
-
-        private bool IsValidMove(Card selectedCard)
-        {
-            // Kiểm tra tính hợp lệ của lá bài (so sánh với màu hoặc số của lá bài hiện tại trên bàn)
-            if (string.IsNullOrEmpty(currentCard))
-                return true;  // Nếu chưa có lá bài nào trên bàn, lá bài nào cũng hợp lệ.
-
-            return selectedCard.Color == currentCard.Split(' ')[0] || selectedCard.Value == currentCard.Split(' ')[1];
-        }
-
-        private void CheckForWinner()
-        {
-            // Kiểm tra nếu người chơi đã hết bài
-            if (playerHand.Count == 0)
-            {
-                MessageBox.Show($"{players[currentPlayerIndex].Name} đã chiến thắng!");
-                EndGame();
-            }
-        }
-
         private void EndGame()
         {
             // Xử lý kết thúc trò chơi
@@ -667,17 +570,16 @@ namespace UnoOnline {
         private void SkipTurnButton_Click(object sender, EventArgs e)
         {
             // Chuyển sang lượt tiếp theo
-            NextTurn();
         }
 
         private void DrawCardButton_Click(object sender, EventArgs e)
         {
             // Thêm một lá bài mới vào tay người chơi nếu họ không thể ra bài
             Card newCard = DrawCard();
-            playerHand.Add(newCard);
+            GameManager.Instance.Players[0].Hand.Add(newCard);
 
             // Cập nhật giao diện
-            DisplayPlayerHand(playerHand);
+            DisplayPlayerHand(GameManager.Instance.Players[0].Hand);
         }
 
         private Card DrawCard()
@@ -772,7 +674,6 @@ namespace UnoOnline {
             this.Controls.Add(this.skipTurnButton);
             this.DoubleBuffered = true;
             this.Name = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -782,14 +683,6 @@ namespace UnoOnline {
         private Button drawCardButton;
         private ProgressBar turnTimer;
         private FlowLayoutPanel PlayerHandPanel;
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            InitializeGame();
-            InitializeGameBoard();
-            InitializeTimer();
-            DisplayPlayerHand(playerHand); // Display initial hand of cards
-        }
 
         private Label currentCardLabel;
         private Label currentPlayerLabel;
@@ -812,7 +705,7 @@ namespace UnoOnline {
             Controls.Add(cardButton);
 
             Point startPoint = new Point(500, 110); // Starting point (deck location)
-            Point endPoint = new Point(20 + (playerHand.Count * 85), 60); // Ending point (player hand location)
+            Point endPoint = new Point(20 + (GameManager.Instance.Players[0].Hand.Count * 85), 60); // Ending point (player hand location)
 
             for (int i = 0; i <= 100; i += 5)
             {
@@ -824,13 +717,13 @@ namespace UnoOnline {
             }
 
             Controls.Remove(cardButton);
-            DisplayPlayerHand(playerHand);
+            DisplayPlayerHand(GameManager.Instance.Players[0].Hand);
         }
         private async void drawCardButton_Click(object sender, EventArgs e)
         {
             // Thêm một lá bài mới vào tay người chơi nếu họ không thể ra bài
             Card newCard = DrawCard();
-            playerHand.Add(newCard);
+            GameManager.Instance.Players[0].Hand.Add(newCard);
 
             // Animate the card drawing
             await Task.Run(() => AnimateCardDrawing(newCard));
@@ -851,35 +744,9 @@ namespace UnoOnline {
             }
 
             PlayerHandPanel.Controls.Remove(cardButton);
-            currentCard = $"{card.Color} {card.Value}";
+            currentCard = card;
             currentCardLabel.Text = $"Lá bài hiện tại: {currentCard}";
         }
-
-        private async void cardButton_Click(object sender, EventArgs e)
-        {
-            Button clickedButton = (Button)sender;
-            Card selectedCard = clickedButton.Tag as Card;
-
-            if (IsValidMove(selectedCard))
-            {
-                // Animate the card playing
-                await Task.Run(() => AnimateCardPlaying(clickedButton, selectedCard));
-
-                // Xóa lá bài khỏi tay người chơi
-                playerHand.Remove(selectedCard);
-
-                // Kiểm tra nếu người chơi đã chiến thắng
-                CheckForWinner();
-
-                // Tiến hành lượt chơi tiếp theo
-                NextTurn();
-            }
-            else
-            {
-                MessageBox.Show("Lá bài không hợp lệ.");
-            }
-        }
-
         public static void YellUNOEnable()
         {
             // Assuming you have a reference to the Form1 instance

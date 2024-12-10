@@ -254,13 +254,6 @@ namespace UNOServer
                     PLAYERLIST.Remove(user); //Xóa người chơi khỏi danh sách PLAYERLIST
                 }
             }
-            //Nếu tất cả người chơi đã thoát hết, đóng kết nối server
-            if (PLAYERLIST.Count == 0)
-            {
-                ServerSocket.Shutdown(SocketShutdown.Both); 
-                ServerSocket.Close();
-                Console.WriteLine("Tất cả người chơi đã thoát. Server đã đóng!");
-            }
         }
 
         /* Hàm thiết lập bắt đầu trò chơi */
