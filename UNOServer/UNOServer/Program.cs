@@ -27,6 +27,7 @@ namespace UNOServer
         private static List<string> YELLUNOLIST = new List<string>(); //List các id chỉ còn 1 lá mà chưa hô uno
         private static int DemRestart = 0; //Đếm số lượng đồng ý restart (màn hình kết quả thắng thua)
         private static int DemFinish = 0; //Đếm số lượng muốn finish (màn hình kết quả thắng thua)
+        private static string WinnerName = ""; //Lưu tên người thắng
 
         /* Hàm thiết lập (khởi động) server */
         static void Main(string[] args)
@@ -313,6 +314,7 @@ namespace UNOServer
             PLAYERLIST[HienTai - 1].SoLuongBai = int.Parse(Signal[2]); //Lấy số lượng bài còn lại của người chơi sau khi đánh đó
             if (PLAYERLIST[HienTai - 1].SoLuongBai == 0) //Kiểm tra nếu số lượng bài còn lại của người chơi sau khi đánh đó là 0
             {
+                WinnerName = PLAYERLIST[HienTai - 1].ID; //Lưu tên người thắng
                 //Gửi thông điệp cho tất cả người chơi End: kết thúc game và bật màn hình kết quả thắng thua, người thắng (Signal[1]) sẽ mở màn hình thắng, còn lại màn hình thua
                 foreach (var user in PLAYERLIST)
                 {
@@ -519,12 +521,12 @@ namespace UNOServer
             }
         }
 
-        /* Hàm cập nhật điểm của người chơi sau khi hết ván */
+        /* Hàm cập nhật điểm của người thắng sau khi hết ván */
         private static void HandleDiem(string[] Signal, PLAYER User)
         {
             for (int i = 0; i < PLAYERLIST.Count; i++)
             {
-                if (PLAYERLIST[i].ID == Signal[1])
+                if (PLAYERLIST[i].ID == WinnerName)
                     PLAYERLIST[i].Diem += int.Parse(Signal[2]);
             }
         }
@@ -576,6 +578,7 @@ namespace UNOServer
                     }
                 }
                 else SetupGame(Signal, User);  //Đủ người thì lại thiết lập bắt đầu trò chơi
+                WinnerName = "";
                 DemFinish = 0;
                 DemRestart = 0;
             }
