@@ -36,6 +36,7 @@ namespace UnoOnline {
         {
             this.ClientSize = new Size(1280, 720);
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.TransparencyKey = Color.FromArgb(0, 0, 0); // Màu trong suốt
 
             // Panel chứa bài của người chơi (có tính năng cuộn)
             Panel playerHandPanel = new Panel
@@ -45,6 +46,7 @@ namespace UnoOnline {
                 AutoScroll = true, // Bật tính năng cuộn
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
                 BackColor = Color.FromArgb(100, 0, 0, 0) // Màu nền
+
             };
 
 
@@ -73,7 +75,10 @@ namespace UnoOnline {
             {
                 Location = new Point(540, 260),
                 Size = new Size(200, 200),
-                Anchor = AnchorStyles.None
+                Anchor = AnchorStyles.None,
+                BackColor = Color.FromArgb(100, 0, 0, 0) // Màu nền với độ trong suốt
+
+
             };
 
             // Panel hiển thị người chơi đối thủ (phía trên)
@@ -81,7 +86,9 @@ namespace UnoOnline {
             {
                 Location = new Point(180, 20),
                 Size = new Size(920, 130),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                BackColor = Color.FromArgb(100, 0, 0, 0) // Màu nền với độ trong suốt
+
             };
 
 
@@ -91,7 +98,8 @@ namespace UnoOnline {
                 Location = new Point(20, 160),
                 Size = new Size(150, 400),
                 Anchor = AnchorStyles.Left,
-                BackColor = Color.FromArgb(100, 0, 0, 0)
+                BackColor = Color.FromArgb(100, 0, 0, 0),
+
             };
 
 
@@ -242,6 +250,43 @@ namespace UnoOnline {
             this.Controls.Add(mainLayout);
         }
 
+        private Panel CreateControlPanel()
+        {
+            Panel controlPanel = new Panel
+            {
+                Location = new Point(this.ClientSize.Width - 170, 160),
+                Size = new Size(150, 400),
+                Anchor = AnchorStyles.Right,
+                BackColor = Color.FromArgb(100, 0, 0, 0) // Màu nền với độ trong suốt
+            };
+
+            Button drawCardButton = new Button
+            {
+                Location = new Point(10, 10),
+                Size = new Size(130, 40),
+                Text = "Draw Card",
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(100, 0, 122, 204),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F)
+            };
+
+            Button unoButton = new Button
+            {
+                Location = new Point(10, 60),
+                Size = new Size(130, 40),
+                Text = "UNO!",
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(100, 204, 0, 0),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F)
+            };
+
+            controlPanel.Controls.AddRange(new Control[] { drawCardButton, unoButton });
+            drawCardButton.Click += DrawCardButton_Click; // Gán sự kiện click
+            return controlPanel;
+        }
+
         public class CustomCard : UserControl
         {
             public CustomCard()
@@ -251,12 +296,7 @@ namespace UnoOnline {
             }
         }
 
-        [STAThread]
-        public static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.Run(new Form1());
-        }
+        
         private void SetupGameStatusPanel()
         {
             Label turnLabel = new Label
@@ -687,8 +727,9 @@ namespace UnoOnline {
             // 
             this.PlayerHandPanel.Location = new System.Drawing.Point(12, 291);
             this.PlayerHandPanel.Name = "PlayerHandPanel";
-            this.PlayerHandPanel.Size = new System.Drawing.Size(602, 100);
+            this.PlayerHandPanel.Size = new System.Drawing.Size(602, 200);
             this.PlayerHandPanel.TabIndex = 6;
+            this.PlayerHandPanel.BackColor = Color.Transparent;
             // 
             // currentCardLabel
             // 
@@ -862,6 +903,13 @@ namespace UnoOnline {
         private void customCardPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+        public class CustomCardPanel : Panel
+        {
+            public CustomCardPanel()
+            {
+                this.AutoScroll = true; // Bật tính năng cuộn
+            }
         }
     }
 
