@@ -36,10 +36,10 @@ namespace UnoOnline
 
         public void UpdateOtherPlayerName(string otherPlayerName)
         {
-            bool playerExists = Players.Exists(p => p.Name == otherPlayerName);
+            bool playerExists = Instance.Players.Exists(p => p.Name == otherPlayerName);
             if (!playerExists)
             {
-                Players.Add(new Player(otherPlayerName));
+                Instance.Players.Add(new Player(otherPlayerName));
             }
         }
 
@@ -49,7 +49,7 @@ namespace UnoOnline
             {
                 instance = new GameManager();
             }
-
+            Instance.AddPlayer(Program.player);
             string[] data = message.Data.ToArray();
             string playerName = data[0];
             int turnOrder = int.Parse(data[1]);
@@ -57,10 +57,10 @@ namespace UnoOnline
 
             // Lấy danh sách các lá bài
             List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
-            Player player = new Player(playerName);
+            // Thêm người chơi vào list players
 
             // Thêm các lá bài vào tay người chơi
-            player.Hand = cardNames.Select(cardData =>
+            Program.player.Hand = cardNames.Select(cardData =>
             {
                 string[] card = cardData.Split('_');
                 string color = card[0];
@@ -77,10 +77,6 @@ namespace UnoOnline
             string currentColor = currentCard[0];
             string currentValue = currentCard[1];
             Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
-            Instance.AddPlayer(player);
-            //Hiển thị bài trên tay người chơi
-            Form1 form1 = new Form1();
-            form1.DisplayPlayerHand(player.Hand);
         }
 
         public static void UpdateOtherPlayerStat(Message message)
@@ -124,35 +120,23 @@ namespace UnoOnline
                     {
                         Form1 form1 = new Form1();
                         form1.Show();
+                        form1.DisplayPlayerHand(Instance.Players[0].Hand);
                     }
                 }));
             }
-            // Hiển thị những lá bài được chia 
-            // Form1.DisplayPlayerHand();
-
-            //Hiển thị số lá bài của 3 người chơi còn lại
         }
 
         public void PlayCard(Player player, Card card)
         {
-            if (IsValidMove(card))
+            //Gửi thông điệp đến server theo định dạng DanhBai;ID;SoLuongBaiTrenTay;CardName;color
+            if(card.Color == "Wild")
             {
-                player.Hand.Remove(card);
-                CurrentCard = card;
-                //Gửi thông điệp đến server theo định dạng DanhBai;ID;SoLuongBaiTrenTay;CardName;color
-                if(card.Color == "Wild")
-                {
-                    //Hiển thị form chọn màu, bên dưới chỉ là giả sử
-                    //string color = Form1.ColorPicker();
-                    string color = "Red";
-                    card.Color = color;
-                }
-                ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, player.Hand.Count.ToString(), card.CardName, card.Color }));
+                //Hiển thị form chọn màu, bên dưới chỉ là giả sử
+                //string color = Form1.ColorPicker();
+                string color = "Red";
+                card.Color = color;
             }
-            else
-            {
-                MessageBox.Show("Lá bài không hợp lệ.");
-            }
+            ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, (player.Hand.Count -1).ToString(), card.CardName, card.Color }));
         }
 
         public bool IsValidMove(Card card)
@@ -196,6 +180,7 @@ namespace UnoOnline
             if (playerId == Program.player.Name)
             {
                 // Enable playable cards
+                //Form1.EnablePlayableCards();
             }
         }
         public static void HandleCardDraw(Message message)
@@ -247,20 +232,6 @@ namespace UnoOnline
             // An tạo giùm tui phần chat trong Form1 nha
         }
 
-        public static void HandleResult(Message message)
-        {
-            //Result;ID;Diem;Rank
-            string playerId = message.Data[0];
-            int points = int.Parse(message.Data[1]);
-            int rank = int.Parse(message.Data[2]);
-            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
-            if (player != null)
-            {
-                player.Points = points;
-                player.Rank = rank;
-            }
-        }
-
         public static void HandleEndMessage(Message message)
         {
             string[] data = message.Data.ToArray();
@@ -277,7 +248,22 @@ namespace UnoOnline
             }
         }
 
+        public static void HandleResult(Message message)
+        {
+            //Result;ID;Diem;Rank
+            string playerId = message.Data[0];
+            int points = int.Parse(message.Data[1]);
+            int rank = int.Parse(message.Data[2]);
+            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            if (player != null)
+            {
+                player.Points = points;
+                player.Rank = rank;
+            }
+            //Hiển thị bảng xếp hạng cho tất cả người chơi
+            //Form1.DisplayRankingTable();
 
+        }
         public static void HandleConnect(Message message)
         {
             var newPlayer = new Player(message.Data[0]);
