@@ -79,11 +79,11 @@ namespace UnoOnline
                         GameManager.InitializeStat(message);
                         break;
                     case MessageType.OtherPlayerStat:
-                        OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
+                        //OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
                         GameManager.UpdateOtherPlayerStat(message);
                         break;
                     case MessageType.Boot:
-                        OnMessageReceived?.Invoke("Processing Boot message");
+                        //OnMessageReceived?.Invoke("Processing Boot message");
                         if (Application.OpenForms[0].InvokeRequired)
                         {
                             Application.OpenForms[0].Invoke(new Action(() => GameManager.Boot()));
@@ -97,7 +97,7 @@ namespace UnoOnline
                         gamemanager.HandleUpdate(message);
                         break;
                     case MessageType.Turn:
-                        OnMessageReceived?.Invoke("Processing Turn message");
+                        //OnMessageReceived?.Invoke("Processing Turn message");
                         GameManager.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:

@@ -568,8 +568,12 @@ namespace UnoOnline {
             playerHand.Clear();
             // Giả sử tạo tay bài cho người chơi 1
             playerHand.Add(new Card ("Yellow_7","Yellow", "7" ));
-            playerHand.Add(new Card { Color = "Blue", Value = "5" });
-            playerHand.Add(new Card { Color = "Green", Value = "8" });
+            playerHand.Add(new Card { CardName="Blue_5", Color = "Blue", Value = "5" });
+            playerHand.Add(new Card { CardName= "Green_8", Color = "Green", Value = "8" });
+            playerHand.Add(new Card("Red_7", "Red", "7"));
+            playerHand.Add(new Card("Wild", "Wild", "Wild"));
+            playerHand.Add(new Card("Wild_Draw", "Wild", "Draw"));
+            playerHand.Add(new Card("Yellow_0", "Yellow", "0"));
 
 
             int xOffset = 10;
@@ -624,7 +628,7 @@ namespace UnoOnline {
                 GameManager.Instance.PlayCard(Program.player, selectedCard);
                 // Cập nhật lá bài hiện tại với lá bài được chọn
                 GameManager.Instance.CurrentCard = selectedCard;
-                currentCardLabel.Text = $"Lá bài hiện tại: {GameManager.Instance.CurrentCard}";
+                currentCardLabel.Text = $"Lá bài hiện tại: {GameManager.Instance.CurrentCard.CardName}";
 
                 // Xóa lá bài khỏi tay người chơi
                 GameManager.Instance.Players[0].Hand.Remove(selectedCard);
