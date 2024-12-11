@@ -463,8 +463,6 @@ namespace UnoOnline {
         private void InitializeGame()
         {
         }
-
-
         private void InitializeGameBoard()
         {
             // Label for current player
@@ -493,7 +491,7 @@ namespace UnoOnline {
             {
                 Location = new Point(300, 50),
                 Size = new Size(200, 30),
-                Text = "Lá bài hiện tại: Chưa có",
+                Text = $"Lá bài hiện tại: {GameManager.Instance.CurrentCard}" ,
                 Font = new Font("Arial", 14),
                 BackColor = Color.LightGray
             };
@@ -532,6 +530,13 @@ namespace UnoOnline {
         {
             Message yellUNOMessage = new Message(MessageType.YellUNO, new List<string> { Program.player.Name });
             ClientSocket.SendData(yellUNOMessage);
+            //Disable uno button
+            Form1 form = Application.OpenForms.OfType<Form1>().FirstOrDefault();
+            if (form != null)
+            {
+                form.Invoke(new Action(() => form.yellUNOButton.Enabled = false));
+            }
+
         }
 
 
@@ -559,6 +564,13 @@ namespace UnoOnline {
         public void DisplayPlayerHand(List<Card> playerHand)
         {
             PlayerHandPanel.Controls.Clear(); // Clear existing controls
+            playerHand = new List<Card>();
+            playerHand.Clear();
+            // Giả sử tạo tay bài cho người chơi 1
+            playerHand.Add(new Card ("Yellow_7","Yellow", "7" ));
+            playerHand.Add(new Card { Color = "Blue", Value = "5" });
+            playerHand.Add(new Card { Color = "Green", Value = "8" });
+
 
             int xOffset = 10;
             int yOffset = 10;
@@ -612,7 +624,7 @@ namespace UnoOnline {
                 GameManager.Instance.PlayCard(Program.player, selectedCard);
                 // Cập nhật lá bài hiện tại với lá bài được chọn
                 GameManager.Instance.CurrentCard = selectedCard;
-                currentCardLabel.Text = $"Lá bài hiện tại: {currentCard}";
+                currentCardLabel.Text = $"Lá bài hiện tại: {GameManager.Instance.CurrentCard}";
 
                 // Xóa lá bài khỏi tay người chơi
                 GameManager.Instance.Players[0].Hand.Remove(selectedCard);
