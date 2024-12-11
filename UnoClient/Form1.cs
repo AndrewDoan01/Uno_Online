@@ -688,21 +688,11 @@ namespace UnoOnline {
             // 
             // skipTurnButton
             // 
-            this.skipTurnButton.Location = new System.Drawing.Point(522, 262);
-            this.skipTurnButton.Name = "skipTurnButton";
-            this.skipTurnButton.Size = new System.Drawing.Size(75, 23);
-            this.skipTurnButton.TabIndex = 1;
-            this.skipTurnButton.Text = "Skip";
-            this.skipTurnButton.UseVisualStyleBackColor = true;
+            
             // 
             // drawCardButton
             // 
-            this.drawCardButton.Location = new System.Drawing.Point(522, 221);
-            this.drawCardButton.Name = "drawCardButton";
-            this.drawCardButton.Size = new System.Drawing.Size(75, 23);
-            this.drawCardButton.TabIndex = 2;
-            this.drawCardButton.Text = "Draw";
-            this.drawCardButton.UseVisualStyleBackColor = true;
+            
             // 
             // turnTimer
             // 
