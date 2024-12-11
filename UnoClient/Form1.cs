@@ -562,20 +562,8 @@ namespace UnoOnline {
         }
 
         public void DisplayPlayerHand(List<Card> playerHand)
-        {   /*
+        {
             PlayerHandPanel.Controls.Clear(); // Clear existing controls
-            playerHand = new List<Card>();
-            playerHand.Clear();
-            // Giả sử tạo tay bài cho người chơi 1
-            playerHand.Add(new Card ("Yellow_7","Yellow", "7" ));
-            playerHand.Add(new Card { CardName="Blue_5", Color = "Blue", Value = "5" });
-            playerHand.Add(new Card { CardName= "Green_8", Color = "Green", Value = "8" });
-            playerHand.Add(new Card("Red_7", "Red", "7"));
-            playerHand.Add(new Card("Wild", "Wild", "Wild"));
-            playerHand.Add(new Card("Wild_Draw", "Wild", "Draw"));
-            playerHand.Add(new Card("Yellow_0", "Yellow", "0"));
-            */
-
             int xOffset = 10;
             int yOffset = 10;
             int cardWidth = 80;
@@ -634,6 +622,8 @@ namespace UnoOnline {
                 // Xóa lá bài khỏi tay người chơi
                 GameManager.Instance.Players[0].Hand.Remove(selectedCard);
                 PlayerHandPanel.Controls.Remove(clickedButton);
+
+                //Disable tất cả bài trên tay
             }
             else
             {

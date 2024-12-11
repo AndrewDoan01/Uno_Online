@@ -136,7 +136,7 @@ namespace UnoOnline
                 string color = "Red";
                 card.Color = color;
             }
-            ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { player.Name, (player.Hand.Count -1).ToString(), card.CardName, card.Color }));
+            ClientSocket.SendData(new Message(MessageType.DanhBai, new List<string> { Instance.Players[0].Name, (Instance.Players[0].Hand.Count -1).ToString(), card.CardName, card.Color }));
         }
 
         public bool IsValidMove(Card card)

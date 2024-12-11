@@ -97,7 +97,7 @@ namespace UnoOnline
                         gamemanager.HandleUpdate(message);
                         break;
                     case MessageType.Turn:
-                        //OnMessageReceived?.Invoke("Processing Turn message");
+                        OnMessageReceived?.Invoke("Processing Turn message");
                         GameManager.HandleTurnMessage(message);
                         break;
                     case MessageType.CardDraw:
