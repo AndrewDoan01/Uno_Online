@@ -106,10 +106,7 @@ namespace UnoOnline
                     case MessageType.Specialdraws:
                         GameManager.HandleSpecialDraw(message);
                         break;
-                    case MessageType.End:
-                        OnMessageReceived?.Invoke("Processing End message");
-                        GameManager.HandleEndMessage(message);
-                        break;
+                    
                     case MessageType.MESSAGE:
                         OnMessageReceived?.Invoke("Processing MESSAGE");
                         GameManager.HandleChatMessage(message);
@@ -118,13 +115,17 @@ namespace UnoOnline
                         OnMessageReceived?.Invoke("Processing Penalty");
                         GameManager.Penalty(message);
                         break;
-                    case MessageType.Result:
-                        OnMessageReceived?.Invoke("Processing Result");
-                        GameManager.HandleResult(message);
-                        break;
                     case MessageType.YellUNOEnable:
                         OnMessageReceived?.Invoke("Processing YellUNOEnable");
                         Form1.YellUNOEnable();
+                        break;
+                    case MessageType.End:
+                        OnMessageReceived?.Invoke("Processing End message");
+                        GameManager.HandleEndMessage(message);
+                        break;
+                    case MessageType.Result:
+                        OnMessageReceived?.Invoke("Processing Result");
+                        GameManager.HandleResult(message);
                         break;
                 }
             }
@@ -251,7 +252,9 @@ public enum MessageType
     End,
     Result,
     Diem,
-    YellUNOEnable
+    YellUNOEnable,
+    ReStart,
+    Finish
 }
 public class Message
 {

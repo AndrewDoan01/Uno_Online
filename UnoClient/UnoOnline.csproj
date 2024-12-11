@@ -77,6 +77,12 @@
     <Compile Include="WaitingLobby.Designer.cs">
       <DependentUpon>WaitingLobby.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinResult.Designer.cs">
+      <DependentUpon>WinResult.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -95,6 +101,9 @@
       <DesignTime>True</DesignTime>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <EmbeddedResource Include="WinResult.resx">
+      <DependentUpon>WinResult.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <EmbeddedResource Include="WaitingLobby.resx">
       <DependentUpon>WaitingLobby.cs</DependentUpon>

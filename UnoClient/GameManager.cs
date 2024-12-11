@@ -219,8 +219,8 @@ namespace UnoOnline
             string playerGotPenalty = message.Data[0];
             if (playerGotPenalty == Program.player.Name)
             {
-                MessageBox.Show("You got penalty");
-                ClientSocket.SendData(new Message(MessageType.DrawPenalty, new List<string> { Program.player.Name, "2" }));
+                MessageBox.Show("You got penalty for not pressing the UNO button!");
+                ClientSocket.SendData(new Message(MessageType.DrawPenalty, new List<string> { Program.player.Name}));
             }
         }
         public static void HandleChatMessage(Message message)
@@ -238,7 +238,8 @@ namespace UnoOnline
             int PenaltyPoint = Instance.Players[0].Hand.Count * 10;
             if (winnerName == Program.player.Name)
             {
-                // Display win screen
+                WinResult winResult = new WinResult();
+                winResult.Show();
             }
             else
             {

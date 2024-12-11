@@ -656,9 +656,7 @@ namespace UnoOnline {
 
         private void DrawCardButton_Click(object sender, EventArgs e)
         {
-            // Thêm một lá bài mới vào tay người chơi nếu họ không thể ra bài
-            Card newCard = DrawCard();
-            GameManager.Instance.Players[0].Hand.Add(newCard);
+            ClientSocket.SendData(new Message(MessageType.RutBai, new List<string> { Program.player.Name, (GameManager.Instance.Players[0].Hand.Count).ToString() }));
 
             // Cập nhật giao diện
             DisplayPlayerHand(GameManager.Instance.Players[0].Hand);
@@ -668,6 +666,7 @@ namespace UnoOnline {
         {
             // Hàm giả lập rút bài từ bộ bài (thực tế có thể lấy từ bộ bài chung)
             return new Card { CardName="Red_2",Color = "Red", Value = "2" };
+
         }
 
         private void InitializeComponent()
