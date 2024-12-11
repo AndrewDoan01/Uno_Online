@@ -60,7 +60,7 @@ namespace UnoOnline
             // Thêm người chơi vào list players
 
             // Thêm các lá bài vào tay người chơi
-            Program.player.Hand = cardNames.Select(cardData =>
+            Instance.Players[0].Hand = cardNames.Select(cardData =>
             {
                 string[] card = cardData.Split('_');
                 string color = card[0];
@@ -72,8 +72,8 @@ namespace UnoOnline
                 return new Card(cardData, color, value);
             }).ToList();
 
-            string currentCardName = data[8];
-            string[] currentCard = currentCardName.Split('_');
+            string currentCardName = data[10];
+            string[] currentCard = data[10].Split('_');
             string currentColor = currentCard[0];
             string currentValue = currentCard[1];
             Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
@@ -229,7 +229,6 @@ namespace UnoOnline
             string chatMessage = message.Data[1];
             //Hiển thị lên form1
             // VD vầy Form1.DisplayChatMessage(playerName, chatMessage);
-            // An tạo giùm tui phần chat trong Form1 nha
         }
 
         public static void HandleEndMessage(Message message)

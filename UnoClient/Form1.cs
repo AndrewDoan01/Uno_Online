@@ -381,7 +381,7 @@ namespace UnoOnline {
             {
                 Text = "Lá bài hiện tại:",
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 12),
+                Font = new Font("Segoe UI", 4),
                 AutoSize = true,
                 Location = new Point(10, 35)
             };
@@ -557,12 +557,12 @@ namespace UnoOnline {
             else
             {
                 // Nếu hết thời gian, chuyển sang lượt tiếp theo
-                //Phải thông  báo cho server biết nữa
+                //Phải thông  báo cho server biết nữa => gửi tin RutBai
             }
         }
 
         public void DisplayPlayerHand(List<Card> playerHand)
-        {
+        {   /*
             PlayerHandPanel.Controls.Clear(); // Clear existing controls
             playerHand = new List<Card>();
             playerHand.Clear();
@@ -574,7 +574,7 @@ namespace UnoOnline {
             playerHand.Add(new Card("Wild", "Wild", "Wild"));
             playerHand.Add(new Card("Wild_Draw", "Wild", "Draw"));
             playerHand.Add(new Card("Yellow_0", "Yellow", "0"));
-
+            */
 
             int xOffset = 10;
             int yOffset = 10;
@@ -610,9 +610,10 @@ namespace UnoOnline {
             // Xử lý các thẻ đặc biệt như "Wild" 
             if (card.Color == "Wild" )
             {
-                return Image.FromFile($"Resources/CardImages/{card.Color}.png");
+                if(card.Value == "Draw")
+                    return Image.FromFile($"Resources/CardImages/Wild_Draw.png");
+                return Image.FromFile($"Resources/CardImages/Wild.png");
             }
-
             // Đối với các lá bài màu
             return Image.FromFile($"Resources/CardImages/{card.Color}_{card.Value}.png");
         }
@@ -676,7 +677,7 @@ namespace UnoOnline {
         private Card DrawCard()
         {
             // Hàm giả lập rút bài từ bộ bài (thực tế có thể lấy từ bộ bài chung)
-            return new Card { Color = "Red", Value = "2" };
+            return new Card { CardName="Red_2",Color = "Red", Value = "2" };
         }
 
         private void InitializeComponent()
