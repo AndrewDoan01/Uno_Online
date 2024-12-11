@@ -177,6 +177,56 @@ namespace UnoOnline
                 MessageBox.Show("Error during disconnect: " + ex.Message);
             }
         }
+
+        // Thêm logging để debug
+        private void HandleReceive(IAsyncResult ar)
+        {
+            try
+            {
+                int received = clientSocket.EndReceive(ar);
+                if (received > 0)
+                {
+                    byte[] buffer = (byte[])ar.AsyncState;
+                    string message = Encoding.UTF8.GetString(buffer, 0, received);
+                    Console.WriteLine($"Received from server: {message}"); // Debug log
+
+                    OnMessageReceived?.Invoke(message);
+                }
+
+                StartReceive(); // Tiếp tục nhận dữ liệu
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in HandleReceive: {ex.Message}");
+            }
+        }
+
+        private void StartReceive()
+        {
+            try
+            {
+                byte[] buffer = new byte[1024];
+                clientSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(HandleReceive), buffer);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in StartReceive: {ex.Message}");
+            }
+        }
+
+        public void SendMessage(string message)
+        {
+            try
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                Console.WriteLine($"Sending to server: {message}"); // Debug log
+                clientSocket.Send(buffer);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending message: {ex.Message}");
+            }
+        }
     }
 }
 public enum MessageType

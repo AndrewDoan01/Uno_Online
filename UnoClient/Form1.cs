@@ -19,7 +19,9 @@ namespace UnoOnline {
         //private Button skipTurnButton;
         //private Button drawCardButton;
         private CustomCardPanel playerCards;
-
+        private Panel chatPanel;
+        private TextBox chatInput;
+        private RichTextBox chatHistory;
         private Timer timer;
         private Button yellUNOButton;
         private TableLayoutPanel mainLayout;
@@ -27,6 +29,79 @@ namespace UnoOnline {
         private FlowLayoutPanel playerCardsPanel;
         private Panel actionPanel;
         Card currentCard = GameManager.Instance.CurrentCard;
+
+        private void InitializeAdditionalComponents()
+        {
+            // Panel chat (bên phải)
+            chatPanel = new Panel
+            {
+                Dock = DockStyle.Right,
+                Width = 250
+            };
+
+            chatHistory = new RichTextBox
+            {
+                Dock = DockStyle.Top,
+                Height = ClientSize.Height - 50,
+                ReadOnly = true,
+                BackColor = Color.White
+            };
+
+            chatInput = new TextBox
+            {
+                Dock = DockStyle.Bottom,
+                Height = 30
+            };
+
+           
+
+           
+
+            // Thêm controls chat vào panel
+            chatPanel.Controls.AddRange(new Control[] { chatHistory, chatInput });
+
+            // Thêm các controls mới vào form
+            Controls.AddRange(new Control[]
+            {
+            chatPanel
+            });
+
+            // Đăng ký events
+            //chatInput.KeyPress += ChatInput_KeyPress;
+        }
+
+        // Thêm xử lý chat
+        //private void ChatInput_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == (char)Keys.Enter)
+        //    {
+        //        e.Handled = true;
+        //        string message = chatInput.Text.Trim();
+        //        if (!string.IsNullOrEmpty(message))
+        //        {
+        //            ClientSocket.SendMessage($"CHAT|{message}");
+        //            chatInput.Clear();
+        //        }
+        //    }
+        //}
+
+        
+        // Thêm method hiển thị chat
+        public void AddChatMessage(string sender, string message)
+        {
+            if (chatHistory.InvokeRequired)
+            {
+                BeginInvoke(new Action(() => AddChatMessage(sender, message)));
+                return;
+            }
+
+            string formattedMessage = $"[{sender}]: {message}\n";
+            chatHistory.AppendText(formattedMessage);
+            chatHistory.ScrollToCaret();
+        }
+
+        
+
         private void InitializeGameLayout()
         {
             this.ClientSize = new Size(1280, 720);
