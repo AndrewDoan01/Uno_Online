@@ -183,7 +183,7 @@ namespace UnoOnline
                 //Form1.EnablePlayableCards();
             }
         }
-        public static void HandleCardDraw(Message message)
+        public static void HandleSpecialDraw(Message message)
         {
             //Specialdraws; ID; CardName; CardName...
             string playerId = message.Data[0];
@@ -201,7 +201,7 @@ namespace UnoOnline
             }
 
         }
-        public static void HandleSpecialDraw(Message message)
+        public static void HandleCardDraw(Message message)
         {
             string playerName = message.Data[0];
             string cardName = message.Data[1];

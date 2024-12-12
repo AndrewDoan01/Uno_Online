@@ -657,7 +657,6 @@ namespace UnoOnline {
         private void DrawCardButton_Click(object sender, EventArgs e)
         {
             ClientSocket.SendData(new Message(MessageType.RutBai, new List<string> { Program.player.Name, (GameManager.Instance.Players[0].Hand.Count).ToString() }));
-
             // Cập nhật giao diện
             DisplayPlayerHand(GameManager.Instance.Players[0].Hand);
         }

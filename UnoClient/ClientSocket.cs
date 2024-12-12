@@ -150,9 +150,9 @@ namespace UnoOnline
                 byte[] buffer = Encoding.UTF8.GetBytes(messageString);
                 clientSocket.Send(buffer);
             }
-            catch (Exception ex)
+            catch 
             {
-                MessageBox.Show("Error sending data: " + ex.Message);
+                MessageBox.Show("Xin lỗi bạn, server đang bị lỗi, chúng tôi sẽ khắc phục trong thời gian nhanh nhất");
             }
         }
 
@@ -198,7 +198,7 @@ namespace UnoOnline
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in HandleReceive: {ex.Message}");
+                Console.WriteLine($"Error in HandleReceive: {ex.Message}";
             }
         }
 
@@ -215,19 +215,6 @@ namespace UnoOnline
             }
         }
 
-        public void SendMessage(string message)
-        {
-            try
-            {
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
-                Console.WriteLine($"Sending to server: {message}"); // Debug log
-                clientSocket.Send(buffer);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending message: {ex.Message}");
-            }
-        }
     }
 }
 public enum MessageType
