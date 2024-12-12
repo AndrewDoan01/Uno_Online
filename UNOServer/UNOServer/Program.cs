@@ -146,7 +146,7 @@ namespace UNOServer
          * START;ID                                                                   | OtherPlayerStat;ID;Luot;SoLuongBai
          * DanhBai;ID;SoLuongBai;CardName;color(wild draw, wild)                      | Boot;ID                                   
          * RutBai;ID;SoLuongBai                                                       | Update;ID;SoluongBai;CardName(Nếu đánh bài);color(wild draw, wild) (Nếu đánh bài)          
-         * SpecialDraw;ID;SoLuongBai;                                                 | Turn;ID                      
+         * SpecialCardEffect;ID;SoLuongBai;                                                 | Turn;ID                      
          * Chat;ID;<Content>                                                          | CardDraw;ID;CardName                
          * YellUNO;ID                                                                 | Specialdraws;ID;CardName;CardName...
          * DrawPenalty;ID;SoLuongBai;                                                 | End;ID
