@@ -244,7 +244,8 @@ namespace UnoOnline
             else
             {
                 ClientSocket.SendData(new Message(MessageType.Diem, new List<string> { Program.player.Name, PenaltyPoint.ToString() }));
-                // Display lose screen
+                LoseResult loseResult = new LoseResult();
+                loseResult.Show();
             }
         }
 

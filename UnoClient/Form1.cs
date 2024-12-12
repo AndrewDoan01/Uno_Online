@@ -94,7 +94,7 @@ namespace UnoOnline {
                 BeginInvoke(new Action(() => AddChatMessage(sender, message)));
                 return;
             }
-
+            ClientSocket.SendData(new Message(MessageType.Chat, new List<string> { Program.player.Name, message }));
             string formattedMessage = $"[{sender}]: {message}\n";
             chatHistory.AppendText(formattedMessage);
             chatHistory.ScrollToCaret();

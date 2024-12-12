@@ -239,6 +239,7 @@ public enum MessageType
     YellUNO,
     Penalty,
     MESSAGE,
+    Chat,
     DanhBai,
     DrawPenalty,
     Info,

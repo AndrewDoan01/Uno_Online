@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace UnoOnline
 {
-    public partial class WinResult : Form
+    public partial class LoseResult : Form
     {
-        public WinResult()
+        public LoseResult()
         {
             InitializeComponent();
         }

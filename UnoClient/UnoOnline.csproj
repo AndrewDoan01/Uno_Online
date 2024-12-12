@@ -54,6 +54,12 @@
     <Compile Include="CustomCardPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FinalRanking.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FinalRanking.Designer.cs">
+      <DependentUpon>FinalRanking.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,6 +68,12 @@
     </Compile>
     <Compile Include="GameManager.cs" />
     <Compile Include="GameResources.cs" />
+    <Compile Include="LoseResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoseResult.Designer.cs">
+      <DependentUpon>LoseResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,8 +95,14 @@
     <Compile Include="WinResult.Designer.cs">
       <DependentUpon>WinResult.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FinalRanking.resx">
+      <DependentUpon>FinalRanking.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoseResult.resx">
+      <DependentUpon>LoseResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
