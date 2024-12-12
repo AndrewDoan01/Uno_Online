@@ -74,16 +74,15 @@ namespace UnoOnline
                         }
                         break;
                     case MessageType.InitializeStat:
-                        OnMessageReceived?.Invoke("Processing InitializeStat message");
                         OnMessageReceived?.Invoke(string.Join(" ", message.Data));
                         GameManager.InitializeStat(message);
                         break;
                     case MessageType.OtherPlayerStat:
-                        //OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
+                        OnMessageReceived?.Invoke("Processing OtherPlayerStat message");
                         GameManager.UpdateOtherPlayerStat(message);
                         break;
                     case MessageType.Boot:
-                        //OnMessageReceived?.Invoke("Processing Boot message");
+                        OnMessageReceived?.Invoke("Processing Boot message");
                         if (Application.OpenForms[0].InvokeRequired)
                         {
                             Application.OpenForms[0].Invoke(new Action(() => GameManager.Boot()));
@@ -94,6 +93,7 @@ namespace UnoOnline
                         }
                         break;
                     case MessageType.Update:
+                        OnMessageReceived?.Invoke("Processing Update");
                         gamemanager.HandleUpdate(message);
                         break;
                     case MessageType.Turn:
@@ -108,23 +108,18 @@ namespace UnoOnline
                         break;
                     
                     case MessageType.MESSAGE:
-                        OnMessageReceived?.Invoke("Processing MESSAGE");
                         GameManager.HandleChatMessage(message);
                         break;
                     case MessageType.Penalty:
-                        OnMessageReceived?.Invoke("Processing Penalty");
                         GameManager.Penalty(message);
                         break;
                     case MessageType.YellUNOEnable:
-                        OnMessageReceived?.Invoke("Processing YellUNOEnable");
                         Form1.YellUNOEnable();
                         break;
                     case MessageType.End:
-                        OnMessageReceived?.Invoke("Processing End message");
                         GameManager.HandleEndMessage(message);
                         break;
                     case MessageType.Result:
-                        OnMessageReceived?.Invoke("Processing Result");
                         GameManager.HandleResult(message);
                         break;
                 }
@@ -237,12 +232,13 @@ public enum MessageType
     Turn,
     CardDraw,
     Specialdraws,
+    SpecialCardEffect,
     End,
     Result,
     Diem,
     YellUNOEnable,
     ReStart,
-    Finish
+    Finish,
 }
 public class Message
 {

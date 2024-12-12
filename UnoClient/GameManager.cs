@@ -49,7 +49,7 @@ namespace UnoOnline
             {
                 instance = new GameManager();
             }
-            Instance.AddPlayer(Program.player);
+
             string[] data = message.Data.ToArray();
             string playerName = data[0];
             int turnOrder = int.Parse(data[1]);
@@ -57,7 +57,6 @@ namespace UnoOnline
 
             // Lấy danh sách các lá bài
             List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
-            // Thêm người chơi vào list players
 
             // Thêm các lá bài vào tay người chơi
             Instance.Players[0].Hand = cardNames.Select(cardData =>
@@ -81,33 +80,20 @@ namespace UnoOnline
 
         public static void UpdateOtherPlayerStat(Message message)
         {
+            //ID;Lượt;Số lượng bài
             string[] data = message.Data.ToArray();
             string playerName = data[0];
             int turnOrder = int.Parse(data[1]);
             int cardCount = int.Parse(data[2]);
 
-            List<string> cardNames = new List<string>(data.Skip(3).Take(cardCount));
             Player player = new Player(playerName);
+            player.HandCount = cardCount;
 
-            foreach (var cardData in cardNames)
-            {
-                string cardname = cardData;
-                string[] card = cardData.Split('_');
-                string color = card[0];
-                string value = card[1];
-                player.Hand.Add(new Card(cardname, color, value));
-            }
-
-            string currentCardName = data[8];
-            string[] currentCard = data[8].Split('_');
-            string currentColor = currentCard[0];
-            string currentValue = currentCard[1];
-            Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
             Instance.AddPlayer(player);
         }
         public void AddPlayer(Player player)
         {
-            Players.Add(player);
+            Instance.Players.Add(player);
         }
         public static void Boot()
         {
@@ -121,6 +107,7 @@ namespace UnoOnline
                         Form1 form1 = new Form1();
                         form1.Show();
                         form1.DisplayPlayerHand(Instance.Players[0].Hand);
+                        //DisplayOtherPlayerHand
                     }
                 }));
             }
@@ -149,15 +136,16 @@ namespace UnoOnline
             //Message nhận được: Update; ID; SoluongBaiConLai; CardName(Nếu đánh bài); color(red/blue/green/yellow nếu trường hợp cardname chứa wild)(Nếu đánh bài)
             string playerId = message.Data[0];
             int remainingCards = int.Parse(message.Data[1]);
-            //Tìm người chơi đó trong list player và cập nhật số bài đang trên tay họ
-            Player player = Players.FirstOrDefault(p => p.Name == playerId);
+            //Tìm người chơi đó trong list player
+            Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
+            //Cập nhật số bài đang trên tay họ
             if (player != null)
             {
                 player.HandCount = remainingCards;
             }
             if (playerId != Program.player.Name)
             {
-            //Nếu người chơi  khác đã đánh bài
+                //Nếu người chơi khác đã đánh bài có chữ số
                 if (message.Data.Count == 3)
                 {
                     CurrentCard.CardName = message.Data[2];
@@ -172,6 +160,7 @@ namespace UnoOnline
                     CurrentCard.Color = message.Data[3];
                 }
             }
+            //Hiển thị
         }
 
         public static void HandleTurnMessage(Message message)
@@ -179,6 +168,17 @@ namespace UnoOnline
             string playerId = message.Data[0];
             if (playerId == Program.player.Name)
             {
+                if(Instance.CurrentCard.CardName.Contains("Draw"))
+                {
+                    if(Instance.CurrentCard.CardName.Contains("Wild"))
+                    {//Draw 4
+                        ClientSocket.SendData(new Message(MessageType.SpecialCardEffect, new List<string> { Program.player.Name, (Instance.Players[0].Hand.Count + 4).ToString() }));
+                    }
+                    else
+                    {//Draw 2
+                        ClientSocket.SendData(new Message(MessageType.SpecialCardEffect, new List<string> { Program.player.Name, (Instance.Players[0].Hand.Count + 2).ToString() }));
+                    }
+                }
                 // Enable playable cards
                 //Form1.EnablePlayableCards();
             }
@@ -188,18 +188,14 @@ namespace UnoOnline
             //Specialdraws; ID; CardName; CardName...
             string playerId = message.Data[0];
             Player player = Instance.Players.FirstOrDefault(p => p.Name == playerId);
-            if (player != null)
+            for (int i = 1; i < message.Data.Count; i++)
             {
-                for (int i = 1; i < message.Data.Count; i++)
-                {
-                    string cardName = message.Data[i];
-                    string[] card = cardName.Split('_');
-                    string color = card[0];
-                    string value = card[1];
-                    player.Hand.Add(new Card(cardName, color, value));
-                }
+                string cardName = message.Data[i];
+                string[] card = cardName.Split('_');
+                string color = card[0];
+                string value = card[1];
+                player.Hand.Add(new Card(cardName, color, value));
             }
-
         }
         public static void HandleCardDraw(Message message)
         {

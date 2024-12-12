@@ -12,3 +12,10 @@ E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.AssemblyReference.c
 E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.CoreCompileInputs.cache
 E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.exe
 E:\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.pdb
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\bin\Debug\UNOServer.exe.config
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\bin\Debug\UNOServer.exe
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\bin\Debug\UNOServer.pdb
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.AssemblyReference.cache
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.csproj.CoreCompileInputs.cache
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.exe
+C:\Users\ledan\source\repos\Uno_Online\UNOServer\UNOServer\obj\Debug\UNOServer.pdb

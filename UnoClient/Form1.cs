@@ -457,6 +457,8 @@ namespace UnoOnline {
             InitializeTimer();
             ApplyCustomTheme();
             InitializeCustomComponents();
+            // Thêm người chơi vào list players
+            GameManager.Instance.Players.Add(new Player(Program.player.Name));
         }
 
         // Inside the Form1 class
@@ -656,7 +658,7 @@ namespace UnoOnline {
 
         private void DrawCardButton_Click(object sender, EventArgs e)
         {
-            ClientSocket.SendData(new Message(MessageType.RutBai, new List<string> { Program.player.Name, (GameManager.Instance.Players[0].Hand.Count).ToString() }));
+            ClientSocket.SendData(new Message(MessageType.RutBai, new List<string> { Program.player.Name, ((GameManager.Instance.Players[0].Hand.Count) + 1).ToString() }));
             // Cập nhật giao diện
             DisplayPlayerHand(GameManager.Instance.Players[0].Hand);
         }
