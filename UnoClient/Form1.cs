@@ -30,6 +30,25 @@ namespace UnoOnline {
         private Panel actionPanel;
         Card currentCard = GameManager.Instance.CurrentCard;
 
+        // update the image displayed in the PictureBox
+        private void UpdateCurrentCardDisplay(Card currentCard)
+        {
+            // Construct the file path for the card image
+            string cardImagePath = Path.Combine("Resources", "CardImages", $"{currentCard.Color}_{currentCard.Value}.png");
+
+            if (File.Exists(cardImagePath))
+            {
+                // Load the image into the PictureBox
+                currentCardPictureBox.Image = Image.FromFile(cardImagePath);
+            }
+            else
+            {
+                MessageBox.Show($"Card image not found: {cardImagePath}");
+                currentCardPictureBox.Image = null; // Clear the image if not found
+            }
+        }
+
+
         private void InitializeAdditionalComponents()
         {
             // Panel chat (bên phải)
@@ -489,15 +508,14 @@ namespace UnoOnline {
             Controls.Add(turnTimer);
 
             // Label for current card
-            currentCardLabel = new Label
+            currentCardPictureBox = new PictureBox
             {
-                Location = new Point(300, 50),
-                Size = new Size(200, 30),
-                Text = $"Lá bài hiện tại: {GameManager.Instance.CurrentCard}" ,
-                Font = new Font("Arial", 14),
-                BackColor = Color.LightGray
+                Location = new Point(300, 50), // Adjust the location as needed
+                Size = new Size(138, 200),     // Adjust to match your card image size
+                SizeMode = PictureBoxSizeMode.StretchImage, // Ensure the image fits correctly
+                BackColor = Color.LightGray    // Optional: Background color
             };
-            Controls.Add(currentCardLabel);
+            Controls.Add(currentCardPictureBox);
 
             // Panel for player hand
             PlayerHandPanel = new FlowLayoutPanel
@@ -613,25 +631,24 @@ namespace UnoOnline {
         {
             Button clickedButton = (Button)sender;
             Card selectedCard = clickedButton.Tag as Card;
-            //Gọi phương thức kiểm tra lá ở GameManager
+
             if (GameManager.Instance.IsValidMove(selectedCard))
             {
                 GameManager.Instance.PlayCard(Program.player, selectedCard);
-                // Cập nhật lá bài hiện tại với lá bài được chọn
                 GameManager.Instance.CurrentCard = selectedCard;
-                currentCardLabel.Text = $"Lá bài hiện tại: {GameManager.Instance.CurrentCard.CardName}";
 
-                // Xóa lá bài khỏi tay người chơi
-                GameManager.Instance.Players[0].Hand.Remove(selectedCard);
+                // Update the current card PictureBox
+                UpdateCurrentCardDisplay(selectedCard);
+
+                // Remove the card from the player's hand
                 PlayerHandPanel.Controls.Remove(clickedButton);
-
-                //Disable tất cả bài trên tay
             }
             else
             {
-                MessageBox.Show("Lá bài không hợp lệ.");
+                MessageBox.Show("Invalid move.");
             }
         }
+
         private void EndGame()
         {
             // Xử lý kết thúc trò chơi
@@ -676,7 +693,6 @@ namespace UnoOnline {
             this.drawCardButton = new System.Windows.Forms.Button();
             this.turnTimer = new System.Windows.Forms.ProgressBar();
             this.PlayerHandPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.currentCardLabel = new System.Windows.Forms.Label();
             this.currentPlayerLabel = new System.Windows.Forms.Label();
             this.yellUNOButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -704,14 +720,7 @@ namespace UnoOnline {
             this.PlayerHandPanel.Size = new System.Drawing.Size(602, 200);
             this.PlayerHandPanel.TabIndex = 6;
             this.PlayerHandPanel.BackColor = Color.Transparent;
-            // 
-            // currentCardLabel
-            // 
-            this.currentCardLabel.AutoSize = true;
-            this.currentCardLabel.Location = new System.Drawing.Point(519, 184);
-            this.currentCardLabel.Name = "currentCardLabel";
-            this.currentCardLabel.Size = new System.Drawing.Size(0, 16);
-            this.currentCardLabel.TabIndex = 3;
+     
             // 
             // currentPlayerLabel
             // 
@@ -741,7 +750,7 @@ namespace UnoOnline {
             this.Controls.Add(this.PlayerHandPanel);
             this.Controls.Add(this.turnTimer);
             this.Controls.Add(this.currentPlayerLabel);
-            this.Controls.Add(this.currentCardLabel);
+            this.Controls.Add(this.currentCardPictureBox);
             this.Controls.Add(this.drawCardButton);
             this.Controls.Add(this.skipTurnButton);
             this.DoubleBuffered = true;
@@ -756,7 +765,7 @@ namespace UnoOnline {
         private ProgressBar turnTimer;
         private FlowLayoutPanel PlayerHandPanel;
 
-        private Label currentCardLabel;
+        private PictureBox currentCardPictureBox;
         private Label currentPlayerLabel;
         private async void AnimateCardDrawing(Card card)
         {
@@ -817,7 +826,6 @@ namespace UnoOnline {
 
             PlayerHandPanel.Controls.Remove(cardButton);
             currentCard = card;
-            currentCardLabel.Text = $"Lá bài hiện tại: {currentCard}";
         }
         public static void YellUNOEnable()
         {
