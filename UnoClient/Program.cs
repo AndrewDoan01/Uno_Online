@@ -20,7 +20,7 @@ namespace UnoOnline
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FinalRanking());
+            Application.Run(new Menu());
         }
         public static bool IsFormOpen(Type formType)
         {
