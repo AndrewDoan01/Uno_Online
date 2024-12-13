@@ -31,7 +31,7 @@ namespace UnoOnline {
         Card currentCard = GameManager.Instance.CurrentCard;
 
         // update the image displayed in the PictureBox
-        private void UpdateCurrentCardDisplay(Card currentCard)
+        public void UpdateCurrentCardDisplay(Card currentCard)
         {
             // Construct the file path for the card image
             string cardImagePath = Path.Combine("Resources", "CardImages", $"{currentCard.Color}_{currentCard.Value}.png");
@@ -636,6 +636,7 @@ namespace UnoOnline {
             {
                 GameManager.Instance.PlayCard(Program.player, selectedCard);
                 GameManager.Instance.CurrentCard = selectedCard;
+                GameManager.Instance.Players[0].Hand.Remove(selectedCard);
 
                 // Update the current card PictureBox
                 UpdateCurrentCardDisplay(selectedCard);

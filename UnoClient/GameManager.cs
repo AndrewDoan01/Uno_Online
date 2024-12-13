@@ -76,6 +76,7 @@ namespace UnoOnline
             string currentColor = currentCard[0];
             string currentValue = currentCard[1];
             Instance.CurrentCard = new Card(currentCardName, currentColor, currentValue);
+            Form1 form1 = new Form1();
         }
 
         public static void UpdateOtherPlayerStat(Message message)
@@ -107,6 +108,7 @@ namespace UnoOnline
                         Form1 form1 = new Form1();
                         form1.Show();
                         form1.DisplayPlayerHand(Instance.Players[0].Hand);
+                        form1.UpdateCurrentCardDisplay(Instance.CurrentCard);
                         //DisplayOtherPlayerHand
                     }
                 }));
