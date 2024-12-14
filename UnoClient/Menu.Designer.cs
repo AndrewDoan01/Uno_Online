@@ -28,15 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.BtnJoinGame = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.BtnExit = new System.Windows.Forms.Button();
+            this.BtnRules = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BtnJoinGame
             // 
-            this.BtnJoinGame.Location = new System.Drawing.Point(12, 12);
+            this.BtnJoinGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnJoinGame.Location = new System.Drawing.Point(329, 187);
             this.BtnJoinGame.Name = "BtnJoinGame";
-            this.BtnJoinGame.Size = new System.Drawing.Size(100, 42);
+            this.BtnJoinGame.Size = new System.Drawing.Size(140, 140);
             this.BtnJoinGame.TabIndex = 0;
             this.BtnJoinGame.Text = "Join room";
             this.BtnJoinGame.UseVisualStyleBackColor = true;
@@ -44,19 +48,44 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(13, 170);
+            this.richTextBox1.Location = new System.Drawing.Point(160, 404);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(775, 96);
+            this.richTextBox1.Size = new System.Drawing.Size(481, 44);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
+            // 
+            // BtnExit
+            // 
+            this.BtnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnExit.Location = new System.Drawing.Point(541, 212);
+            this.BtnExit.Name = "BtnExit";
+            this.BtnExit.Size = new System.Drawing.Size(100, 100);
+            this.BtnExit.TabIndex = 2;
+            this.BtnExit.Text = "Exit";
+            this.BtnExit.UseVisualStyleBackColor = true;
+            // 
+            // BtnRules
+            // 
+            this.BtnRules.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnRules.Location = new System.Drawing.Point(160, 213);
+            this.BtnRules.Name = "BtnRules";
+            this.BtnRules.Size = new System.Drawing.Size(100, 100);
+            this.BtnRules.TabIndex = 3;
+            this.BtnRules.Text = "Rules";
+            this.BtnRules.UseVisualStyleBackColor = true;
             // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.BtnRules);
+            this.Controls.Add(this.BtnExit);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.BtnJoinGame);
+            this.DoubleBuffered = true;
             this.Name = "Menu";
             this.Text = "Menu";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Menu_FormClosing);
@@ -68,5 +97,7 @@
 
         private System.Windows.Forms.Button BtnJoinGame;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button BtnExit;
+        private System.Windows.Forms.Button BtnRules;
     }
 }
