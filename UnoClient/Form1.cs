@@ -751,7 +751,6 @@ namespace UnoOnline {
             this.Controls.Add(this.PlayerHandPanel);
             this.Controls.Add(this.turnTimer);
             this.Controls.Add(this.currentPlayerLabel);
-            this.Controls.Add(this.currentCardPictureBox);
             this.Controls.Add(this.drawCardButton);
             this.Controls.Add(this.skipTurnButton);
             this.DoubleBuffered = true;
