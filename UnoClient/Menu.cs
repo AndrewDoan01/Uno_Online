@@ -24,13 +24,29 @@ namespace UnoOnline
 
         private void ClientSocket_OnMessageReceived(string message)
         {
-            // Update the UI with the received message
-            Invoke(new Action(() =>
+            if (this.IsHandleCreated)
             {
-                // Display the message in a label or text box
-                richTextBox1.Text = message;
-            }));
+                // Update the UI with the received message
+                this.Invoke(new Action(() =>
+                {
+                    // Display the message in a label or text box
+                    richTextBox1.Text = message;
+                }));
+            }
+            else
+            {
+                // Handle the case where the handle has not been created
+                this.HandleCreated += (s, e) =>
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        // Display the message in a label or text box
+                        richTextBox1.Text = message;
+                    }));
+                };
+            }
         }
+
 
         private static void Connect()
         {

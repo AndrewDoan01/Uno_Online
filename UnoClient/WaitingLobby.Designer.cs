@@ -31,6 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaitingLobby));
             this.btnStartGame = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.lblPlayer1 = new System.Windows.Forms.Label();
+            this.lblPlayer2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblPlayer3 = new System.Windows.Forms.Label();
+            this.lblPlayer4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnStartGame
@@ -51,6 +56,55 @@
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 
+            // lblPlayer1
+            // 
+            this.lblPlayer1.AutoSize = true;
+            this.lblPlayer1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayer1.Location = new System.Drawing.Point(65, 204);
+            this.lblPlayer1.Name = "lblPlayer1";
+            this.lblPlayer1.Size = new System.Drawing.Size(75, 18);
+            this.lblPlayer1.TabIndex = 2;
+            this.lblPlayer1.Text = "--player1--";
+            // 
+            // lblPlayer2
+            // 
+            this.lblPlayer2.AutoSize = true;
+            this.lblPlayer2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayer2.Location = new System.Drawing.Point(241, 300);
+            this.lblPlayer2.Name = "lblPlayer2";
+            this.lblPlayer2.Size = new System.Drawing.Size(126, 18);
+            this.lblPlayer2.TabIndex = 3;
+            this.lblPlayer2.Text = "waiting for players";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(613, 204);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 25);
+            this.label3.TabIndex = 5;
+            // 
+            // lblPlayer3
+            // 
+            this.lblPlayer3.AutoSize = true;
+            this.lblPlayer3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayer3.Location = new System.Drawing.Point(417, 300);
+            this.lblPlayer3.Name = "lblPlayer3";
+            this.lblPlayer3.Size = new System.Drawing.Size(126, 18);
+            this.lblPlayer3.TabIndex = 6;
+            this.lblPlayer3.Text = "waiting for players";
+            // 
+            // lblPlayer4
+            // 
+            this.lblPlayer4.AutoSize = true;
+            this.lblPlayer4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayer4.Location = new System.Drawing.Point(595, 204);
+            this.lblPlayer4.Name = "lblPlayer4";
+            this.lblPlayer4.Size = new System.Drawing.Size(126, 18);
+            this.lblPlayer4.TabIndex = 7;
+            this.lblPlayer4.Text = "waiting for players";
+            // 
             // WaitingLobby
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -58,6 +112,11 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lblPlayer4);
+            this.Controls.Add(this.lblPlayer3);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblPlayer2);
+            this.Controls.Add(this.lblPlayer1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.btnStartGame);
             this.DoubleBuffered = true;
@@ -65,6 +124,7 @@
             this.Text = "WaitingLobby";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WaitingLobby_FormClosing);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -72,5 +132,10 @@
 
         private System.Windows.Forms.Button btnStartGame;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label lblPlayer1;
+        private System.Windows.Forms.Label lblPlayer2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblPlayer3;
+        private System.Windows.Forms.Label lblPlayer4;
     }
 }

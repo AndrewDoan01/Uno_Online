@@ -476,8 +476,6 @@ namespace UnoOnline {
             InitializeTimer();
             ApplyCustomTheme();
             InitializeCustomComponents();
-            // Thêm người chơi vào list players
-            GameManager.Instance.Players.Add(new Player(Program.player.Name));
         }
 
         // Inside the Form1 class
@@ -589,7 +587,7 @@ namespace UnoOnline {
             int cardWidth = 80;
             int cardHeight = 120;
 
-            foreach (var card in playerHand)
+            foreach (var card in playerHand.ToList())
             {
                 Button cardButton = new Button
                 {
@@ -700,11 +698,17 @@ namespace UnoOnline {
             // 
             // skipTurnButton
             // 
-            
+            this.skipTurnButton.Location = new System.Drawing.Point(0, 0);
+            this.skipTurnButton.Name = "skipTurnButton";
+            this.skipTurnButton.Size = new System.Drawing.Size(75, 23);
+            this.skipTurnButton.TabIndex = 8;
             // 
             // drawCardButton
             // 
-            
+            this.drawCardButton.Location = new System.Drawing.Point(0, 0);
+            this.drawCardButton.Name = "drawCardButton";
+            this.drawCardButton.Size = new System.Drawing.Size(75, 23);
+            this.drawCardButton.TabIndex = 7;
             // 
             // turnTimer
             // 
@@ -716,12 +720,11 @@ namespace UnoOnline {
             // 
             // PlayerHandPanel
             // 
+            this.PlayerHandPanel.BackColor = System.Drawing.Color.Transparent;
             this.PlayerHandPanel.Location = new System.Drawing.Point(12, 291);
             this.PlayerHandPanel.Name = "PlayerHandPanel";
             this.PlayerHandPanel.Size = new System.Drawing.Size(602, 200);
             this.PlayerHandPanel.TabIndex = 6;
-            this.PlayerHandPanel.BackColor = Color.Transparent;
-     
             // 
             // currentPlayerLabel
             // 
@@ -755,6 +758,7 @@ namespace UnoOnline {
             this.Controls.Add(this.skipTurnButton);
             this.DoubleBuffered = true;
             this.Name = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -857,6 +861,12 @@ namespace UnoOnline {
             {
                 this.AutoScroll = true; // Bật tính năng cuộn
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Menu menu = new Menu();
+            menu.Show();
         }
     }
 

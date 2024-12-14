@@ -263,11 +263,6 @@ namespace UnoOnline
             //Form1.DisplayRankingTable();
 
         }
-        public static void HandleConnect(Message message)
-        {
-            var newPlayer = new Player(message.Data[0]);
-            ClientSocket.gamemanager.AddPlayer(newPlayer);
-        }
 
         public static void HandleDisconnect(Message message)
         {
