@@ -260,8 +260,7 @@ namespace UnoOnline
                 player.Rank = rank;
             }
             //Hiển thị bảng xếp hạng cho tất cả người chơi
-            //Form1.DisplayRankingTable();
-
+            FinalRanking.DisplayRanking(Instance.Players);
         }
 
         public static void HandleDisconnect(Message message)
