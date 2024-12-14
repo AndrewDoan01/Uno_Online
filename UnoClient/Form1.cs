@@ -33,8 +33,16 @@ namespace UnoOnline {
         // update the image displayed in the PictureBox
         public void UpdateCurrentCardDisplay(Card currentCard)
         {
+            string cardImagePath = "";
+            if (currentCard.CardName.Contains("Wild"))
+            {
+                if (currentCard.Value == "Draw")
+                    cardImagePath = Path.Combine("Resources", "CardImages", "Wild.png");
+                cardImagePath = Path.Combine("Resources", "CardImages", "Wild_Draw.png");
+            }
+            else
             // Construct the file path for the card image
-            string cardImagePath = Path.Combine("Resources", "CardImages", $"{currentCard.Color}_{currentCard.Value}.png");
+                cardImagePath = Path.Combine("Resources", "CardImages", $"{currentCard.Color}_{currentCard.Value}.png");
 
             if (File.Exists(cardImagePath))
             {

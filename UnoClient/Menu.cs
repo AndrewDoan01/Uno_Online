@@ -74,5 +74,17 @@ namespace UnoOnline
             Environment.Exit(0);
             Application.Exit();
         }
+
+        private void BtnExit_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+            Application.Exit();
+        }
+
+        private void BtnRules_Click(object sender, EventArgs e)
+        {
+            //Sẽ tạm thời mở trang web chứa luật chơi-https://www.unorules.com/
+            System.Diagnostics.Process.Start("https://www.unorules.com/");
+        }
     }
 }
