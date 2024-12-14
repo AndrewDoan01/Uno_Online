@@ -73,16 +73,25 @@ namespace UNOServer
             //Vòng lặp kiểm tra kết nối và xử lý dữ liêu từ client 
             while (User.PlayerSocket.Connected)
             {
-                if (User.PlayerSocket.Available > 0) //Nếu có dữ liệu đến từ client thì server sẽ bắt đầu nhận
+                try
                 {
-                    string receivedata = ""; //Tạo chuỗi chứa thông điệp (dữ liệu từ client gửi đến)
-                    while (User.PlayerSocket.Available > 0)
+                    if (User.PlayerSocket.Available > 0) //Nếu có dữ liệu đến từ client thì server sẽ bắt đầu nhận
                     {
-                        int bRead = User.PlayerSocket.Receive(data); //Nhận dữ liệu client và ghi từng byte dữ liệu vào mảng byte tên data, số byte lưu vào bRead
-                        receivedata += Encoding.UTF8.GetString(data, 0, bRead); //Chuyển đổi mảng byte dữ liệu thành dạng chuỗi và nối chuỗi vào receivedata thành thông điệp
+                        string receivedata = ""; //Tạo chuỗi chứa thông điệp (dữ liệu từ client gửi đến)
+                        while (User.PlayerSocket.Available > 0)
+                        {
+                            int bRead = User.PlayerSocket.Receive(data); //Nhận dữ liệu client và ghi từng byte dữ liệu vào mảng byte tên data, số byte lưu vào bRead
+                            receivedata += Encoding.UTF8.GetString(data, 0, bRead); //Chuyển đổi mảng byte dữ liệu thành dạng chuỗi và nối chuỗi vào receivedata thành thông điệp
+                        }
+                        Console.WriteLine(User.PlayerSocket.RemoteEndPoint + ": " + receivedata);
+                        DecryptingMessage(receivedata, User); //Thông điệp được đưa vào hàm này để xử lý yêu cầu (thông điệp) từ người chơi (client) tương ứng
                     }
-                    Console.WriteLine(User.PlayerSocket.RemoteEndPoint + ": " + receivedata);
-                    DecryptingMessage(receivedata, User); //Thông điệp được đưa vào hàm này để xử lý yêu cầu (thông điệp) từ người chơi (client) tương ứng
+                }
+                catch //Xử lý việc người chơi mất kết nối ko gửi DISCONNECT
+                {
+                    User.PlayerSocket.Shutdown(SocketShutdown.Both); //Ngắt kết nối hai chiều
+                    User.PlayerSocket.Close(); //Đóng socket của người chơi
+                    PLAYERLIST.Remove(User);
                 }
             }
         }
