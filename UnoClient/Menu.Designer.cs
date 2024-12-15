@@ -33,6 +33,8 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.BtnExit = new System.Windows.Forms.Button();
             this.BtnRules = new System.Windows.Forms.Button();
+            this.tbName = new System.Windows.Forms.TextBox();
+            this.btnName = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BtnJoinGame
@@ -76,6 +78,23 @@
             this.BtnRules.UseVisualStyleBackColor = true;
             this.BtnRules.Click += new System.EventHandler(this.BtnRules_Click);
             // 
+            // tbName
+            // 
+            this.tbName.Location = new System.Drawing.Point(329, 12);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(163, 22);
+            this.tbName.TabIndex = 4;
+            // 
+            // btnName
+            // 
+            this.btnName.Location = new System.Drawing.Point(498, 3);
+            this.btnName.Name = "btnName";
+            this.btnName.Size = new System.Drawing.Size(169, 41);
+            this.btnName.TabIndex = 5;
+            this.btnName.Text = "Confirm name";
+            this.btnName.UseVisualStyleBackColor = true;
+            this.btnName.Click += new System.EventHandler(this.btnName_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -83,6 +102,8 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnName);
+            this.Controls.Add(this.tbName);
             this.Controls.Add(this.BtnRules);
             this.Controls.Add(this.BtnExit);
             this.Controls.Add(this.richTextBox1);
@@ -92,6 +113,7 @@
             this.Text = "Menu";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Menu_FormClosing);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -101,5 +123,7 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button BtnExit;
         private System.Windows.Forms.Button BtnRules;
+        private System.Windows.Forms.TextBox tbName;
+        private System.Windows.Forms.Button btnName;
     }
 }

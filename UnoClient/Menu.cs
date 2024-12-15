@@ -86,5 +86,11 @@ namespace UnoOnline
             //Sẽ tạm thời mở trang web chứa luật chơi-https://www.unorules.com/
             System.Diagnostics.Process.Start("https://www.unorules.com/");
         }
+
+        private void btnName_Click(object sender, EventArgs e)
+        {
+            //Lấy tên trong textbox name set cho người chơi
+            Program.player.Name = tbName.Text;
+        }
     }
 }
