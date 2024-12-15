@@ -31,14 +31,11 @@ namespace UNOServer
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8; //Sử dụng console để cập nhật thông tin (tiện theo dõi bên server)    
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName()); //Lấy thông tin IP của máy tính mà server đang chạy trên chính nó host          
-            IPAddress iPAddress = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Lấy ra IP dạng IPv4 từ host ở trên
             ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); //Tạo socket cho server
-            IPEndPoint serverEP = new IPEndPoint(iPAddress, 11000); //Tạo endpoint với IP của host và cổng
+            IPEndPoint serverEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000); //Tạo endpoint với IP của host và cổng
             ServerSocket.Bind(serverEP); //Socket server kết nối đến endpoint đó => địa chỉ của server
             ServerSocket.Listen(4);
             Console.WriteLine("Server đã được tạo và đang chạy! Đợi các kết nối từ Clients...");
-            Console.WriteLine("Địa chỉ IP của Server: " + iPAddress.ToString());
             //Lặp vô hạn để xử lý các kết nối đến server từ nhiều client
             while (true)
             {
