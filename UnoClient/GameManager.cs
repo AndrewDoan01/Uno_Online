@@ -130,7 +130,7 @@ namespace UnoOnline
 
         public bool IsValidMove(Card card)
         {
-            return card.Color == CurrentCard.Color || card.Value == CurrentCard.Value || card.Color == "Wild";
+            return card.Color == CurrentCard.Color || card.Value == CurrentCard.Value || card.Color == "Wild" || (CurrentCard.CardName.Contains("Wild")&& card.CardName.Contains("Wild"));
         }
 
         public void HandleUpdate(Message message)
@@ -159,7 +159,11 @@ namespace UnoOnline
                 else if (message.Data.Count == 4)
                 {
                     CurrentCard.CardName = message.Data[2];
+                    string[] card = message.Data[2].Split('_');
+                    CurrentCard.Value = card[1];
+                    // Màu do ng chơi trc chọn
                     CurrentCard.Color = message.Data[3];
+
                 }
             }
             //Hiển thị
