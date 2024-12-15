@@ -142,7 +142,7 @@ namespace UnoOnline {
                 Size = new Size(920, 130), // Kích thước panel
                 AutoScroll = true, // Bật tính năng cuộn
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                BackColor = Color.FromArgb(100, 0, 0, 0) // Màu nền
+                BackColor = Color.Transparent // Màu nền
 
             };
 
@@ -531,15 +531,7 @@ namespace UnoOnline {
             };
             Controls.Add(PlayerHandPanel);
 
-            // Skip turn button
-            skipTurnButton = new Button
-            {
-                Location = new Point(500, 60),
-                Size = new Size(100, 40),
-                Text = "Bỏ qua lượt"
-            };
-            skipTurnButton.Click += SkipTurnButton_Click;
-            Controls.Add(skipTurnButton);
+           
 
             // Draw card button
             drawCardButton = new Button
@@ -696,7 +688,6 @@ namespace UnoOnline {
 
         private void InitializeComponent()
         {
-            this.skipTurnButton = new System.Windows.Forms.Button();
             this.drawCardButton = new System.Windows.Forms.Button();
             this.turnTimer = new System.Windows.Forms.ProgressBar();
             this.PlayerHandPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -704,13 +695,7 @@ namespace UnoOnline {
             this.yellUNOButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // skipTurnButton
-            // 
-            this.skipTurnButton.Location = new System.Drawing.Point(0, 0);
-            this.skipTurnButton.Name = "skipTurnButton";
-            this.skipTurnButton.Size = new System.Drawing.Size(75, 23);
-            this.skipTurnButton.TabIndex = 8;
-            // 
+           
             // drawCardButton
             // 
             this.drawCardButton.Location = new System.Drawing.Point(0, 0);
@@ -755,6 +740,7 @@ namespace UnoOnline {
             // 
             // Form1
             // 
+            this.AutoSize = true;
             this.BackgroundImage = global::UnoOnline.Properties.Resources.Table_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(647, 441);
@@ -763,16 +749,15 @@ namespace UnoOnline {
             this.Controls.Add(this.turnTimer);
             this.Controls.Add(this.currentPlayerLabel);
             this.Controls.Add(this.drawCardButton);
-            this.Controls.Add(this.skipTurnButton);
             this.DoubleBuffered = true;
             this.Name = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
-        private Button skipTurnButton;
         private Button drawCardButton;
         private ProgressBar turnTimer;
         private FlowLayoutPanel PlayerHandPanel;
@@ -875,6 +860,11 @@ namespace UnoOnline {
         {
             Menu menu = new Menu();
             menu.Show();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
